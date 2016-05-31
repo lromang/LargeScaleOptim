@@ -301,40 +301,58 @@ double backTrack(double (*func)(double*, int),
  * Newton Gradiente Conjugado -
  * Búsqueda de Línea
  * IN
- * func: Apuntador a una función que recibe
- * cómo parámetros un apuntador a un double
- * y un entero.
- * x: Vector donde se lleva a cabo la
- * evaluación.
- * p: Dirección de descenso.
- * length: Longitud de los vectores.
+ *
  * OUT
- * alpha: Tamaño del paso en la dirección
- * de descenso.
+ *
  * -------------------------------------
  */
-/*double* lSNCG(double* x, double* grad, double* B,
+double* lSNCG(double* x, double* grad, double* B,
               int length, int TOL){
   // Declaración de variables.
   int i, j;
-  double epsilon, normSquare, norm, z;
-  double *r, *d, *Bd;
+  double epsilon, normSquare, norm,
+    dbd, alpha, normR, beta;
+  double *r, *d, *z, *Bd, *oldR, *p;
 
   // Inicialización de variables.
   normSquare = dotProd(grad, grad, length);
   norm       = sqrt(normSquare);
 
-  // Comienza loop
+  // Comienza loop externo
   for(i = 0; i < TOL; i++){
-    epsilon = min(0.5, norm)*norm;
-    z = 0;
-    r = grad;
-    d = vProd(r, -1, length);
+    epsilon = min(0.5, norm) * norm;
+    z       = 0;
+    r       = grad;
+    d       = vProd(r, -1, length);
+    // Comienza loop interno
     for(j = 0; j < TOL; j++){
-
+      Bd      = mProd(B, d, length, length);
+      dbd     = dotProd(Bd, d, length);
+      if(dbd <= 0){
+        if(j == 0){
+          p = vProd(r, -1, length);
+          break;
+        }else{
+          p = z;
+          break;
+        }
+      }
+      alpha = dotProd(r,r,length) / dbd;
+      z     = vSum(z, vProd(d, alpha, length), length);
+      oldR  = r;
+      r     = vSum(r, vProd(Bd, alpha, length), length);
+      normR = dotProd(r, r, length);
+      if(normR < epsilon*epsilon){
+        p = z;
+        break;
+      }
+      beta = dotProd(r, r, length) / dotProd(oldR, oldR,  length);
+      d    = vSum(vProd(r, -1, length), vProd(d, beta, length), length);
     }
+    x = vSum(x, p, length);
   }
-  }*/
+  return x;
+}
 
 
 /*
