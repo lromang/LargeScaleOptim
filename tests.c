@@ -123,6 +123,9 @@ double* centralDiff(double (*func)(double*, int), double* x, int length){
     res[i] = (func(aux, length) - func(x, length)) / epsilon;
     aux[i] = x[i];
   }
+
+  // Liberar memoria
+  free(aux);
   return res;
 }
 
@@ -293,6 +296,11 @@ double backTrack(double (*func)(double*, int),
     fx        = func(x, length) + c * alpha * dotProd(gradx, p, length);
     alpha     = alpha * rho;
   } while(fx_p <= fx);
+
+  // Liberar espacio
+  free(aux_vprod);
+  free(aux_vsum);
+  free(gradx);
 
   return alpha;
 }
