@@ -21,11 +21,13 @@ double  math(double x, double y);
 double* mProd(double* B, double* v, int lengthRow, int nRow);
 void    imprimeMatriz(double* A, int lengthRow, int nRow);
 double* GC(double* A, double* b, int nrow);
+double* NGC(double* A, double* b, int nrow, int N_max);
+double* lSNCG(double* grad, double* B, int nrow);
 double* mTrans(double* A, int lengthRow, int nRow);
 
 int main(){
   // Declaración de variables.
-  double *point,  *matrix, *sol, *matrix_symm;
+  double *point,  *matrix, *sol, *matrix_symm, *dir_des;
   int    nrow, j, i, k;
 
   // Inicialización de variables.
@@ -40,6 +42,7 @@ int main(){
   matrix       = (double*) malloc((nrow * nrow) * sizeof(double));
   matrix_symm  = (double*) malloc((nrow * nrow) * sizeof(double));
   sol          = (double*) malloc(nrow * sizeof(double));
+  dir_des      = (double*) malloc(nrow * sizeof(double));
 
   // Llenado de matriz y vector
   k = 0;
@@ -73,6 +76,18 @@ int main(){
   printf("Solución del sistema");
   printf("\n------------\n");
   imprimeMatriz(sol, 1, nrow);
+
+  // Prueba NGC
+  printf("--------------------------------\n");
+  printf("Prueba Newton Gradiente Conjugado\n");
+  printf("--------------------------------\n\n");
+  dir_des = NGC(matrix, point, nrow, 1e3);
+
+  // Imprime Solución.
+  printf("\n------------\n");
+  printf("Dirección de descenso truncada");
+  printf("\n------------\n");
+  imprimeMatriz(dir_des, 1, nrow);
 
   return 0;
 }
@@ -166,9 +181,11 @@ double* vProd(double* v, double alpha, int length){
 /* -------------------------------------
  * Transponer matriz
  * IN
- *
+ * A: Matriz a transponer.
+ * lengthRow: Número de columnas de A.
+ * nRow: Número de renglones de A.
  * OUT
- *
+ * A_trans: A transpuesta.
  * -------------------------------------
  */
 double* mTrans(double* A, int lengthRow, int nRow){
@@ -403,7 +420,6 @@ double* GC(double* A, double* b, int nrow){
   // Inicializar r, p y k.
   // r = Ax0-b
   r = vSum(mProd(A, x, nrow, nrow), vProd(b, -1, nrow), nrow);
-
   // p = -r
   p = vProd(r, -1, nrow);
   k = 0;
@@ -433,6 +449,88 @@ double* GC(double* A, double* b, int nrow){
   return x;
 }
 
+/* -------------------------------------
+ * Newton Gradiente Conjugado -
+ * IN
+ * A: Hessian
+ * b: -Gradient
+ * OUT
+ * p: Dirección de descenso que hace
+ * que ||grad(f(x))|| < epsilon||f(x)||
+ * -------------------------------------
+ */
+double* NGC(double* A, double* b, int nrow, int N_max){
+  double *r, *p, *x, *z, *z_new, *r_new, *d, *d_new;
+  double alpha, beta, Tol, epsilon, norm;
+  int k, i;
+
+  // Número máximo de ciclos.
+  Tol   = 1e-3;
+
+  // Alocar espacio para vectores.
+  x     = (double*)malloc(sizeof(double)*nrow);
+  z_new = (double*)malloc(sizeof(double)*nrow);
+  r_new = (double*)malloc(sizeof(double)*nrow);
+  d     = (double*)malloc(sizeof(double)*nrow);
+  d_new = (double*)malloc(sizeof(double)*nrow);
+  z     = (double*)malloc(sizeof(double)*nrow);
+
+  // Inicializar x y z.
+  for(i = 0; i < nrow; i++){
+    x[i]    = rand() % 10;
+    z[i]    = 0;
+  }
+
+  // Inicializar r y epsilon.
+  // r = grad(fx) = Ax-b
+  r       = vSum(mProd(A, x, nrow, nrow), vProd(b, -1, nrow), nrow);
+  norm    = sqrt(dotProd(r, r, nrow));
+  epsilon = min(.5, sqrt(norm)) * norm;
+
+  // d = -r
+  d = vProd(r, -1, nrow);
+  k = 0;
+
+  // Comenzar loop.
+  // Mientras ||r|| > Tol && k < N_max
+  while((sqrt(dotProd(r, r, nrow)) > Tol) && (k < N_max)){
+    // Verificar si estamos en una dirección de descenso.
+    if(dotProd(d, mProd(A, d, nrow, nrow), nrow) <= 0){
+      if(k == 0){
+        p = d;
+        break; // Break sale de while.
+      }else{
+        p = z;
+        break; // Break sale de while.
+      }
+    }
+    // alpha = r'r/d'Ad
+    alpha = dotProd(r, r, nrow) / dotProd(d, mProd(A, d, nrow, nrow), nrow);
+    // x_new = x + alpha*d
+    z_new = vSum(z, vProd(d, alpha, nrow), nrow);
+    z     = z_new;
+    // r_new = r + alpha*A*d
+    r_new = vSum(r, vProd(mProd(A, d, nrow, nrow), alpha, nrow), nrow);
+    // Truncamiento de GC.
+    if(sqrt(dotProd(r_new, r_new, norm)) < epsilon){
+      p = z;
+      break; // Break sale de while.
+    }
+    // beta  = r_new'r_new/r'r
+    beta  = dotProd(r_new, r_new, nrow) / dotProd(r, r, nrow);
+    r = r_new;
+    // p_new = -r + beta*p
+    d_new = vSum(vProd(r, -1, nrow), vProd(d, beta, nrow), nrow);
+    d     = d_new;
+    k++;
+  }
+
+  // Liberar Espacio.
+  free(r);
+
+  return p;
+}
+
 
 /* -------------------------------------
  * Newton Gradiente Conjugado -
@@ -443,52 +541,10 @@ double* GC(double* A, double* b, int nrow){
  *
  * -------------------------------------
  */
-double* lSNCG(double* x, double* grad, double* B,
-              int length, int TOL){
+double* lSNCG(double* grad, double* B, int nrow){
   // Declaración de variables.
-  int i, j;
-  double epsilon, normSquare, norm,
-    dbd, alpha, normR, beta;
-  double *r, *d, *z, *Bd, *oldR, *p;
 
-  // Inicialización de variables.
-  normSquare = dotProd(grad, grad, length);
-  norm       = sqrt(normSquare);
 
-  // Comienza loop externo
-  for(i = 0; i < TOL; i++){
-    epsilon = min(0.5, norm) * norm;
-    z       = 0;
-    r       = grad;
-    d       = vProd(r, -1, length);
-    // Comienza loop interno
-    for(j = 0; j < TOL; j++){
-      Bd      = mProd(B, d, length, length);
-      dbd     = dotProd(Bd, d, length);
-      if(dbd <= 0){
-        if(j == 0){
-          p = vProd(r, -1, length);
-          break;
-        }else{
-          p = z;
-          break;
-        }
-      }
-      alpha = dotProd(r,r,length) / dbd;
-      z     = vSum(z, vProd(d, alpha, length), length);
-      oldR  = r;
-      r     = vSum(r, vProd(Bd, alpha, length), length);
-      normR = dotProd(r, r, length);
-      if(normR < epsilon*epsilon){
-        p = z;
-        break;
-      }
-      beta = dotProd(r, r, length) / dotProd(oldR, oldR,  length);
-      d    = vSum(vProd(r, -1, length), vProd(d, beta, length), length);
-    }
-    x = vSum(x, p, length);
-  }
-  return x;
 }
 
 
