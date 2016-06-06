@@ -21,13 +21,13 @@ double  math(double x, double y);
 double* mProd(double* B, double* v, int lengthRow, int nRow);
 void    imprimeMatriz(double* A, int lengthRow, int nRow);
 double* GC(double* A, double* b, int nrow);
-double* NGC(double* A, double* b, int nrow, int N_max);
-double* lSNCG(double* grad, double* B, int nrow);
+double* NGC(double* A, double* b, double* x, int nrow, int N_max);
+double* lSNCG(double* (*grad)(double *), double* (*f) (double *), int nrow, int N_max);
 double* mTrans(double* A, int lengthRow, int nRow);
 
 int main(){
   // Declaración de variables.
-  double *point,  *matrix, *sol, *matrix_symm, *dir_des;
+  double *point,  *matrix, *sol, *matrix_symm, *dir_des, *x;
   int    nrow, j, i, k;
 
   // Inicialización de variables.
@@ -39,6 +39,7 @@ int main(){
   printf("Escriba el tamaño de la matriz: \n");
   scanf("%d", &nrow);
   point        = (double*) malloc(nrow * sizeof(double));
+  x            = (double*) malloc(nrow * sizeof(double));
   matrix       = (double*) malloc((nrow * nrow) * sizeof(double));
   matrix_symm  = (double*) malloc((nrow * nrow) * sizeof(double));
   sol          = (double*) malloc(nrow * sizeof(double));
@@ -52,6 +53,7 @@ int main(){
       k = k + 1;
     }
     point[j] = rand() % 10;
+    x[j] = rand() % 10;
   }
 
   // Imprime Matriz.
@@ -81,7 +83,7 @@ int main(){
   printf("--------------------------------\n");
   printf("Prueba Newton Gradiente Conjugado\n");
   printf("--------------------------------\n\n");
-  dir_des = NGC(matrix, point, nrow, 1e3);
+  dir_des = NGC(matrix, point, x, nrow, 1e3);
 
   // Imprime Solución.
   printf("\n------------\n");
@@ -459,8 +461,8 @@ double* GC(double* A, double* b, int nrow){
  * que ||grad(f(x))|| < epsilon||f(x)||
  * -------------------------------------
  */
-double* NGC(double* A, double* b, int nrow, int N_max){
-  double *r, *p, *x, *z, *z_new, *r_new, *d, *d_new;
+double* NGC(double* A, double* b, double* x, int nrow, int N_max){
+  double *r, *p, *z, *z_new, *r_new, *d, *d_new;
   double alpha, beta, Tol, epsilon, norm;
   int k, i;
 
@@ -468,7 +470,6 @@ double* NGC(double* A, double* b, int nrow, int N_max){
   Tol   = 1e-3;
 
   // Alocar espacio para vectores.
-  x     = (double*)malloc(sizeof(double)*nrow);
   z_new = (double*)malloc(sizeof(double)*nrow);
   r_new = (double*)malloc(sizeof(double)*nrow);
   d     = (double*)malloc(sizeof(double)*nrow);
@@ -477,7 +478,6 @@ double* NGC(double* A, double* b, int nrow, int N_max){
 
   // Inicializar x y z.
   for(i = 0; i < nrow; i++){
-    x[i]    = rand() % 10;
     z[i]    = 0;
   }
 
@@ -536,15 +536,33 @@ double* NGC(double* A, double* b, int nrow, int N_max){
  * Newton Gradiente Conjugado -
  * Búsqueda de Línea
  * IN
- *
+ * F    = F(x)
+ * Grad = grad(x)
  * OUT
  *
  * -------------------------------------
  */
-double* lSNCG(double* grad, double* B, int nrow){
+double* lSNCG(double* (*grad)(double* x), double* (*f)(double* x), int nrow, int N_max){
   // Declaración de variables.
+  double *p, *sol, *x, *hess;
+  int Tol;
 
+  // Inicializar Tol
+  Tol = 1e-6;
 
+  // Alocar espacio para variables.
+  p    = (double*)malloc(nrow*sizeof(double));
+  sol  = (double*)malloc(nrow*sizeof(double));
+  x    = (double*)malloc(nrow*sizeof(double));
+  hess = (double*)malloc(nrow*sizeof(double));
+
+  /*while(sqrt(dotProd(grad, grad, nrow)) > Tol){
+    // Estimar Hessiana.
+    hess = hessEstim();
+    // Resolver Gradiente Conjugado
+    // p    = NGC(hess, grad, x, nrow, N_max);
+  }*/
+  return sol;
 }
 
 
