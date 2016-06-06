@@ -25,8 +25,8 @@ double* mTrans(double* A, int lengthRow, int nRow);
 
 int main(){
   // Declaración de variables.
-  double *point, *matriz, *sol, *matriz_trans;
-  int    nrow, j, i;
+  double *point,  *matrix, *sol, *matrix_symm;
+  int    nrow, j, i, k;
 
   // Inicialización de variables.
   printf("--------------------------------\n");
@@ -37,39 +37,56 @@ int main(){
   printf("Escriba el tamaño de la matriz: \n");
   scanf("%d", &nrow);
   point        = (double*) malloc(nrow * sizeof(double));
-  matriz       = (double*) malloc(nrow * nrow * sizeof(double));
-  matriz_trans = (double*) malloc(nrow * nrow * sizeof(double));
+  matrix       = (double*) malloc((nrow * nrow) * sizeof(double));
+  matrix_symm  = (double*) malloc((nrow * nrow) * sizeof(double));
+  sol          = (double*) malloc(nrow * sizeof(double));
 
   // Llenado de matriz y vector
-  for(i = 0; i < nrow; i++){
-    for(j = 0; j < nrow; j++){
-      matriz[(i + 1)*j] = rand();
+  k = 0;
+  for(j = 0; j < nrow; j++){
+    for(i = 0; i < nrow; i++){
+      matrix[k] = rand() % 10;
+      k = k + 1;
     }
-    point[i] = rand();
+    point[j] = rand() % 10;
   }
 
-  // Imprimir matriz.
-  imprimeMatriz(matriz, nrow, nrow);
+  // Imprime Matriz.
+  printf("\n------------\n");
+  printf("Matriz del sistema");
+  printf("\n------------\n");
+  matrix_symm = vSum(mTrans(matrix, nrow, nrow),
+                     matrix, (nrow*nrow));
+  imprimeMatriz(matrix_symm, nrow, nrow);
 
-  printf("\n Matriz transpuesta: \n");
+  // Imprime Vector.
+  printf("\n------------\n");
+  printf("Vector del sistema");
+  printf("\n------------\n");
+  imprimeMatriz(point, 1, nrow);
 
-  matriz_trans = mTrans(matriz, nrow, nrow);
+  // Resolver con gradiente conjugado.
+  sol = GC(matrix_symm, point, nrow);
 
-  imprimeMatriz(matriz_trans, nrow, nrow);
-  // Resolver GC
-  //sol = GC(matriz, point, nrow);
+  // Imprime Solución.
+  printf("\n------------\n");
+  printf("Solución del sistema");
+  printf("\n------------\n");
+  imprimeMatriz(sol, 1, nrow);
 
   return 0;
 }
 
 void imprimeMatriz(double* A, int lengthRow, int nRow){
   // Declaración de variables.
-  int i, j;
+  int i, j, k;
 
   // Imprimir matriz.
+  k = 0;
   for(i = 0; i < nRow; i++){
     for(j = 0; j < lengthRow; j++){
-      printf(" %.2lf ", A[(i + 1) * j]);
+      printf(" %.2lf ", A[k]);
+      k = k + 1;
     }
     printf("\n");
   }
@@ -149,12 +166,9 @@ double* vProd(double* v, double alpha, int length){
 /* -------------------------------------
  * Transponer matriz
  * IN
- * v: Vector a multiplicar.
- * alpha: Escalar a multiplicar
- * length: Longitud del vector.
+ *
  * OUT
- * prod_v: Arreglo que contiene el producto
- * de v y alpha entrada a entrada.
+ *
  * -------------------------------------
  */
 double* mTrans(double* A, int lengthRow, int nRow){
@@ -162,15 +176,13 @@ double* mTrans(double* A, int lengthRow, int nRow){
   double* A_trans;
   int i, j;
 
-
   // Alocar espacio para matriz.
-  A_trans = (double*)malloc(sizeof(double) * lengthRow * nRow);
-  imprimeMatriz(A_trans, lengthRow, nRow);
+  A_trans = (double*)malloc(lengthRow * nRow * sizeof(double));
 
   // Trasponer
   for(i = 0; i < nRow; i++){
     for(j = 0; j < lengthRow; j++){
-      A_trans[(i + 1) * j] = A[j*lengthRow + i];
+      A_trans[i*lengthRow + j] = A[j*lengthRow + i];
     }
   }
 
@@ -234,8 +246,6 @@ int vEq(double* v, double* u, int length){
   return eq;
 }
 
-
-
 /* -------------------------------------
  * Producto punto entre vectores
  * IN
@@ -286,7 +296,7 @@ double* mProd(double* B, double* v, int lengthRow, int nRow){
   for(i = 0; i < nRow; i++){
     sum = 0;
     for(j = 0; j < lengthRow; j++){
-      sum = sum + B[(i + 1) * j] * v[j];
+      sum = sum + B[i*lengthRow + j] * v[j];
     }
     Bd[i] = sum;
   }
@@ -371,49 +381,56 @@ double backTrack(double (*func)(double*, int),
  * -------------------------------------
  */
 double* GC(double* A, double* b, int nrow){
-  double *r, *p, *zero, *x, *x_new, *r_new, *p_new;
-  double alpha, beta;
-  int k, i;
+  double *r, *p, *x, *x_new, *r_new, *p_new;
+  double alpha, beta, Tol;
+  int k, i, N_max;
 
-  // Alocar espacio para vector.
-  zero  = (double*)malloc(sizeof(double)*nrow);
+  // Número máximo de ciclos.
+  N_max = 1e3;
+  Tol   = 1e-3;
+
+  // Alocar espacio para vectores.
   x     = (double*)malloc(sizeof(double)*nrow);
   x_new = (double*)malloc(sizeof(double)*nrow);
   r_new = (double*)malloc(sizeof(double)*nrow);
   p_new = (double*)malloc(sizeof(double)*nrow);
 
-  // Inicializar vectores.
+  // Punto inicial.
   for(i = 0; i < nrow; i++){
-    zero[i] = 0;
-    x[i]    = rand();
+    x[i]    = rand() % 10;
   }
 
   // Inicializar r, p y k.
+  // r = Ax0-b
   r = vSum(mProd(A, x, nrow, nrow), vProd(b, -1, nrow), nrow);
+
+  // p = -r
   p = vProd(r, -1, nrow);
   k = 0;
 
   // Comenzar loop.
-  while(r != 0){
-    alpha = dotProd(r, p, nrow)/dotProd(p, mProd(A, p, nrow, nrow), nrow);
+  // Mientras ||r|| > Tol && k < N_max
+  while((sqrt(dotProd(r, r, nrow)) > Tol) && (k < N_max)){
+    // alpha = r'r/p'Ap
+    alpha = dotProd(r, r, nrow) / dotProd(p, mProd(A, p, nrow, nrow), nrow);
+    // x_new = x + alpha*p
     x_new = vSum(x, vProd(p, alpha, nrow), nrow);
     x     = x_new;
-    r_new = vSum(mProd(A, x, nrow, nrow), vProd(b, -1, nrow), nrow);
-    r     = r_new;
-    beta  = dotProd(r, mProd(A,p, nrow, nrow), nrow)/dotProd(p, mProd(A, p, nrow, nrow), nrow);
+    // r_new = r + alpha*A*p
+    r_new = vSum(r, vProd(mProd(A, p, nrow, nrow), alpha, nrow), nrow);
+    // beta  = r_new'r_new/r'r
+    beta  = dotProd(r_new, r_new, nrow)/dotProd(r, r, nrow);
+    r = r_new;
+    // p_new = -r + beta*p
     p_new = vSum(vProd(r, -1, nrow), vProd(p, beta, nrow), nrow);
     p     = p_new;
     k++;
   }
 
   // Liberar Espacio.
-  free(zero);
-  free(x);
-  free(x_new);
-  free(r_new);
-  free(p_new);
+  free(r);
 
-  return p;
+  return x;
 }
 
 
