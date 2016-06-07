@@ -1,16 +1,15 @@
 /*
  * Luis Manuel Román García
- * 000117077
+ *
  * ----------------------------------
  * Rutinas de propósito general para
- * optimización numérica.
+ * optimización numérica. C
  * ----------------------------------
  */
 
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#include<time.h>
 
 double* centralDiff(double (*func)(double*, int), double* x, int length);
 double  testFunc(double* x, int length);
