@@ -1,38 +1,44 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "line_alg.c"
+#include <math.h>
+#include "trunc_newton.c"
 #include "utileries.c"
+
+double test_func(double*, int);
 
 int main(){
   // Declaración de variables
-  double *matrix, *vector;
-  int    nrow, alpha;
-
+  double* point;
+  int length, i;
   /*
    *********************************************
-   * Solicitar a usuario tamaño de matriz y
-   * vectores a utilizar en pruebas.
+   * Resolver sistema de ecuaciones Ax = b
    *********************************************
    */
-  printf("Escriba el tamaño de la matriz: \n");
-  scanf("%d", &nrow);
-  matrix = (double*) malloc((nrow * nrow) * sizeof(double));
+  printf("Enter size of point:\n");
+  scanf("%d", &length);
 
-  // Llenado de matriz y vector
-  matrix = creaMatriz(nrow, nrow);
-  vector = creaMatriz(1, nrow);
+  point = (double*) malloc(length * sizeof(double));
+  for(i = 0; i < length; i++){
+    point[i] = rand() %10;
+  }
 
-  // Imprimir matriz y vector.
-   imprimeTit("Matriz del sistema");
-   imprimeMatriz(matrix, nrow, nrow);
-   imprimeTit("Vector del sistema");
-   imprimeMatriz(vector, 1, nrow);
+  // Print point
+  imprimeTit("El punto donde se evalualará la derivada es");
+  imprimeMatriz(point, 1, length);
 
-  /*
-   *********************************************
-   * Probar funciones.
-   *********************************************
-   */
-   imprimeTit("El producto entre matriz y vector es");
-   imprimeMatriz(mProd(matrix, vector, nrow, nrow), 1, nrow);
+  // Print result
+  imprimeTit("El resultado es:");
+  imprimeMatriz(centralDiff(test_func, point, length), 1, length);
+
+
+
+   return 0;
 }
+
+double test_func(double* x, int length){
+  double res;
+  int i;
+  for(i = 0; i < length; i++){
+    res = res + x[i]*x[i];
+  }
+  return res;
+};
