@@ -9,6 +9,7 @@
  */
 
 #include "line_alg.c"
+#include "utileries.c"
 
 /* -------------------------------------
  * Método de diferencias centrales para
@@ -23,34 +24,69 @@
  * res: Gradiente de fun evaluado en x.
  * -------------------------------------
  */
-double* centralDiff(double (*func)(double*, int), double* x, int length){
+double* gradCentralDiff(double (*func)(double*, int), double* x, int length){
   // Declaración de variables.
   int i;
   double epsilon, u;
-  double *res, *aux;
+  double *res, *laux, *raux;
 
   // Inicialización de variables.
   u       = 1.1e-16;
   epsilon = sqrt(u);
   res     = (double*)malloc(length * sizeof(double));
-  aux     = (double*)malloc(length * sizeof(double));
+  laux     = (double*)malloc(length * sizeof(double));
+  raux     = (double*)malloc(length * sizeof(double));
 
   // Llenado de vector auxiliar.
   for(i = 0; i < length; i++){
-    aux[i] = x[i];
+    laux[i] = x[i];
+    raux[i] = x[i];
   }
 
   // Evaluación de derivada.
   for(i = 0; i < length; i++){
-    aux[i] = aux[i] + epsilon;
-    res[i] = (func(aux, length) - func(x, length)) / epsilon;
-    aux[i] = x[i];
+    laux[i] = laux[i] + epsilon;
+    raux[i] = raux[i] - epsilon;
+    res[i]  = (func(laux, length) - func(raux, length)) / (2*epsilon);
+    raux[i] = x[i];
+    laux[i] = x[i];
   }
 
   // Liberar memoria
-  free(aux);
+  // free(aux);
   return res;
 }
+
+/* -------------------------------------
+ * Método de diferencias centrales para
+ * aproximar el producto de la hessiana
+ * de una función por un vector.
+ * IN
+ * fun: Apuntador a una función que recibe
+ * un apuntador a un double y un entero.
+ * x: Apuntador a un vector sobre el cual
+ * se quiere aproximar el gradiente
+ * length: Longitud del vector.
+ * OUT
+ * res: Gradiente de fun evaluado en x.
+ * -------------------------------------
+ */
+double* hessCentralDiff(double (*func)(double*, int), double* x, double* p, int length){
+  // Declaración de variables.
+  double *grad, *aux_grad;
+  double epsilon;
+
+  // Initializar epsilon
+  epsilon = sqrt(1.1e-6);
+
+  // Cálculo del gradiente y el gradiente auxiliar.
+  grad     = gradCentralDiff(func, x, length);
+  aux_grad = gradCentralDiff(func, vSum(x, vProd(p, epsilon, length), length), length);
+
+  // Approximación final.
+  return vProd(vSum(aux_grad, vProd(grad, -1, length), length), 1/epsilon, length);
+}
+
 
 /* -------------------------------------
  * Método para buscar tamaño de paso
@@ -86,7 +122,7 @@ double backTrack(double (*func)(double*, int),
   gradx     = (double*)malloc(length * sizeof(double));
 
   // Condiciones del Loop
-  gradx = centralDiff(func, x, length);
+  gradx = gradCentralDiff(func, x, length);
   do{
     aux_vprod = vProd(p, alpha, length);
     aux_vsum  = vSum(x, aux_vprod, length);

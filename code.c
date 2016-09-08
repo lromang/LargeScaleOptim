@@ -11,18 +11,18 @@
 #include<stdlib.h>
 #include<math.h>
 
-double* centralDiff(double (*func)(double*, int), double* x, int length);
-double  testFunc(double* x, int length);
 double* vProd(double* v, double alpha, int length);
 double* vSum(double* v, double* u, int length);
 double  dotProd(double* v, double* u, int length);
-double  math(double x, double y);
 double* mProd(double* B, double* v, int lengthRow, int nRow);
+double* mTrans(double* A, int lengthRow, int nRow);
 void    imprimeMatriz(double* A, int lengthRow, int nRow);
+double  testFunc(double* x, int length);
+double* centralDiff(double (*func)(double*, int), double* x, int length);
 double* GC(double* A, double* b, int nrow);
 double* NGC(double* A, double* b, double* x, int nrow, int N_max);
 double* lSNCG(double* (*grad)(double *), double* (*f) (double *), int nrow, int N_max);
-double* mTrans(double* A, int lengthRow, int nRow);
+
 
 int main(){
   // Declaración de variables.
@@ -129,10 +129,10 @@ double* centralDiff(double (*func)(double*, int), double* x, int length){
   double *res, *aux;
 
   // Inicialización de variables.
-  u = 1.1e-16;
+  u       = 1.1e-16;
   epsilon = sqrt(u);
-  res = (double*)malloc(length * sizeof(double));
-  aux = (double*)malloc(length * sizeof(double));
+  res     = (double*)malloc(length * sizeof(double));
+  aux     = (double*)malloc(length * sizeof(double));
 
   // Llenado de vector auxiliar.
   for(i = 0; i < length; i++){
@@ -528,40 +528,6 @@ double* NGC(double* A, double* b, double* x, int nrow, int N_max){
   free(r);
 
   return p;
-}
-
-
-/* -------------------------------------
- * Newton Gradiente Conjugado -
- * Búsqueda de Línea
- * IN
- * F    = F(x)
- * Grad = grad(x)
- * OUT
- *
- * -------------------------------------
- */
-double* lSNCG(double* (*grad)(double* x), double* (*f)(double* x), int nrow, int N_max){
-  // Declaración de variables.
-  double *p, *sol, *x, *hess;
-  int Tol;
-
-  // Inicializar Tol
-  Tol = 1e-6;
-
-  // Alocar espacio para variables.
-  p    = (double*)malloc(nrow*sizeof(double));
-  sol  = (double*)malloc(nrow*sizeof(double));
-  x    = (double*)malloc(nrow*sizeof(double));
-  hess = (double*)malloc(nrow*sizeof(double));
-
-  /*while(sqrt(dotProd(grad, grad, nrow)) > Tol){
-    // Estimar Hessiana.
-    hess = hessEstim();
-    // Resolver Gradiente Conjugado
-    // p    = NGC(hess, grad, x, nrow, N_max);
-  }*/
-  return sol;
 }
 
 
