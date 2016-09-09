@@ -231,6 +231,23 @@ double* mProd(double* B, double* v, int lengthRow, int nRow){
   return Bd;
 }
 
+
+/* -------------------------------------
+ * Función que calcula la norma de un
+ * vector.
+ * IN
+ * x: vector al que se quiere calcular
+ * la norma
+ * norm: longitud del vecotr.
+ * OUT
+ * Norma del vector
+ * -------------------------------------
+ */
+double norm(double * x, int length){
+  return sqrt(dotProd(x, x, length));
+}
+
+
 /* -------------------------------------
  * Función que calcula el mínimo entre dos
  * números.

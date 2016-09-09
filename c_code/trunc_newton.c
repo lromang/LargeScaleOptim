@@ -5,7 +5,6 @@
  * Funciones para calcular Newton truncado
  * -------------------------------------
  */
-
 #include "gen_optim.c"
 
 /* -------------------------------------
@@ -83,72 +82,60 @@ double* GC(double* A, double* b, int nrow){
  * que ||grad(f(x))|| < epsilon||f(x)||
  * -------------------------------------
  */
-double* NGC(double* A, double* b, double* x, int nrow, int N_max){
-  double *r, *p, *z, *z_new, *r_new, *d, *d_new;
-  double alpha, beta, Tol, epsilon, norm;
-  int k, i;
-
-  // Número máximo de ciclos.
-  Tol   = 1e-3;
-
-  // Alocar espacio para vectores.
-  z_new = (double*)malloc(sizeof(double)*nrow);
-  r_new = (double*)malloc(sizeof(double)*nrow);
-  d     = (double*)malloc(sizeof(double)*nrow);
-  d_new = (double*)malloc(sizeof(double)*nrow);
-  z     = (double*)malloc(sizeof(double)*nrow);
-
-  // Inicializar x y z.
-  for(i = 0; i < nrow; i++){
-    z[i]    = 0;
-  }
-
-  // Inicializar r y epsilon.
-  // r = grad(fx) = Ax-b
-  r       = vSum(mProd(A, x, nrow, nrow), vProd(b, -1, nrow), nrow);
-  norm    = sqrt(dotProd(r, r, nrow));
-  epsilon = min(.5, sqrt(norm)) * norm;
-
-  // d = -r
-  d = vProd(r, -1, nrow);
-  k = 0;
-
-  // Comenzar loop.
-  // Mientras ||r|| > Tol && k < N_max
-  while((sqrt(dotProd(r, r, nrow)) > Tol) && (k < N_max)){
-    // Verificar si estamos en una dirección de descenso.
-    if(dotProd(d, mProd(A, d, nrow, nrow), nrow) <= 0){
-      if(k == 0){
-        p = d;
-        break; // Break sale de while.
-      }else{
-        p = z;
-        break; // Break sale de while.
+double* NGC(double (*func)(double*, int), double* b, double* x, int nrow, int N_max, double TOL){
+  // Variable declaration.
+  double *r, *d, *z, *r_new, *Bd, *p;
+  int k, i, j;
+  double epsilon, alpha, beta, step;
+  // Space allocation.
+  z = (double*) malloc(nrow * sizeof(double));
+  // Calculate gradient.
+  r = gradCentralDiff(func, x, nrow);
+  // Outer loop, this modifies x! (stop criteria is missing)
+  for(k = 0; norm(r, nrow) >= TOL; k++){
+    // Set tolerance.
+    epsilon = min(.5, sqrt(norm(r, nrow)) * norm(r, nrow));
+    // Initialize z, r, d
+    d = vProd(r, -1, nrow);
+    for(i = 0; i < nrow; i++){
+      z[i] = 0;
+    }
+    /* -----------------------------------
+     * ########### CG Iteration ##########
+     * -----------------------------------
+     */
+    for(j = 0; j < N_max; j++){
+      Bd = hessCentralDiff(func, x, d, nrow);
+      // Check if d'Bd <= 0
+      if(dotProd(d, Bd, nrow) <= 0){
+        if(j == 0){
+          p = d;
+          break;
+        }else{
+          p = z;
+          break;
+        }
       }
+      alpha = dotProd(r, r, nrow) / dotProd(d, Bd, nrow);  // alpha_j = rj'rj/d_j'Bd_j
+      z     = vSum(z, vProd(d, alpha, nrow), nrow);        // z_{j+1} = z_j + alpha_j*d_j
+      r_new = vSum(r, vProd(Bd, alpha, nrow), nrow);       // r_{j+1} = r_j + alpha_j*B_kd_j
+      if(norm(r_new, nrow) < epsilon){
+        p = z;
+        break;
+      }
+      beta = dotProd(r_new, r_new, nrow) / dotProd(r, r, nrow);
+      d    = vSum(vProd(r_new, -1, nrow), vProd(d, beta, nrow), nrow);
+      /* -----------------------------------
+       * ###################################
+       * -----------------------------------
+       */
     }
-    // alpha = r'r/d'Ad
-    alpha = dotProd(r, r, nrow) / dotProd(d, mProd(A, d, nrow, nrow), nrow);
-    // x_new = x + alpha*d
-    z_new = vSum(z, vProd(d, alpha, nrow), nrow);
-    z     = z_new;
-    // r_new = r + alpha*A*d
-    r_new = vSum(r, vProd(mProd(A, d, nrow, nrow), alpha, nrow), nrow);
-    // Truncamiento de GC.
-    if(sqrt(dotProd(r_new, r_new, norm)) < epsilon){
-      p = z;
-      break; // Break sale de while.
-    }
-    // beta  = r_new'r_new/r'r
-    beta  = dotProd(r_new, r_new, nrow) / dotProd(r, r, nrow);
-    r = r_new;
-    // p_new = -r + beta*p
-    d_new = vSum(vProd(r, -1, nrow), vProd(d, beta, nrow), nrow);
-    d     = d_new;
-    k++;
-  }
-
-  // Liberar Espacio.
-  free(r);
-
-  return p;
+    // Choose step via backtracking
+    alpha = backTrack(func, x, p, nrow);
+    // Update x
+    x = vSum(x, vProd(p, alpha, nrow), nrow);
+    // Update r
+    r = gradCentralDiff(func, x, nrow);
+  } // Outer loop, modifies x!
+  return x;
 }
