@@ -7,7 +7,7 @@ double dummy_func(double*, int);
 
 int main(){
   // Declaración de variables
-  double* point, *p;
+  double *point, *p, *x;
   int length, i;
   /*
    *********************************************
@@ -26,17 +26,14 @@ int main(){
     p[i] = rand() % 10;
   }
 
-  // Print point
-  imprimeTit("El punto donde se evalualará la hessiana es");
-  imprimeMatriz(point, 1, length);
+  x = point;
 
-  // Print vector
-  imprimeTit("El vector por el que se multiplicará la hessiana es");
-  imprimeMatriz(p, 1, length);
+  imprimeTit("El punto inicial donde se evalualará la función es:");
+  imprimeMatriz(x, 1, length);
 
   // Print result
-  imprimeTit("El resultado es:");
-  imprimeMatriz(hessCentralDiff(test_func, point, p, length), 1, length);
+  imprimeTit("El mínimo de la función es:");
+  imprimeMatriz(NGC(test_func, x, length, 1e3, 1e-3), 1, length);
 
    return 0;
 }
@@ -45,8 +42,8 @@ double test_func(double* x, int length){
   double res;
   int i;
   for(res = i = 0; i < length; i++){
-    res = res + x[i]*x[i];
+    res = res + (3 - x[i])*(4 - x[i]);
   }
-  res = res + x[0]*x[1];
+  res = res;
   return res;
 };

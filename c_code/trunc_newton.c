@@ -82,17 +82,18 @@ double* GC(double* A, double* b, int nrow){
  * que ||grad(f(x))|| < epsilon||f(x)||
  * -------------------------------------
  */
-double* NGC(double (*func)(double*, int), double* b, double* x, int nrow, int N_max, double TOL){
+double* NGC(double (*func)(double*, int), double* x, int nrow, int N_max, double TOL){
   // Variable declaration.
   double *r, *d, *z, *r_new, *Bd, *p, *x_new;
-  int k, i, j;
+  int k, i, j, stop;
   double epsilon, alpha, beta, step, eta;
   // Space allocation.
   z = (double*) malloc(nrow * sizeof(double));
   // Calculate gradient.
   r = gradCentralDiff(func, x, nrow);
   // Outer loop, this modifies x! (stop criteria is missing)
-  for(k = 0; norm(r, nrow) >= TOL; k++){
+  stop = 1e5;
+  for(k = 0; (norm(r, nrow) >= TOL) && (k < stop); k++){
     // Set tolerance.
     epsilon = min(.5, sqrt(norm(r, nrow)) * norm(r, nrow));
     // Initialize d, z, eta.
@@ -132,11 +133,13 @@ double* NGC(double (*func)(double*, int), double* b, double* x, int nrow, int N_
        */
     }
     // Choose step via backtracking
-    alpha = 1;
-    while(func(x_new, nrow) > func(x, nrow) + (eta * alpha *  dotProd(r, p, nrow))){
+    step = 1;
+    x_new = vSum(x, vProd(p, step, nrow), nrow);
+
+    while(func(x_new, nrow) > func(x, nrow) + (eta * step *  dotProd(r, p, nrow))){
       // Update x
-      x_new = vSum(x, vProd(p, alpha, nrow), nrow);
-      alpha = alpha/2;
+      x_new = vSum(x, vProd(p, step, nrow), nrow);
+      step = step/2;
     }
     x = x_new;
     // Update r
