@@ -22,10 +22,13 @@ int main(){
   p     = (double*) malloc(length * sizeof(double));
 
   for(i = 0; i < length; i++){
-    point[i] = rand() %10;
+    point[i] = 1;
     p[i] = rand() % 10;
   }
 
+  /* ###############################################################
+   * Prueba NGC
+   * ###############################################################
   x = point;
 
   imprimeTit("El punto inicial donde se evalualará la función es:");
@@ -33,8 +36,9 @@ int main(){
 
   // Print result
   imprimeTit("El mínimo de la función es:");
-  imprimeMatriz(NGC(test_func, x, length, 1e3, 1e-3), 1, length);
-
+  imprimeMatriz(NGC(test_func, x, length, 100, 1e-3), 1, length);
+  *  ###############################################################
+  */
    return 0;
 }
 
@@ -42,7 +46,7 @@ double test_func(double* x, int length){
   double res;
   int i;
   for(res = i = 0; i < length; i++){
-    res = res + (3 - x[i])*(4 - x[i]);
+    res = res + (4 - x[i])*(4 - x[i]);
   }
   res = res;
   return res;

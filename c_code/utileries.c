@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* -------------------------------------
  * Imprime titulo
@@ -29,4 +30,21 @@ double testFunc(double* x, int length){
     sum = sum  + (100 - i + 1) * (x[i] * x[i]);
   }
   return sum;
+}
+
+/* -------------------------------------
+ * Lectura de archivos
+ * -------------------------------------
+ */
+const char* getfield(char* line, int num)
+{
+    const char* tok;
+    for (tok = strtok(line, ",");
+            tok && *tok;
+            tok = strtok(NULL, ",\n"))
+    {
+        if (!--num)
+            return tok;
+    }
+    return NULL;
 }
