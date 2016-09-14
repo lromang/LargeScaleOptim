@@ -140,11 +140,11 @@ double* NGC(double (*func)(double*, int), double* x, int nRow, int N_max, double
     // Choose step via backtracking
     step = 1;
     x_new = vSum(x, vProd(p, step, nRow), nRow);
-
+    // Backtrack loop
     while(func(x_new, nRow) > func(x, nRow) + (eta * step *  dotProd(r, p, nRow))){
       // Update x
       x_new = vSum(x, vProd(p, step, nRow), nRow);
-      step = step/2;
+      step = step / 2;
     }
     x = x_new;
     // Update r
