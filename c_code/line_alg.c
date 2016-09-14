@@ -249,6 +249,30 @@ double norm(double * x, int length){
 
 
 /* -------------------------------------
+ * Generates identity matrix
+ * IN
+ * x: double para comparar.
+ * y: double para comparar.
+ * OUT
+ * El menor entre los dos números.
+ * -------------------------------------
+ */
+double* identity(int m){
+  int i, j, k;
+  double * id;
+  // Allocate space for id.
+  id = (double*) malloc((m * m)* sizeof(double));
+  for(k = i = 0; i < m; i ++){
+    for(j = 0; j < m; j++){
+      i == j ? id[k] = 1 : 0;
+      k ++;
+    }
+  }
+  return id;
+}
+
+
+/* -------------------------------------
  * Función que calcula el mínimo entre dos
  * números.
  * IN
