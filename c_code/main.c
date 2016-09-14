@@ -7,7 +7,7 @@ double dummy_func(double*, int);
 
 int main(){
   // Variable declaration.
-  double *point, *p, *x;
+  double *point, *p, *x, *optim_point;
   int length, i;
 
   // Ask for size of point.
@@ -35,8 +35,9 @@ int main(){
   imprimeMatriz(x, 1, length);
 
   // Print result
+  optim_point = NGC(testFunc, x, length, 100, 1e-2);
   imprimeTit("Function minimum:");
-  imprimeMatriz(NGC(test_func, x, length, 100, 1e-3), 1, length);
+  imprimeMatriz(optim_point, 1, length);
    return 0;
 }
 

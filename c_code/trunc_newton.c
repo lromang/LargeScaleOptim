@@ -98,7 +98,9 @@ double* NGC(double (*func)(double*, int), double* x, int nRow, int N_max, double
   r = gradCentralDiff(func, x, nRow);
   // Outer loop, this modifies x! (stop criteria is missing)
   stop = 1e5;
+  imprimeTit("||grad(f)||");
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
+    printf("%f\n", norm(r, nRow));
     // Set tolerance.
     epsilon = min(.5, sqrt(norm(r, nRow)) * norm(r, nRow));
     // Initialize d, z, eta.
@@ -149,6 +151,8 @@ double* NGC(double (*func)(double*, int), double* x, int nRow, int N_max, double
     x = x_new;
     // Update r
     r = gradCentralDiff(func, x, nRow);
+    printf("%f\n", norm(r, nRow));
+
   } // Outer loop, modifies x!
   // Memory release.
   free(r);
