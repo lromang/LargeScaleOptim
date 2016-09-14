@@ -155,7 +155,6 @@ double* NGC(double (*func)(double*, int), double* x, int nRow, int N_max, double
   free(d);
   free(z);
   free(Bd);
-  free(p);
   // Return result.
   return x;
 }
