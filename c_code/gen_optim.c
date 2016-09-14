@@ -1,206 +1,121 @@
-/*
+/* #########################################
  * Luis Manuel Román García
+ * luis.roangarci@gmail.com
+ * #########################################
  *
- * -------------------------------------
- * Rutinas para llevar a cabo
- * operaciones generales para algoritmos
- * de optimización.
- * -------------------------------------
+ * -----------------------------------------
+ * General purpose optimization functions.
+ * -----------------------------------------
+ *
  */
 
 #include "line_alg.c"
 #include "utileries.c"
 
 /* -------------------------------------
- * Método de diferencias centrales para
- * aproximar el gradiente de una función
+ * Gradient approximation.
+ * Approximates the gradient of func via
+ * central differences.
  * IN
- * fun: Apuntador a una función que recibe
- * un apuntador a un double y un entero.
- * x: Apuntador a un vector sobre el cual
- * se quiere aproximar el gradiente
- * length: Longitud del vector.
+ * fun:    Funciton from which the gradient
+ *         is to be obtained.
+ * x:      Point where the gradient is to be
+ *         obtained.
+ * length: x's length.
  * OUT
- * res: Gradiente de fun evaluado en x.
+ * res: A pointer to the gradient of func
+ *      evaluated on x.
  * -------------------------------------
  */
 double* gradCentralDiff(double (*func)(double*, int), double* x, int length){
-  // Declaración de variables.
-  int i;
-  double epsilon, u;
+  // Variable declaration.
   double *res, *laux, *raux;
-
-  // Inicialización de variables.
+  double epsilon, u;
+  int i;
+  // Variable initialization and space allocation.
   u       = 1.1e-16;
   epsilon = sqrt(u);
   res     = (double*)malloc(length * sizeof(double));
-  laux     = (double*)malloc(length * sizeof(double));
-  raux     = (double*)malloc(length * sizeof(double));
-
-  // Llenado de vector auxiliar.
+  laux    = (double*)malloc(length * sizeof(double));
+  raux    = (double*)malloc(length * sizeof(double));
+  // Auxiliar vectors fill in.
   for(i = 0; i < length; i++){
     laux[i] = x[i];
     raux[i] = x[i];
   }
-
-  // Evaluación de derivada.
+  // Entry-wise gradient approximation.
   for(i = 0; i < length; i++){
     laux[i] = laux[i] + epsilon;
     raux[i] = raux[i] - epsilon;
-    res[i]  = (func(laux, length) - func(raux, length)) / (2*epsilon);
+    res[i]  = (func(laux, length) - func(raux, length)) / (2 * epsilon);
     raux[i] = x[i];
     laux[i] = x[i];
   }
-
-  // Liberar memoria
-  // free(aux);
+  // Memory release.
+  free(laux);
+  free(raux);
   return res;
 }
 
 /* -------------------------------------
- * Método de diferencias centrales para
- * aproximar el producto de la hessiana
- * de una función por un vector.
+ * Hessian vector product approximation
  * IN
- * fun: Apuntador a una función que recibe
- * un apuntador a un double y un entero.
- * x: Apuntador a un vector sobre el cual
- * se quiere aproximar el gradiente
- * p: El vector por el cual se multiplica
- * la hessiana.
- * length: Longitud del vector.
+ * fun:    Funciton from which the hessian
+ *         is to be obtained.
+ * x:      Point where the gradient is to be
+ *         obtained.
+ * p:      Vector that multiplies the
+ *         Hessian.
+ * length: x's length.
  * OUT
- * res: Gradiente de fun evaluado en x.
+ * Pointer to result of product between
+ * the Hessian and p evaluated on x.
  * -------------------------------------
  */
 double* hessCentralDiff(double (*func)(double*, int), double* x, double* p, int length){
-  // Declaración de variables.
-  double *grad, *aux_grad;
+  // Variable declaration.
+  double *grad, *aux_grad, *hess;
   double epsilon;
-
-  // Initializar epsilon
+  // Epsilon initialization.
   epsilon = sqrt(1.1e-6);
-
-  // Cálculo del gradiente y el gradiente auxiliar.
+  // Gradient and auxiliar gradient.
   grad     = gradCentralDiff(func, x, length);
   aux_grad = gradCentralDiff(func, vSum(x, vProd(p, epsilon, length), length), length);
-
-  // Approximación final.
-  return vProd(vSum(aux_grad, vProd(grad, -1, length), length), 1/epsilon, length);
+  // Hessian approximation.
+  hess = vProd(vSum(aux_grad, vProd(grad, -1, length), length), 1 / epsilon, length);
+  // Memory release.
+  free(grad);
+  free(aux_grad);
+  return hess;
 }
-
-
-/* -------------------------------------
- * Auxiliar function for line search
- * algorithm.
- * -------------------------------------
- */
-double phi(double (*func)(double*, int), double* x, double* p, double alpha, int length){
-  // phi(a) = f(x + ap)
-  return func(vSum(x, vProd(p, alpha, length), length), length);
-}
-
-/* -------------------------------------
- * Método auxiliar para búsqueda de línea.
- * IN
- * fun: Apuntador a una función que recibe
- * un apuntador a un double y un entero.
- * x: Apuntador a un vector sobre el cual
- * se quiere aproximar el gradiente
- * p: Una dirección de descenso.
- * length: Longitud del vector.
- * OUT
- * res: Gradiente de fun evaluado en x.
- * -------------------------------------
- */
-double zoom(double (*func)(double*, int), double alpha_lo, double alpha_hi, double* x, double*p,  int length){
-  double phi_new, alpha, c1, c2, grad_phi;
-  c1 = 1; // modify
-  c2 = 1; // modify
-  while(1){
-    // Obtain alpha
-    alpha   = (alpha_lo + alpha_hi)/2; // modify
-    phi_new = phi(func, x, p, alpha, length);
-    if((phi_new > func(x, length) + c1*alpha*dotProd(gradCentralDiff(func, x, length), p, length)) || (phi_new >= phi(func, x, p, alpha_lo, length))){
-      alpha_hi = alpha;
-    }else{
-      grad_phi = dotProd(gradCentralDiff(func, vSum(x, vProd(p, alpha, length), length), length), p, length);
-      if(abs(grad_phi) <= -c2 * dotProd(gradCentralDiff(func, x, length), p, length))
-        return alpha;
-      if(grad_phi * (alpha_hi - alpha_lo))
-        alpha_hi = alpha_lo;
-      alpha_lo = alpha;
-    }
-  }
-}
-
-
-/* -------------------------------------
- * Método de búsqueda de línea para tamaño
- * de paso.
- * IN
- * fun: Apuntador a una función que recibe
- * un apuntador a un double y un entero.
- * x: Apuntador a un vector sobre el cual
- * se quiere aproximar el gradiente
- * p: Una dirección de descenso.
- * length: Longitud del vector.
- * OUT
- * res: Gradiente de fun evaluado en x.
- * -------------------------------------
- */
-double lineSearch(double (*func)(double*, int), double* x, double* p, int length){
-  // Declare variables.
-  double alpha_old, alphaM, alpha_new, phi_new, phi_old, c1, c2, grad_phi, alpha_aux;
-  int i;
-  // Initialize variables.
-  alpha_old = 0;
-  alphaM    = rand() % 1000;
-  alpha_new = rand() % ((int) alphaM);
-  i  = 0;
-  c1 = 1;  // Modify
-  c2 = 1;  // Modify
-  while(1){
-    phi_new = phi(func, x, p, alpha_new, length);
-    if((phi_new > func(x, length) + dotProd(gradCentralDiff(func, x, length), p, length) * (c1 * alpha_new)) ||
-       ((phi_new >= phi_old) && i > 1))
-      return zoom(func, alpha_old, alpha_new, x, p, length);
-    grad_phi = dotProd(gradCentralDiff(func, vSum(x, vProd(p, alpha_new, length), length), length), p, length);
-    if(abs(grad_phi) <= -c2*dotProd(gradCentralDiff(func, x, length), p, length))
-      return alpha_new;
-    if(grad_phi >= 0)
-      return zoom(func, alpha_new, alpha_old, x, p, length);
-    alpha_aux = alpha_new;
-    alpha_new = alpha_new + (rand() % (int)(alpha_new - alpha_old));
-    alpha_old = alpha_aux;
-  }
-}
-
 
 /* -------------------------------------
  * Backtrack
+ * Calculates a step length that meets
+ * Wolfenstein inequalities.
  * IN
- * fun: Apuntador a una función que recibe
- * un apuntador a un double y un entero.
- * x: Apuntador a un vector sobre el cual
- * se quiere aproximar el gradiente
- * p: Una dirección de descenso.
- * length: Longitud del vector.
+ * fun:    Funciton from which the step length
+ *         is to be obtained.
+ * x:      Point where the gradient is to be
+ *         obtained.
+ * p:      Vector that multiplies the
+ *         Hessian.
+ * length: x's length.
  * OUT
- * res: Gradiente de fun evaluado en x.
+ * alpha: Step length.
  * -------------------------------------
  */
 double backTrack(double (*func)(double*, int), double* x, double* p, int length){
-  // Declare variables.
+  // Variable declaration.
   double *x_new;
   double alpha, rho, c;
-  // Initialize variables.
-  alpha = 1; // Return alpha=1 whenever possible.
+  // Variable initialization
+  alpha = 1; // Return alpha = 1 whenever possible.
   rho   = rand() % 1;
   c     = rand() % 1;
   // Iterate
   x_new  = vSum(x, vProd(p, alpha, length), length);
-  while(func(x_new, length) <= (func(x, length) + dotProd(vProd(gradCentralDiff(func, x, length), c*alpha, length), p, length))){
+  while(func(x_new, length) <= (func(x, length) + dotProd(vProd(gradCentralDiff(func, x, length), c * alpha, length), p, length))){
     x_new  = vSum(x, vProd(p, alpha, length), length);
     alpha  = alpha * rho;
   }
