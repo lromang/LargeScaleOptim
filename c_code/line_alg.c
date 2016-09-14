@@ -37,6 +37,7 @@ double * creaMatriz(int nRow, int nCol){
       k = k + 1;
     }
   }
+  // Return result.
   return matrix;
 }
 
@@ -89,6 +90,7 @@ double* vProd(double* v, double alpha, int length){
   for(i = 0; i < length; i ++){
     prod_v[i] = v[i] * alpha;
   }
+  // Return result.
   return prod_v;
 };
 
@@ -116,6 +118,7 @@ double* mTrans(double* A, int nCol, int nRow){
       A_trans[i * nCol + j] = A[j * nCol + i];
     }
   }
+  // Return result.
   return A_trans;
 };
 
@@ -140,6 +143,7 @@ double* vSum(double* v, double* u, int length){
   for(i = 0; i < length; i ++){
     sum_v[i] = v[i] + u[i];
   }
+  // Return result.
   return sum_v;
 }
 
@@ -161,6 +165,7 @@ int vEq(double* v, double* u, int length){
   int i;
   // Entry-wise comparison
   for(i = 0; (i < length) && (v[i] == u[i]); i ++);
+  // Return result.
   return (i == length);
 }
 
@@ -183,6 +188,7 @@ double dotProd(double* v, double* u, int length){
   for(i = 0; i < length; i ++){
     sum = sum + v[i] * u[i];
   }
+  // Return result.
   return sum;
 }
 
@@ -215,6 +221,7 @@ double* mProd(double* B, double* v, int nCol, int nRow){
     }
     Bd[i] = sum;
   }
+  // Return result.
   return Bd;
 }
 
@@ -257,6 +264,7 @@ double* identity(int m){
       k ++;
     }
   }
+  // Return result.
   return id;
 }
 

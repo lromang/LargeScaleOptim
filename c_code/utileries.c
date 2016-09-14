@@ -31,6 +31,7 @@ double testFunc(double* x, int length){
   for(i = 0; i < length; i++){
     sum = sum  + (100 - i + 1) * (x[i] * x[i]);
   }
+  // Return result.
   return sum;
 }
 
@@ -48,5 +49,6 @@ const char* getfield(char* line, int num)
         if (!--num)
             return tok;
     }
+    // Return result.
     return NULL;
 }

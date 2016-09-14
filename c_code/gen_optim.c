@@ -15,7 +15,7 @@
 /* -------------------------------------
  * Gradient approximation.
  * Approximates the gradient of func via
- * central differences.
+Arman * central differences.
  * IN
  * fun:    Funciton from which the gradient
  *         is to be obtained.
@@ -54,6 +54,7 @@ double* gradCentralDiff(double (*func)(double*, int), double* x, int length){
   // Memory release.
   free(laux);
   free(raux);
+  // Return result.
   return res;
 }
 
@@ -86,6 +87,7 @@ double* hessCentralDiff(double (*func)(double*, int), double* x, double* p, int 
   // Memory release.
   free(grad);
   free(aux_grad);
+  // Return result.
   return hess;
 }
 
@@ -119,5 +121,8 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
     x_new  = vSum(x, vProd(p, alpha, length), length);
     alpha  = alpha * rho;
   }
+  // Memory release.
+  free(x_new);
+  // Return result.
   return alpha;
 }

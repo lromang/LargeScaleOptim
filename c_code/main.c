@@ -45,7 +45,7 @@ double test_func(double* x, int length){
   double res;
   int i;
   for(res = i = 0; i < length; i++){
-    res = res + (3 - x[i])*(4 - x[i]) + x[i]*x[i]*x[i];
+    res = res + (3 - x[i])*(4 - x[i]);
   }
   res = res;
   return res;
