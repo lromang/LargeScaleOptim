@@ -70,9 +70,6 @@ double* GC(double* A, double* b, int nRow){
   // Memory release.
   free(r);
   free(p);
-  free(x_new);
-  free(r_new);
-  free(p_new);
   // Return result.
   return x;
 }
@@ -157,10 +154,8 @@ double* NGC(double (*func)(double*, int), double* x, int nRow, int N_max, double
   free(r);
   free(d);
   free(z);
-  free(r_new);
   free(Bd);
   free(p);
-  free(x_new);
   // Return result.
   return x;
 }

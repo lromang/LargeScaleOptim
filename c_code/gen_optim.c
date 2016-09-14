@@ -15,7 +15,7 @@
 /* -------------------------------------
  * Gradient approximation.
  * Approximates the gradient of func via
-Arman * central differences.
+ * central differences.
  * IN
  * fun:    Funciton from which the gradient
  *         is to be obtained.
