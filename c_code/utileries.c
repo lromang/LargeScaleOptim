@@ -3,9 +3,9 @@
 #include <string.h>
 
 /* -------------------------------------
- * Imprime titulo
+ * Print title
  * IN
- * title: Titulo que se quiere imprimir
+ * title: Title to be printed.
  * -------------------------------------
  */
 void imprimeTit(char * title){
@@ -19,7 +19,9 @@ void imprimeTit(char * title){
 
 
 /* -------------------------------------
- * Función de prueba.
+ * Test function:
+ * ## Characteristics ##
+ * Ill conditioned.
  * -------------------------------------
  */
 double testFunc(double* x, int length){
@@ -33,7 +35,7 @@ double testFunc(double* x, int length){
 }
 
 /* -------------------------------------
- * Lectura de archivos
+ * Read files
  * -------------------------------------
  */
 const char* getfield(char* line, int num)
