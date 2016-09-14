@@ -6,37 +6,36 @@ double test_func(double*, int);
 double dummy_func(double*, int);
 
 int main(){
-  // Declaración de variables
+  // Variable declaration.
   double *point, *p, *x;
   int length, i;
-  /*
-   *********************************************
-   * Resolver sistema de ecuaciones Ax = b
-   *********************************************
-   */
+
+  // Ask for size of point.
   printf("Enter size of point:\n");
   scanf("%d", &length);
 
-  // Alocar espacio
+  // Space allocation.
   point = (double*) malloc(length * sizeof(double));
   p     = (double*) malloc(length * sizeof(double));
 
+  // Point construction.
   for(i = 0; i < length; i++){
     point[i] = 1;
     p[i] = rand() % 10;
   }
 
-  /* ###############################################################
-   * Prueba NGC
+  /*
+   * ###############################################################
+   * Tests
    * ###############################################################
    */
   x = point;
 
-  imprimeTit("El punto inicial donde se evalualará la función es:");
+  imprimeTit("Initial point:");
   imprimeMatriz(x, 1, length);
 
   // Print result
-  imprimeTit("El mínimo de la función es:");
+  imprimeTit("Function minimum:");
   imprimeMatriz(NGC(test_func, x, length, 100, 1e-3), 1, length);
    return 0;
 }

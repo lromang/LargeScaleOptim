@@ -67,7 +67,7 @@ double* GC(double* A, double* b, int nRow){
     p     = p_new;
     k++;
   }
-  // Space release.
+  // Memory release.
   free(r);
   free(p);
   free(x_new);
@@ -153,7 +153,7 @@ double* NGC(double (*func)(double*, int), double* x, int nRow, int N_max, double
     // Update r
     r = gradCentralDiff(func, x, nRow);
   } // Outer loop, modifies x!
-  // Space release.
+  // Memory release.
   free(r);
   free(d);
   free(z);
