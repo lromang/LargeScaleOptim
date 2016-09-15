@@ -5,7 +5,7 @@
  * Funciones para calcular Newton truncado
  * -------------------------------------
  */
-#include "gen_optim.c"
+#include "trunc_newton.c"
 
 /* -------------------------------------
  * Approximate gf'H in LBFGS method
@@ -94,31 +94,45 @@ void updateSY(double ** s, double ** y, double * s_new, double * y_new, int k,  
  * res: Gradiente de fun evaluado en x.
  * -------------------------------------
  */
-double* LBFGS(double (*func)(double*, int), double* x, double ** y, double **s, int m, int nrow, double TOL){
+double* LBFGS(double (*func)(double*, int), int m, int nRow, double TOL){
   // Declare variables
-  double *grad, *p, *x_new, *grad_new;
+  double **s, **y;
+  double *grad, *p, *x_new, *grad_new, *x;
   double  alpha;
-  int k;
+  int k, i;
+  // Space allocation.
+  // x
+  x = (double*) malloc(nRow * sizeof(double));
+  // s
+  s = (double**) malloc((m * nRow) * sizeof(double));
+  // y
+  y = (double**) malloc((m * nRow) * sizeof(double));
+  // Initial x.
+  for(i = 0; i < nRow; i++){
+    x[i] = ((double) rand()/INT_MAX) + 1;
+  }
   // Initialize variables
-  grad = gradCentralDiff(func, x, nrow);
+  grad = gradCentralDiff(func, x, nRow);
   k    = 0;
-  while(norm(grad, nrow) > TOL){
-    p        = findH(func, x, s, y, nrow, m, k);
-    alpha    = backTrack(func, x, p, nrow);
-    x_new    = vSum(x, vProd(p, alpha, nrow), nrow);
-    grad_new = gradCentralDiff(func, x_new, nrow);
+  // Initial values s y.
+  updateSY(s, y, x, grad, k, m);
+  while(norm(grad, nRow) > TOL){
+    p        = findH(func, x, s, y, nRow, m, k); // caso k = 0
+    alpha    = backTrack(func, x, p, nRow);
+    x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
+    grad_new = gradCentralDiff(func, x_new, nRow);
     // Update s y.
-    updateSY(s, y, vSum(x_new, vProd(x, -1, nrow), nrow), vSum(grad_new, vProd(grad, -1, nrow), nrow), k, m);
+    //updateSY(s, y, vSum(x_new, vProd(x, -1, nRow), nRow), vSum(grad_new, vProd(grad, -1, nRow), nRow), k, m);
     // Update grad, x and k.
     grad = grad_new;
     x    = x_new;
     k ++;
   }
-  // Memory release.
+ /*// Memory release.
   free(grad);
   free(p);
   free(x_new);
-  free(grad_new);
+  free(grad_new);*/
   // Return results.
   return x;
 }

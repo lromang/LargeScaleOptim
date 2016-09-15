@@ -1,43 +1,41 @@
 #include <math.h>
-#include "trunc_newton.c"
-
+#include "lbfgs.c"
 
 double test_func(double*, int);
 double dummy_func(double*, int);
 
 int main(){
   // Variable declaration.
-  double *point, *p, *x, *optim_point;
-  int length, i;
+  double *optim_point_N, *optim_point_lbfgs;
+  int length;
 
   // Ask for size of point.
   printf("Enter size of point:\n");
   scanf("%d", &length);
 
-  // Space allocation.
-  point = (double*) malloc(length * sizeof(double));
-  p     = (double*) malloc(length * sizeof(double));
+  /*
+   * ###############################################################
+   * Test Truncated Newton
+   * ###############################################################
+   */
 
-  // Point construction.
-  for(i = 0; i < length; i++){
-    point[i] = 1;
-    p[i] = rand() % 10;
-  }
+  // Print result
+  optim_point_N = NGC(test_func, length, 10, 1e-2);
+  imprimeTit("Function minimum (NCG):");
+  imprimeMatriz(optim_point_N, 1, length);
 
   /*
    * ###############################################################
-   * Tests
+   * Test LBFGS
    * ###############################################################
    */
-  x = point;
-
-  imprimeTit("Initial point:");
-  imprimeMatriz(x, 1, length);
 
   // Print result
-  optim_point = NGC(test_func, x, length, 10, 1e-2);
-  imprimeTit("Function minimum:");
-  imprimeMatriz(optim_point, 1, length);
+  // optim_point_lbfgs = LBFGS(test_func, 10, length, 1e-2);
+  imprimeTit("Function minimum (LBFGS):");
+  // imprimeMatriz(optim_point_lbfgs, 1, length);
+
+
    return 0;
 }
 

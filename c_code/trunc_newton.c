@@ -87,13 +87,21 @@ double* GC(double* A, double* b, int nRow){
  * x: Local minimum of func.
  * -------------------------------------
  */
-double* NGC(double (*func)(double*, int), double* x, int nRow, int N_max, double TOL){
+double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
   // Variable declaration.
-  double *r, *d, *z, *r_new, *Bd, *p, *x_new;
+  double *r, *d, *z, *r_new, *Bd, *p, *x_new, *x;
   int k, i, j, stop;
   double epsilon, alpha, beta, step, eta;
+
   // Space allocation.
   z = (double*) malloc(nRow * sizeof(double));
+  x = (double*) malloc(nRow * sizeof(double));
+
+  // Initial x
+  for(i = 0; i < nRow; i++){
+    // Improve initial point with Stochastic Gradient Descent!
+    x[i] = rand() % 1;//((double) rand()/INT_MAX) + 1;
+  }
   // Calculate gradient.
   r = gradCentralDiff(func, x, nRow);
   // Outer loop, this modifies x! (stop criteria is missing)
