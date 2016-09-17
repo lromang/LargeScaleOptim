@@ -113,8 +113,8 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   double alpha, rho, c;
   // Variable initialization
   alpha = 1; // Return alpha = 1 whenever possible.
-  rho   = rand() % 1;
-  c     = rand() % 1;
+  rho   = ((double) rand()/INT_MAX) + 1;
+  c     = ((double) rand()/INT_MAX) + 1;
   // Iterate
   x_new  = vSum(x, vProd(p, alpha, length), length);
   while(func(x_new, length) <= (func(x, length) + dotProd(vProd(gradCentralDiff(func, x, length), c * alpha, length), p, length))){

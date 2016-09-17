@@ -193,6 +193,34 @@ double dotProd(double* v, double* u, int length){
 }
 
 /* -------------------------------------
+ * Dot product between two vectors.
+ * IN
+ * v:      Vector to be multiplied.
+ * u:      Vector to be multiplied.
+ * length: Vectors' length.
+ * OUT
+ * a matrix with the dot prod of u and v
+ * -------------------------------------
+ */
+double * dotProdMat(double* v, double* u, int length){
+  // Variable declaration.
+  double *dotProd, *aux_array;
+  int i, j, k;
+  // Space allocation.
+  dotProd = (double * )malloc((length * length) * sizeof(double));
+  for(k = i = 0; i < length; i++){
+    aux_array = vProd(u, v[i], length);
+    for(j = 0; j < length; j++){
+      dotProd[k] = aux_array[j];
+      k ++;
+    }
+  }
+  // Return result.
+  return dotProd;
+}
+
+
+/* -------------------------------------
  * Matrix vector product.
  * Carries out the product between a
  * matrix B and a vector v.

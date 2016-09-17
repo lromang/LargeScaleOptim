@@ -31,10 +31,9 @@ int main(){
    */
 
   // Print result
-  // optim_point_lbfgs = LBFGS(test_func, 10, length, 1e-2);
-  imprimeTit("Function minimum (LBFGS):");
-  // imprimeMatriz(optim_point_lbfgs, 1, length);
-
+  //optim_point_lbfgs = LBFGS(test_func, 10, length, 1e-2);
+  //imprimeTit("Function minimum (LBFGS):");
+  //imprimeMatriz(optim_point_lbfgs, 1, length);
 
    return 0;
 }
@@ -43,7 +42,7 @@ double test_func(double* x, int length){
   double res;
   int i;
   for(res = i = 0; i < length; i++){
-    res = res + (3 - x[i])*(4 - x[i]) + x[i]*x[i]*x[i];
+    res = res + (3 - x[i])*(4 - x[i]) + x[i]*x[i]*x[i]*x[i];
   }
   res = res;
   return res;
