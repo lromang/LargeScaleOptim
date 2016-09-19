@@ -18,7 +18,6 @@ void imprimeTit(char * title){
   printf("\n------------\n");
 }
 
-
 /* -------------------------------------
  * Test function:
  * ## Characteristics ##
@@ -50,7 +49,6 @@ double test_func(double* x, int length){
   }
   return res;
 };
-
 
 /* -------------------------------------
  * Read files

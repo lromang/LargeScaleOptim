@@ -98,16 +98,13 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
   x = (double*) malloc(nRow * sizeof(double));
 
   /*
-   * Probably use Stochastic gradient descent for a better initial point.
+   * Initial point x
+   * Alternative: Some iterations of Stochastic Gradient Descent for a better initial point.
    */
-  // Initial point x
   for(i = 0; i < nRow; i++){
     // Improve initial point with Stochastic Gradient Descent!
     x[i] = rand() % 1;//((double) rand()/INT_MAX) + 1;
   }
-  /*
-   * Probably use Stochastic gradient descent for a better initial point.
-   */
 
   // Calculate the gradient.
   r = gradCentralDiff(func, x, nRow);
