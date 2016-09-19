@@ -18,6 +18,7 @@ After execution, the program is going to ask you for the size of the the dimenti
 
 * Characteristics: Convex.
 
+```
 double test_func(double* x, int length){
   double res;
   int i;
@@ -26,10 +27,11 @@ double test_func(double* x, int length){
   }
   return res;
 };
-
+```
 
 * Characteristics: Ill conditioned.
 
+```
 double testFunc(double* x, int length){
   int i;
   double sum;
@@ -39,6 +41,7 @@ double testFunc(double* x, int length){
   }
   // Return result.
   return sum;
-}
+};
+```
 
 
