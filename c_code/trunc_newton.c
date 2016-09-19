@@ -89,7 +89,7 @@ double* GC(double* A, double* b, int nRow){
  */
 double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
   // Variable declaration.
-  double *r, *d, *z, *r_new, *Bd, *p, *x_new, *x;
+  double *r, *d, *z, *r_new, *Bd, *p, *x_new, *x, *r_cg;
   int k, i, j, stop;
   double epsilon, alpha, beta, step, eta;
 
@@ -97,33 +97,40 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
   z = (double*) malloc(nRow * sizeof(double));
   x = (double*) malloc(nRow * sizeof(double));
 
-  // Initial x
+  /*
+   * Probably use Stochastic gradient descent for a better initial point.
+   */
+  // Initial point x
   for(i = 0; i < nRow; i++){
     // Improve initial point with Stochastic Gradient Descent!
     x[i] = rand() % 1;//((double) rand()/INT_MAX) + 1;
   }
-  // Calculate gradient.
+  /*
+   * Probably use Stochastic gradient descent for a better initial point.
+   */
+
+  // Calculate the gradient.
   r = gradCentralDiff(func, x, nRow);
-  // Outer loop, this modifies x! (stop criteria is missing)
   stop = 1e3;
-  //imprimeTit("||grad(f)||");
+
+  // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
-    // printf("%f\n", norm(r, nRow));
     // Set tolerance.
-    epsilon = min(.5, sqrt(norm(r, nRow)) * norm(r, nRow));
-    // Initialize d, z, eta.
-    d = vProd(r, -1, nRow);
+    epsilon = min(.5, sqrt(norm(r, nRow))) * norm(r, nRow);
+    // Initialize d, z, eta, r_cg.
+    d    = vProd(r, -1, nRow);
+    r_cg = vProd(r, 1, nRow);
     for(i = 0; i < nRow; i++){
       z[i] = 0;
     }
-    eta = 1e-4;
+
     /* -----------------------------------
      * ########### CG Iteration ##########
      * -----------------------------------
      */
     for(j = 0; j < N_max; j++){
       Bd = hessCentralDiff(func, x, d, nRow);
-      // Check if d'Bd <= 0
+      // Check if d'Bd <= 0 i.e. d is a descent direction.
       if(dotProd(d, Bd, nRow) <= 0){
         if(j == 0){
           p = d;
@@ -133,24 +140,28 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
           break;
         }
       }
-      alpha = dotProd(r, r, nRow) / dotProd(d, Bd, nRow);  // alpha_j = rj'rj/d_j'Bd_j
+      alpha = dotProd(r_cg, r_cg, nRow) / dotProd(d, Bd, nRow);  // alpha_j = rj'rj/d_j'Bd_j
       z     = vSum(z, vProd(d, alpha, nRow), nRow);        // z_{j+1} = z_j + alpha_j*d_j
-      r_new = vSum(r, vProd(Bd, alpha, nRow), nRow);       // r_{j+1} = r_j + alpha_j*B_kd_j
+      r_new = vSum(r_cg, vProd(Bd, alpha, nRow), nRow);       // r_{j+1} = r_j + alpha_j*B_kd_j
       if(norm(r_new, nRow) < epsilon){
         p = z;
         break;
       }
-      beta = dotProd(r_new, r_new, nRow) / dotProd(r, r, nRow);
+      // Update beta, d, r_cg.
+      beta = dotProd(r_new, r_new, nRow) / dotProd(r_cg, r_cg, nRow);
       d    = vSum(vProd(r_new, -1, nRow), vProd(d, beta, nRow), nRow);
-      /* -----------------------------------
-       * ###################################
-       * -----------------------------------
-       */
+      r_cg = r_new;
     }
+    /* -----------------------------------
+     * ######### CG Iteration End ########
+     * -----------------------------------
+     */
+
     // Choose step via backtracking
     step = 1;
     x_new = vSum(x, vProd(p, step, nRow), nRow);
     // Backtrack loop
+    eta = 1e-4;
     while(func(x_new, nRow) > func(x, nRow) + (eta * step *  dotProd(r, p, nRow))){
       // Update x
       x_new = vSum(x, vProd(p, step, nRow), nRow);
@@ -161,10 +172,7 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
     r = gradCentralDiff(func, x, nRow);
   } // Outer loop, modifies x!
   // Memory release.
-  free(r);
-  free(d);
   free(z);
-  free(Bd);
   // Return result.
   return x;
 }

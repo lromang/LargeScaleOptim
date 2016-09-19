@@ -58,7 +58,7 @@ void imprimeMatriz(double* A, int nCol, int nRow){
   k = 0;
   for(i = 0; i < nRow; i++){
     for(j = 0; j < nCol; j++){
-      printf(" %.2lf ", A[k]);
+      printf(" %.5lf ", A[k]);
       k = k + 1;
     }
     printf("\n");

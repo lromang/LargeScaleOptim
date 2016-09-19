@@ -19,8 +19,14 @@ int main(){
    * ###############################################################
    */
 
-  // Print result
+  // Print results easy.
   optim_point_N = NGC(test_func, length, 10, 1e-2);
+  imprimeTit("Function minimum (NCG):");
+  imprimeMatriz(optim_point_N, 1, length);
+
+
+  // Print results hard.
+  optim_point_N = NGC(testFunc, length, 10, 1e-2);
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
@@ -31,19 +37,9 @@ int main(){
    */
 
   // Print result
-  optim_point_lbfgs = LBFGS(test_func, length, 10, 1e-2);
-  imprimeTit("Function minimum (LBFGS):");
-  imprimeMatriz(optim_point_lbfgs, 1, length);
+  //optim_point_lbfgs = LBFGS(test_func, length, 10, 1e-2);
+  //imprimeTit("Function minimum (LBFGS):");
+  //imprimeMatriz(optim_point_lbfgs, 1, length);
 
    return 0;
 }
-
-double test_func(double* x, int length){
-  double res;
-  int i;
-  for(res = i = 0; i < length; i++){
-    res = res + (3 - x[i])*(4 - x[i]) + x[i]*x[i]*x[i]*x[i];
-  }
-  res = res;
-  return res;
-};
