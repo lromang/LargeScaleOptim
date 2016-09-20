@@ -8,9 +8,7 @@
  * -----------------------------------------
  *
  */
-
 #include "line_alg.c"
-#include "utileries.c"
 
 /* -------------------------------------
  * Gradient approximation.

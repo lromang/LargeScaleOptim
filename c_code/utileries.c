@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "trunc_newton.c"
 
 /* -------------------------------------
  * Print title
@@ -50,20 +51,35 @@ double test_func(double* x, int length){
   return res;
 };
 
+
 /* -------------------------------------
- * Read files
+ * Logistic regression.
+ * ## Characteristics ##
+ * Easy
  * -------------------------------------
  */
-const char* getfield(char* line, int num)
-{
-    const char* tok;
-    for (tok = strtok(line, ",");
-            tok && *tok;
-            tok = strtok(NULL, ",\n"))
+double logistic_regression(double* x, int length){
+  // Variable declaration.
+  int   *y;
+  double res;
+  int i, MAX_FILE_ROWS = 150;
+  float w[MAX_FILE_ROWS][length];
+  // Data file name.
+  FILE *file = fopen("../data/iris", "r");
+  // Allocate space
+  y = (int*) malloc(MAX_FILE_ROWS * sizeof(int));
+  // Read in values
+  for(i = 0; i < MAX_FILE_ROWS; i++)
     {
-        if (!--num)
-            return tok;
+      if (feof(file))
+        break;
+      // Read in values.
+      fscanf(file, "%f %f %f %f %d", &(w[i][0]), &(w[i][1]), &(w[i][2]), &(w[i][3]), &(y[i]));
     }
-    // Return result.
-    return NULL;
-}
+  // Evaluate logistic.
+  res = 0;
+  for(i = 0; i < MAX_FILE_ROWS; i++){
+    res = res + log(1 + exp(-dotProd(x, (double*) w[i], length)*y[i]));
+  }
+  return res;
+};

@@ -1,13 +1,16 @@
 #include <math.h>
-#include "lbfgs.c"
+#include "utileries.c"
 
 double test_func(double*, int);
 double dummy_func(double*, int);
 
 int main(){
   // Variable declaration.
-  double *optim_point_N, *optim_point_lbfgs;
-  int length;
+  double *optim_point_N, *point;
+  int length, i;
+
+
+
 
   // Ask for size of point.
   printf("Enter size of point:\n");
@@ -27,6 +30,12 @@ int main(){
 
   // Print results hard.
   optim_point_N = NGC(testFunc, length, 10, 1e-2);
+  imprimeTit("Function minimum (NCG):");
+  imprimeMatriz(optim_point_N, 1, length);
+
+  // Test logistic.
+  // Generate point
+  optim_point_N = NGC(logistic_regression, min(length, 4), 10, 1e-2);
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
