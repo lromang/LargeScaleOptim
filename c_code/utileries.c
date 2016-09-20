@@ -75,11 +75,15 @@ double logistic_regression(double* x, int length){
         break;
       // Read in values.
       fscanf(file, "%f %f %f %f %d", &(w[i][0]), &(w[i][1]), &(w[i][2]), &(w[i][3]), &(y[i]));
+      //if(y[i] == 0)y[i] = -1;
+      //printf("%f %f %f %f %d \n",  w[i][0],  w[i][1], w[i][2], w[i][3], y[i]);
     }
   // Evaluate logistic.
   res = 0;
   for(i = 0; i < MAX_FILE_ROWS; i++){
-    res = res + log(1 + exp(-dotProd(x, (double*) w[i], length)*y[i]));
+    res = res + log(1 + exp(-dotProd(x, (double*) w[i], length) * y[i]));
   }
+  //imprimeTit("LogLoss");
+  //printf("%f\n", res);
   return res;
 };
