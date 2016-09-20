@@ -13,7 +13,7 @@ gcc -o code main.c -L gen_optim.c -L line_alg.c -L utileries.c -lm
 
 ## Execution
 
-After execution, the program is going to ask you for the size of the the dimention of the problem. The two functions that it is going to optimize are the following:
+During the execution, the program is going to ask the user for the dimention of the problem. The three functions that the code is going to optimize are the following:
 
 
 * Characteristics: Convex.
@@ -44,4 +44,5 @@ double testFunc(double* x, int length){
 };
 ```
 
+* Logistic regression on iris dataset.
 
