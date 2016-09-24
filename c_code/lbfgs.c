@@ -45,6 +45,8 @@ double * findH(double (* func)(double*, int), double* x, double**s, double**y, i
    rho  = 1 / dotProd(y[i], s[i], nRow);
    beta = rho * dotProd(y[i], r, nRow);
    r    = vSum(r, vProd(s[i], (alpha - beta), nRow), nRow);
+   printf("||r||");
+   printf("%f",norm(r, nRow));
   }
   // Memory release.
   free(q);
@@ -112,6 +114,8 @@ double * LBFGS(double (* func)(double*, int), int nRow, int m, double TOL){
   k = 0;
   updateSY(s, y, x, grad, m, 0); // With k = 0; s = x, y = grad(f)
   while(norm(grad, nRow) > TOL && k < MAX_ITER){
+    printf("||Grad LBFGS||\n");
+    printf("%f\n", norm(grad, nRow));
     // p = -Hgrad(f)
     p        = vProd(findH(func, x, s, y, nRow, m, k), -1, nRow);
     // Alpha that statifies Wolfe conditions.

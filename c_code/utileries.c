@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "trunc_newton.c"
+//#include "trunc_newton.c"
+#include "lbfgs.c"
 
 /* -------------------------------------
  * Print title

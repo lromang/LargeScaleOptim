@@ -6,11 +6,8 @@ double dummy_func(double*, int);
 
 int main(){
   // Variable declaration.
-  double *optim_point_N, *point;
-  int length, i;
-
-
-
+  double *optim_point_N, *optim_point_lbfgs;
+  int length;
 
   // Ask for size of point.
   printf("Enter size of point:\n");
@@ -46,9 +43,9 @@ int main(){
    */
 
   // Print result
-  //optim_point_lbfgs = LBFGS(test_func, length, 10, 1e-2);
-  //imprimeTit("Function minimum (LBFGS):");
-  //imprimeMatriz(optim_point_lbfgs, 1, length);
+  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-2);
+  imprimeTit("Function minimum (LBFGS):");
+  imprimeMatriz(optim_point_lbfgs, 1, length);
 
    return 0;
 }
