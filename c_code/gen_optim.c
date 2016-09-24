@@ -111,7 +111,7 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   double alpha, rho, c;
   // Variable initialization
   alpha = 1; // Return alpha = 1 whenever possible.
-  rho   = ((double) rand()/INT_MAX) + 1;
+  rho   = 0.5; //((double) rand()/INT_MAX) + 1;
   c     = 1e-4;
   // Iterate
   x_new  = vSum(x, vProd(p, alpha, length), length);

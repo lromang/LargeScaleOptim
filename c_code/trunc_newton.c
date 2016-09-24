@@ -1,6 +1,8 @@
 /* #########################################
- * Luis Manuel Román García
+ *
+ + Luis Manuel Román García
  * luis.roangarci@gmail.com
+ *
  * #########################################
  *
  * -----------------------------------------
@@ -102,7 +104,7 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
    */
   for(i = 0; i < nRow; i++){
     // Improve initial point with Stochastic Gradient Descent!
-    x[i] = rand() % 1;//((double) rand()/INT_MAX) + 1;
+    x[i] = ((double) rand() / INT_MAX) + 1; //rand() % 1;
   }
 
   // Calculate the gradient.
@@ -119,7 +121,6 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
     for(i = 0; i < nRow; i++){
       z[i] = 0;
     }
-
     /* -----------------------------------
      * ########### CG Iteration ##########
      * -----------------------------------
