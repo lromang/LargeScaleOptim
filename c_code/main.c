@@ -24,7 +24,7 @@ int* logistic_labels;
 float logistic_values[150][5];
 
 double logistic_regression(double*, int);
-double eval_function(double*, int);
+double class_error(double*, int);
 
 
 int main(){
@@ -80,7 +80,7 @@ int main(){
 
   // Prediction error.
   imprimeTit("Class Error:");
-  printf("%f \n", eval_function(optim_point_N, length));
+  printf("%f \n", class_error(optim_point_N, length));
 
   /*
    * ###############################################################
@@ -123,7 +123,7 @@ double logistic_regression(double* x, int length){
  * Eval function
  * -------------------------------------
  */
-double eval_function(double* coefs, int length){
+double class_error(double* coefs, int length){
   // Variable declaration.
   double class_error, entry_val;
   int *y;
