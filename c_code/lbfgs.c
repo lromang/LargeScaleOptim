@@ -5,8 +5,10 @@
  *
  * -----------------------------------------
  * Functions for applying LBFGS
- * algorithm. This script is largely based
- * on José Luis Morales, ITAM 2015 implementation
+ * algorithm. Ideas from
+ * José Luis Morales's, ITAM 2015 LBFGS
+ * implementation have been taken
+ * as a guide for this script.
  * -----------------------------------------
  *
  */
