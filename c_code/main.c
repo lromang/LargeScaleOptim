@@ -11,7 +11,6 @@
  *
  */
 
-
 #include <math.h>
 #include "utileries.c"
 
@@ -23,7 +22,7 @@ int const MAX_FILE_COLS = 4;
 int* logistic_labels;
 float logistic_values[150][5];
 
-double logistic_regression(double*, int);
+double NGC_logistic_regression(double*, int);
 double class_error(double*, int);
 
 
@@ -31,7 +30,7 @@ int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs;
   double res;
-  int i, length;
+  int i, length, seed;
   // Logistic Variable declaration
   // Ask for size of point.
   printf("Enter size of point:\n");
@@ -57,7 +56,7 @@ int main(){
 
   /*
    * ###############################################################
-   * Test Truncated Newton
+   * Test Truncatd Newton
    * ###############################################################
    */
 
@@ -68,19 +67,24 @@ int main(){
 
 
   // Print results hard.
-   optim_point_N = NGC(testFunc, length, 10, 1e-2);
-   imprimeTit("Function minimum (NCG):");
-   imprimeMatriz(optim_point_N, 1, length);
+  optim_point_N = NGC(testFunc, length, 10, 1e-2);
+  imprimeTit("Function minimum (NCG):");
+  imprimeMatriz(optim_point_N, 1, length);
 
+
+
+  printf("Input a random number seed: ");
+  scanf("%u", &seed);
+  srand(seed);
 
   // Test logistic.
-  optim_point_N = NGC(logistic_regression, 5, 10, 1e-2);
+  optim_point_N = NGC(NGC_logistic_regression, 5, 10, 1e-2);
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
   // Prediction error.
   imprimeTit("Class Error:");
-  printf("%f \n", class_error(optim_point_N, length));
+  printf(" %.5lf \n", class_error(optim_point_N, length));
 
   /*
    * ###############################################################
@@ -100,19 +104,30 @@ int main(){
 
 /* -------------------------------------
  * Logistic regression.
- * ## Characteristics ##
+ * ## Characterisics ##
  * Easy
  * -------------------------------------
  */
-double logistic_regression(double* x, int length){
+double NGC_logistic_regression(double* x, int length){
   // Variable declaration.
   double res;
-  int *y;
-  int i;
-  // Evaluate logistic.
+  int *y, *indexes;
+  int i, samp_size, k;
+  // Initialize samp_size and res.
+  k = 10; // Size of sample ... proper subset of dataset.
+  samp_size = rand() % (MAX_FILE_ROWS - k);
   res = 0;
-  for(i = 0; i < MAX_FILE_ROWS; i++){
-    res = res + log(1 + exp(-dotProd(x, (double*) logistic_values[i], 5) * logistic_labels[i]));
+  // Memory allocation.
+  indexes = (int*) malloc(samp_size * sizeof(int));
+  // Generate array of indexes.
+  for(i = 0; i < samp_size; i++){
+    indexes[i] = rand() % MAX_FILE_ROWS;
+  }
+  // Evaluate logistic Error.
+  for(i = 0; i < samp_size; i++){
+    res = res + log(1 +
+                    exp(-dotProd(x, (double*) logistic_values[indexes[i]], 5) *
+                        logistic_labels[indexes[i]]));
   }
   return res;
 };
