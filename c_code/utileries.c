@@ -1,3 +1,16 @@
+/* #########################################
+ *
+ * Luis Manuel Román García
+ * luis.roangarci@gmail.com
+ *
+ * #########################################
+ *
+ * -----------------------------------------
+ * General purpose utileries
+ * -----------------------------------------
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
