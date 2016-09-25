@@ -123,13 +123,14 @@ double * LBFGS(double (* func)(double*, int),
     x[i] = ((double) rand()/INT_MAX) + 1;
   }
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 15;
+  MAX_ITER = 30;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
   updateSY(s, y, x, grad, m, k); // With k = 0; s = x, y = grad(f)
   while(norm(grad, nRow) > TOL && k < MAX_ITER){
     // p = -Hgrad(f)
+    printf("\n||grad|| = %f", norm(grad, nRow));
     p        = vProd(findH(grad, s, y, nRow, m, k), -1, nRow);
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow);
@@ -137,8 +138,6 @@ double * LBFGS(double (* func)(double*, int),
     grad_new = gradCentralDiff(func, x_new, nRow);
     // Update k.
     k = k + 1;
-    printf("p\n");
-    imprimeMatriz(p, 1, nRow);
     // Update s, y.
     updateSY(s, y, vSum(x_new, vProd(x, -1, nRow), nRow),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);

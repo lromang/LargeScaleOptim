@@ -120,7 +120,7 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   while(func(x_new, length) > (func(x, length) +
                                dotProd(vProd(gradCentralDiff(func, x, length),
                                              c * alpha, length), p, length))
-        && alpha > 1e-4){
+        && alpha > 1e-10){
     x_new  = vSum(x, vProd(p, alpha, length), length);
     alpha  = alpha * rho;
   }
