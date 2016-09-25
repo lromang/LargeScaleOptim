@@ -27,7 +27,7 @@
 double * findH(double* grad, double** s, double** y,
                int nRow, int m, int k){
   double *q, *r;
-  double rho, alpha, constant, beta;
+  double rho, alpha, constant, beta, denom;
   int i, state;
   // Copy grad
   q = grad;
@@ -38,7 +38,7 @@ double * findH(double* grad, double** s, double** y,
    * -------------------------
   */
   for(i = (state - 1); i >= 0; i--){
-    rho   = 1 / dotProd(y[i], s[i], nRow);
+    rho   = 1/(1e-6 + dotProd(y[i], s[i], nRow)); // avoid dividing by numerical zero.
     alpha = rho * dotProd(s[i], q, nRow);
     q     = vSum(q, vProd(y[i], -alpha, nRow), nRow);
   }
@@ -57,7 +57,7 @@ double * findH(double* grad, double** s, double** y,
    * -------------------------
   */
   for(i = 0; i < state; i ++){
-   rho  = 1 / dotProd(y[i], s[i], nRow);
+    rho  = 1 /(1e-6 + dotProd(y[i], s[i], nRow)); // avoid dividing by numerical zero.
    beta = rho * dotProd(y[i], r, nRow);
    r    = vSum(r, vProd(s[i], (alpha - beta), nRow), nRow);
   }
@@ -120,20 +120,20 @@ double * LBFGS(double (* func)(double*, int),
   y = (double **)malloc((nRow * nRow) * sizeof(double));
   // Initialize x.
   for(i = 0; i < nRow; i++){
-    x[i] = ((double) rand()/INT_MAX) + 1;
+    x[i] = ((double) rand() / INT_MAX) + 1;
   }
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 30;
+  MAX_ITER = 1e3;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
   updateSY(s, y, x, grad, m, k); // With k = 0; s = x, y = grad(f)
   while(norm(grad, nRow) > TOL && k < MAX_ITER){
     // p = -Hgrad(f)
-    printf("\n||grad|| = %f", norm(grad, nRow));
     p        = vProd(findH(grad, s, y, nRow, m, k), -1, nRow);
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow);
+    //printf("\nalpha = %f", alpha);
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
     grad_new = gradCentralDiff(func, x_new, nRow);
     // Update k.

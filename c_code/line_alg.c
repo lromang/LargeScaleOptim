@@ -312,3 +312,19 @@ double* identity(int m){
 double min (double x, double y){
   return x > y ? y : x;
 }
+
+
+/* -------------------------------------
+ * Maximum between two numbers.
+ * Obtains the maximum between two
+ * numbers.
+ * IN
+ * x: Number to be compared.
+ * y: Number to be compared.
+ * OUT
+ * The maximum between x and y.
+ * -------------------------------------
+ */
+double max (double x, double y){
+  return x > y ? x : y;
+}
