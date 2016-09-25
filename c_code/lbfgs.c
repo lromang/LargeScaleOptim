@@ -122,7 +122,7 @@ double * LBFGS(double (* func)(double*, int),
   y = (double **)malloc((nRow * nRow) * sizeof(double));
   // Initialize x.
   for(i = 0; i < nRow; i++){
-    x[i] = ((double) rand() / INT_MAX) + 1;
+    x[i] = ((double) rand() / INT_MAX) ;
   }
   // Until Convergence or MAX_ITER.
   MAX_ITER = 1e3;
