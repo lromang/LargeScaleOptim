@@ -78,13 +78,13 @@ int main(){
   srand(seed);
 
   // Test logistic.
-  optim_point_N = NGC(NGC_logistic_regression, 5, 10, 1e-2);
-  imprimeTit("Function minimum (NCG):");
-  imprimeMatriz(optim_point_N, 1, length);
+  //optim_point_N = NGC(NGC_logistic_regression, 5, 10, 1e-2);
+  //imprimeTit("Function minimum (NCG):");
+  //imprimeMatriz(optim_point_N, 1, length);
 
   // Prediction error.
-  imprimeTit("Class Error:");
-  printf(" %.5lf \n", class_error(optim_point_N, length));
+  //imprimeTit("Class Error:");
+  //printf(" %.5lf \n", class_error(optim_point_N, length));
 
   /*
    * ###############################################################
@@ -92,10 +92,16 @@ int main(){
    * ###############################################################
    */
 
-  // Print result 890
+  // Print result easy.
   optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-4);
   imprimeTit("Function minimum (LBFGS):");
   imprimeMatriz(optim_point_lbfgs, 1, length);
+
+  // Print results hard.
+  optim_point_lbfgs = NGC(testFunc, length, 10, 1e-4);
+  imprimeTit("Function minimum (LBFGS):");
+  imprimeMatriz(optim_point_lbfgs, 1, length);
+
 
    return 0;
 }
