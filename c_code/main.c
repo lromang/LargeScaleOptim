@@ -93,11 +93,10 @@ int main(){
    */
 
   // Print result
-  /*
-   * optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-2);
-   * imprimeTit("Function minimum (LBFGS):");
-   * imprimeMatriz(optim_point_lbfgs, 1, length);
-  */
+  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-4);
+  imprimeTit("Function minimum (LBFGS):");
+  imprimeMatriz(optim_point_lbfgs, 1, length);
+
    return 0;
 }
 

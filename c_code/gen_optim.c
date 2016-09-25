@@ -116,7 +116,11 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   c     = 1e-4;
   // Iterate
   x_new  = vSum(x, vProd(p, alpha, length), length);
-  while(func(x_new, length) > (func(x, length) + dotProd(vProd(gradCentralDiff(func, x, length), c * alpha, length), p, length))){
+  // alpha > 1e-4 just to avoid numerical 0.
+  while(func(x_new, length) > (func(x, length) +
+                               dotProd(vProd(gradCentralDiff(func, x, length),
+                                             c * alpha, length), p, length))
+        && alpha > 1e-4){
     x_new  = vSum(x, vProd(p, alpha, length), length);
     alpha  = alpha * rho;
   }

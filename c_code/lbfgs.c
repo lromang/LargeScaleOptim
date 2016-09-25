@@ -24,8 +24,8 @@
  * x: Local minimum of func.
  * -------------------------------------
  */
-double * findH(double* grad,
-               double** s, double** y, int nRow, int m, int k){
+double * findH(double* grad, double** s, double** y,
+               int nRow, int m, int k){
   double *q, *r;
   double rho, alpha, constant, beta;
   int i, state;
@@ -48,7 +48,9 @@ double * findH(double* grad,
   }else{
     constant = dotProd(s[state - 1], y[state - 1], nRow) /
       dotProd(y[state - 1], y[state - 1], nRow);
-    r        = mProd(vProd(identity(nRow), constant, nRow * nRow), q, nRow, nRow);
+    r        = mProd(vProd(identity(nRow),
+                           constant,
+                           nRow * nRow), q, nRow, nRow);
   }
   /* -------------------------
    * Second Loop
@@ -77,7 +79,8 @@ double * findH(double* grad,
  * x: Local minimum of func.
  * -------------------------------------
  */
-void updateSY(double** s, double** y, double * s_new, double* y_new, int m, int k){
+void updateSY(double** s, double** y, double * s_new,
+              double* y_new, int m, int k){
   int i;
   if(k < m){
     s[k] = s_new;
@@ -104,10 +107,11 @@ void updateSY(double** s, double** y, double * s_new, double* y_new, int m, int 
  * x: Local minimum of func.
  * -------------------------------------
  */
-double * LBFGS(double (* func)(double*, int), int nRow, int m, double TOL){
+double * LBFGS(double (* func)(double*, int),
+               int nRow, int m, double TOL){
   // Variable declaration.
   double **s, **y;
-  double *x, *grad, *p, *x_new, *grad_new;
+  double *x, *grad, *p, *x_new, *grad_new, *grad0;
   double alpha;
   int i, k, MAX_ITER;
   // Space allocation.
@@ -119,11 +123,11 @@ double * LBFGS(double (* func)(double*, int), int nRow, int m, double TOL){
     x[i] = ((double) rand()/INT_MAX) + 1;
   }
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1e3;
+  MAX_ITER = 15;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
-  updateSY(s, y, x, grad, m, 0); // With k = 0; s = x, y = grad(f)
+  updateSY(s, y, x, grad, m, k); // With k = 0; s = x, y = grad(f)
   while(norm(grad, nRow) > TOL && k < MAX_ITER){
     // p = -Hgrad(f)
     p        = vProd(findH(grad, s, y, nRow, m, k), -1, nRow);
@@ -133,6 +137,8 @@ double * LBFGS(double (* func)(double*, int), int nRow, int m, double TOL){
     grad_new = gradCentralDiff(func, x_new, nRow);
     // Update k.
     k = k + 1;
+    printf("p\n");
+    imprimeMatriz(p, 1, nRow);
     // Update s, y.
     updateSY(s, y, vSum(x_new, vProd(x, -1, nRow), nRow),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
