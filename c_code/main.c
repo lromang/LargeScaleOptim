@@ -23,7 +23,9 @@ int const MAX_FILE_COLS = 4;
 int* logistic_labels;
 float logistic_values[150][5];
 
-double logistic_regression(double* x, int length);
+double logistic_regression(double*, int);
+double eval_function(double*, int);
+
 
 int main(){
   // Variable declaration.
@@ -76,6 +78,10 @@ int main(){
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
+  // Prediction error.
+  imprimeTit("Class Error:");
+  printf("%f \n", eval_function(optim_point_N, length));
+
   /*
    * ###############################################################
    * Test LBFGS
@@ -101,7 +107,7 @@ int main(){
 double logistic_regression(double* x, int length){
   // Variable declaration.
   double res;
-  int   *y;
+  int *y;
   int i;
   // Evaluate logistic.
   res = 0;
@@ -109,4 +115,28 @@ double logistic_regression(double* x, int length){
     res = res + log(1 + exp(-dotProd(x, (double*) logistic_values[i], 5) * logistic_labels[i]));
   }
   return res;
+};
+
+
+/*
+ * -------------------------------------
+ * Eval function
+ * -------------------------------------
+ */
+double eval_function(double* coefs, int length){
+  // Variable declaration.
+  double class_error, entry_val;
+  int *y;
+  int i, pred;
+  // Evaluate logistic.
+  pred = 0;
+  for(i = 0; i < MAX_FILE_ROWS; i++){
+    entry_val = exp(- dotProd(coefs, (double*) logistic_values[i], length));
+    entry_val = 1 / (1 + entry_val);
+    // Classification threshold = .5
+    pred < .5 ? pred = 1 : -1;
+    class_error = class_error + (pred == logistic_labels[i] ? 1 : 0);
+    //res = res + log(1 + exp(-dotProd(x, (double*) logistic_values[i], 5) * logistic_labels[i]));
+  }
+  return class_error / MAX_FILE_ROWS;
 };
