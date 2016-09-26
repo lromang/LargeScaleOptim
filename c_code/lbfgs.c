@@ -43,6 +43,7 @@ double * findH(double* grad, double** s, double** y,
     rho   = 1/(1e-6 + dotProd(y[i], s[i], nRow)); // avoid dividing by numerical zero.
     alpha = rho * dotProd(s[i], q, nRow);
     q     = vSum(q, vProd(y[i], -alpha, nRow), nRow);
+    //printf("\n||grad|| = %f     sTy = %f \n", norm(grad, nRow), dotProd(s[i], y[i], nRow));
   }
   // r = H'q
   if(k == 0){
@@ -125,7 +126,7 @@ double * LBFGS(double (* func)(double*, int),
     x[i] = ((double) rand() / INT_MAX) ;
   }
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1e3;
+  MAX_ITER = 1.5e3;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
