@@ -114,7 +114,7 @@ double * LBFGS(double (* func)(double*, int),
                int nRow, int m, double TOL){
   // Variable declaration.
   double **s, **y;
-  double *x, *grad, *p, *x_new, *grad_new, *grad0;
+  double *x, *grad, *p, *x_new, *grad_new;
   double alpha;
   int i, k, MAX_ITER;
   // Space allocation.
