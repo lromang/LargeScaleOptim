@@ -22,7 +22,7 @@ int const MAX_FILE_COLS = 4;
 int* logistic_labels;
 float logistic_values[150][5];
 
-double NGC_logistic_regression(double*, int);
+double stochastic_logistic_regression(double*, int);
 double class_error(double*, int);
 
 
@@ -71,20 +71,19 @@ int main(){
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
-
-
   printf("Input a random number seed: ");
   scanf("%u", &seed);
   srand(seed);
 
   // Test logistic.
-  //optim_point_N = NGC(NGC_logistic_regression, 5, 10, 1e-2);
-  //imprimeTit("Function minimum (NCG):");
-  //imprimeMatriz(optim_point_N, 1, length);
+  /*optim_point_N = NGC(stochastic_logistic_regression, 5, 10, 1e-2);
+   *imprimeTit("Function minimum (NCG):");
+   *imprimeMatriz(optim_point_N, 1, length);
 
   // Prediction error.
-  //imprimeTit("Class Error:");
-  //printf(" %.5lf \n", class_error(optim_point_N, length));
+   *imprimeTit("Class Error:");
+   *printf(" %.5lf \n", class_error(optim_point_N, length));
+  */
 
   /*
    * ###############################################################
@@ -103,6 +102,16 @@ int main(){
   imprimeMatriz(optim_point_lbfgs, 1, length);
 
 
+  // Test logistic.
+  /*optim_point_N = LBFGS(stochastic_logistic_regression, 5, 10, 1e-2);
+   *imprimeTit("Function minimum (LBFGS):");
+   *imprimeMatriz(optim_point_N, 1, length);
+
+  // Prediction error.
+   *imprimeTit("Class Error:");
+   *printf(" %.5lf \n", class_error(optim_point_N, length));
+  */
+
    return 0;
 }
 
@@ -113,7 +122,7 @@ int main(){
  * Easy
  * -------------------------------------
  */
-double NGC_logistic_regression(double* x, int length){
+double stochastic_logistic_regression(double* x, int length){
   // Variable declaration.
   double res;
   int *y, *indexes;
