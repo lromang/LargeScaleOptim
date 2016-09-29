@@ -137,7 +137,7 @@ double * LBFGS(double (* func)(double*, int),
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow);
     // ---------------- PRINT ------------------- //
-    printf("\n ITER = %d; f(x) = %f ; ||grad|| = %f ; ||p|| = %f ; sTy = %f ; alpha = %f",
+    printf("\n ITER = %d; f(x) = %f ; ||grad|| =  %.10e ; ||p|| =  %.10e ; sTy =  %.10e ; alpha = %f",
            k,
            func(x, nRow),
            norm(grad, nRow),

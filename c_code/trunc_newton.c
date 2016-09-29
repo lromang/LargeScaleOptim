@@ -92,7 +92,7 @@ double* GC(double* A, double* b, int nRow){
 double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
   // Variable declaration.
   double *r, *d, *z, *r_new, *Bd, *p, *x_new, *x, *r_cg;
-  int k, i, j, stop;
+  int k, i, j, stop, wolf_cond;
   double epsilon, alpha, beta, step, eta;
 
   // Space allocation.
@@ -160,21 +160,24 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
     x_new = vSum(x, vProd(p, step, nRow), nRow);
     // Backtrack loop
     eta = 1e-4;
+    wolf_cond = 1;
     while(func(x_new, nRow) > func(x, nRow) + (eta * step *  dotProd(r, p, nRow))){
       // Update x
       x_new = vSum(x, vProd(p, step, nRow), nRow);
       step  = step / 2;
+      wolf_cond = wolf_cond + 1;
     }
     x = x_new;
     // Update r
     r = gradCentralDiff(func, x, nRow);
     // ---------------- PRINT ------------------- //
-    printf("\n ITER = %d; f(x) = %f;  ||grad|| = %f ; ||p|| = %f ; alpha = %f",
+    printf("\n ITER = %d; f(x) = %f;  ||grad|| =  %.10e ; ||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d",
            k,
            func(x, nRow),
            norm(r, nRow),
            norm(p, nRow),
-           alpha);
+           alpha,
+           wolf_cond);
     // ---------------- PRINT ------------------- //y
   } // Outer loop, modifies x!
   // Memory release.

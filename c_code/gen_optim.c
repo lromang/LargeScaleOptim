@@ -110,6 +110,7 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   // Variable declaration.
   double *x_new;
   double alpha, rho, c;
+  int wolf_iters;
   // Variable initialization
   alpha = 1; // Return alpha = 1 whenever possible.
   rho   = 0.5; //((double) rand()/INT_MAX) + 1;
@@ -117,13 +118,16 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   // Iterate
   x_new  = vSum(x, vProd(p, alpha, length), length);
   // alpha > 1e-4 just to avoid numerical 0.
+  wolf_iters = 1;
   while(func(x_new, length) > (func(x, length) +
                                dotProd(vProd(gradCentralDiff(func, x, length),
                                              c * alpha, length), p, length))
         && alpha > 1e-10){
     x_new  = vSum(x, vProd(p, alpha, length), length);
     alpha  = alpha * rho;
+    wolf_iters = wolf_iters + 1;
   }
+  printf("\n backtrack iters = %d\n", wolf_iters);
   // Memory release.
   free(x_new);
   // Return result.
