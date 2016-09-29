@@ -136,7 +136,14 @@ double * LBFGS(double (* func)(double*, int),
     p        = vProd(findH(grad, s, y, nRow, m, k), -1, nRow);
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow);
-    //printf("\nalpha = %f", alpha);
+    // ---------------- PRINT ------------------- //
+    printf("\n ITER = %d; ||grad|| = %f ; ||p|| = %f ; sTy = %f ; alpha = %f",
+           k,
+           norm(grad, nRow),
+           norm(p, nRow),
+           dotProd(s[k % m], y[k % m], nRow),
+           alpha);
+    // ---------------- PRINT ------------------- //y
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
     grad_new = gradCentralDiff(func, x_new, nRow);
     // Update k.

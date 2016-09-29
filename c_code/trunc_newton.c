@@ -168,6 +168,13 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
     x = x_new;
     // Update r
     r = gradCentralDiff(func, x, nRow);
+    // ---------------- PRINT ------------------- //
+    printf("\n ITER = %d; ||grad|| = %f ; ||p|| = %f ; alpha = %f",
+           k,
+           norm(r, nRow),
+           norm(p, nRow),
+           alpha);
+    // ---------------- PRINT ------------------- //y
   } // Outer loop, modifies x!
   // Memory release.
   free(z);
