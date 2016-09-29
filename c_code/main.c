@@ -78,15 +78,15 @@ int main(){
   srand(seed);
 
   // Test logistic.
-  /*optim_point_N = NGC(stochastic_logistic_regression, 5, 10, 1e-2);
-   *imprimeTit("Function minimum (NCG):");
-   *imprimeMatriz(optim_point_N, 1, length);
-   */
+  // optim_point_N = NGC(stochastic_logistic_regression, 5, 10, 1e-2);
+  // imprimeTit("Function minimum (NCG):");
+  // imprimeMatriz(optim_point_N, 1, length);
+
 
   // Prediction error.
-  /*imprimeTit("Class Error:");
-   *printf(" %.5lf \n", class_error(optim_point_N, length));
-   */
+  // imprimeTit("Class Error:");
+  // printf(" %.5lf \n", class_error(optim_point_N, length));
+
 
   /*
    * ###############################################################
@@ -106,15 +106,15 @@ int main(){
 
 
   // Test logistic.
-  /*optim_point_N = LBFGS(stochastic_logistic_regression, 5, 10, 1e-2);
-   *imprimeTit("Function minimum (LBFGS):");
-   *imprimeMatriz(optim_point_N, 1, length);
-   */
+  // optim_point_N = LBFGS(stochastic_logistic_regression, 5, 10, 1e-2);
+  // imprimeTit("Function minimum (LBFGS):");
+  // imprimeMatriz(optim_point_N, 1, length);
+
 
   // Prediction error.
-  /*imprimeTit("Class Error:");
-   *printf(" %.5lf \n", class_error(optim_point_N, length));
-   */
+  // imprimeTit("Class Error:");
+  // printf(" %.5lf \n", class_error(optim_point_N, length));
+
 
    return 0;
 }
