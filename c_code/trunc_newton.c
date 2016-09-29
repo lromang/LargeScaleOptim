@@ -160,7 +160,7 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
     x_new = vSum(x, vProd(p, step, nRow), nRow);
     // Backtrack loop
     eta = 1e-4;
-    wolf_cond = 1;
+    wolf_cond = 0;
     while(func(x_new, nRow) > func(x, nRow) + (eta * step *  dotProd(r, p, nRow))){
       // Update x
       x_new = vSum(x, vProd(p, step, nRow), nRow);
@@ -176,7 +176,7 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
            func(x, nRow),
            norm(r, nRow),
            norm(p, nRow),
-           alpha,
+           step,
            wolf_cond);
     // ---------------- PRINT ------------------- //y
   } // Outer loop, modifies x!

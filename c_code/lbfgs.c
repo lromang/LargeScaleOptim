@@ -115,7 +115,7 @@ double * LBFGS(double (* func)(double*, int),
   // Variable declaration.
   double **s, **y;
   double *x, *grad, *p, *x_new, *grad_new;
-  double alpha;
+  double alpha, norm_grad0;
   int i, k, MAX_ITER;
   // Space allocation.
   x = (double *)malloc(nRow * sizeof(double));
@@ -131,7 +131,8 @@ double * LBFGS(double (* func)(double*, int),
   // Update s, y.
   k = 0;
   updateSY(s, y, x, grad, m, k); // With k = 0; s = x, y = grad(f)
-  while(norm(grad, nRow) > TOL && k < MAX_ITER){
+  norm_grad0 = norm(grad, nRow);
+  while(norm(grad, nRow) > TOL*(1 + norm_grad0) && k < MAX_ITER){
     // p = -Hgrad(f)
     p        = vProd(findH(grad, s, y, nRow, m, k), -1, nRow);
     // Alpha that statifies Wolfe conditions.
