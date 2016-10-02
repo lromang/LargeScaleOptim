@@ -62,7 +62,7 @@ int main(){
    */
 
   // Print results easy.
-  optim_point_N = NGC(test_func, length, 10, 1e-2);
+  optim_point_N = NGC(test_func, length, 10, 1e-6);
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
