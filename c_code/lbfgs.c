@@ -51,9 +51,10 @@ double * findH(double* grad, double** s, double** y,
   }
   // Second Loop
   for(i = 0; i < state; i ++){
-    rho  = 1 / (dotProd(y[i], s[i], nRow));
-    beta = rho * dotProd(y[i], r, nRow);
-    r    = vSum(r, vProd(s[i], (alpha - beta), nRow), nRow);
+    rho   = 1 / (dotProd(y[i], s[i], nRow));
+    beta  = rho * dotProd(y[i], r, nRow);
+    alpha = rho * dotProd(s[i], q, nRow);
+    r     = vSum(r, vProd(s[i], (alpha - beta), nRow), nRow);
   }
   // Memory release.
   free(q);
@@ -121,7 +122,7 @@ double * LBFGS(double (* func)(double*, int),
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
-  // updateSY(s, y, x, grad, m, k); // With k = 0; s = x, y = grad(f)
+  // Initial norm of gradient.
   norm_grad0 = norm(grad, nRow);
   while(norm(grad, nRow) > TOL*(1 + norm_grad0) && k < MAX_ITER){
     // p = -Hgrad(f)
@@ -131,7 +132,7 @@ double * LBFGS(double (* func)(double*, int),
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
     grad_new = gradCentralDiff(func, x_new, nRow);
     // Update s, y.
-    updateSY(s, y, vSum(x_new, vProd(x, -1, nRow), nRow),
+    updateSY(s, y, vProd(p, alpha, nRow),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
     // ---------------- PRINT ------------------- //
     printf("\n ITER = %d; f(x) = %.10e ; ||x|| = %.10e ; ||grad|| =  %.10e ; ||p|| =  %.10e ; sTy =  %.10e ; alpha = %.10e",
@@ -140,8 +141,12 @@ double * LBFGS(double (* func)(double*, int),
            norm(x, nRow),
            norm(grad, nRow),
            norm(p, nRow),
-           dotProd(s[k % m], y[k % m], nRow),
+           dotProd(s[(int)min(k , (m - 1))], y[(int)min(k , (m - 1))], nRow),
            alpha);
+    // imprimeTit("S");
+    // imprimeMatriz(s[(int)min(k, (m - 1))], 1, nRow);
+    // imprimeTit("Y");
+    // imprimeMatriz(y[(int)min(k, (m - 1))], 1, nRow);
     // ---------------- PRINT ------------------- //y
     // Update k, x, grad.
     x    = x_new;

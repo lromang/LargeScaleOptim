@@ -12,7 +12,7 @@
  */
 
 #include <math.h>
-#include "utileries.c"
+#include "lbfgs.c"
 
 // Size of file.
 int const MAX_FILE_ROWS = 150;
@@ -21,7 +21,6 @@ int const MAX_FILE_COLS = 4;
 // Value storage.
 int* logistic_labels;
 float logistic_values[150][5];
-
 double stochastic_logistic_regression(double*, int);
 double class_error(double*, int);
 
@@ -29,7 +28,6 @@ double class_error(double*, int);
 int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs;
-  double res;
   int i, length, seed;
   // Logistic Variable declaration
   // Ask for size of point.

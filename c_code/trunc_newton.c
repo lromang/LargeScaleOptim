@@ -114,6 +114,7 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
 
   // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
+    // ############ CG Variables ###########
     // Set tolerance.
     epsilon = min(.5, sqrt(norm(r, nRow))) * norm(r, nRow);
     // Initialize d, z, eta, r_cg.

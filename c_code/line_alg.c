@@ -13,6 +13,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include "utileries.c"
 
 /* -------------------------------------
  * Matrix creation:
@@ -59,7 +60,7 @@ void imprimeMatriz(double* A, int nCol, int nRow){
   k = 0;
   for(i = 0; i < nRow; i++){
     for(j = 0; j < nCol; j++){
-      printf(" %.5lf ", A[k]);
+      printf("%.10e", A[k]);
       k = k + 1;
     }
     printf("\n");
