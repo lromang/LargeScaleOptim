@@ -10,8 +10,9 @@
  * implementation have been taken
  * as a guide for this script.
  * -----------------------------------------
- *
+
  */
+
 #include "trunc_newton.c"
 
 
@@ -28,17 +29,18 @@
  */
 double * findH(double* grad, double** s, double** y,
                int nRow, int m, int k){
-  double *q, *r;
-  double rho, alpha, constant, beta;
+  double *q, *r, *alpha;
+  double rho, constant, beta;
   int i, state;
   q = grad;
-  // State
+  // Initialize variables
+  alpha = (double*) malloc(nRow * sizeof(double));
   state = min(k, m);
   // First Loop
   for(i = (state - 1); i > 0; i--){
-    rho   = 1 / (dotProd(y[i], s[i], nRow));
-    alpha = rho * dotProd(s[i], q, nRow);
-    q     = vSum(q, vProd(y[i], -alpha, nRow), nRow);
+    rho      = 1 / (dotProd(y[i], s[i], nRow));
+    alpha[i] = rho * dotProd(s[i], q, nRow);
+    q        = vSum(q, vProd(y[i], -alpha[i], nRow), nRow);
   }
   // r = H0
   if(k == 0){
@@ -53,8 +55,7 @@ double * findH(double* grad, double** s, double** y,
   for(i = 0; i < state; i ++){
     rho   = 1 / (dotProd(y[i], s[i], nRow));
     beta  = rho * dotProd(y[i], r, nRow);
-    alpha = rho * dotProd(s[i], q, nRow);
-    r     = vSum(r, vProd(s[i], (alpha - beta), nRow), nRow);
+    r     = vSum(r, vProd(s[i], (alpha[i] - beta), nRow), nRow);
   }
   // Memory release.
   free(q);

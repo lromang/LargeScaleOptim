@@ -60,7 +60,7 @@ int main(){
    */
 
   // Print results easy.
-  optim_point_N = NGC(test_func, length, 10, 1e-6);
+  optim_point_N = NGC(test_func, length, 10, 1e-2);
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
@@ -93,12 +93,12 @@ int main(){
    */
 
   // Print result easy.
-  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-4);
+  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-2);
   imprimeTit("Function minimum (LBFGS):");
   imprimeMatriz(optim_point_lbfgs, 1, length);
 
   // Print results hard.
-  optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-4);
+  optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-2);
   imprimeTit("Function minimum (LBFGS):");
   imprimeMatriz(optim_point_lbfgs, 1, length);
 
