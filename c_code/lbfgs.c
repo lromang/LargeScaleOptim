@@ -151,7 +151,7 @@ double * LBFGS(double (* func)(double*, int),
     // Update k, x, grad.
     x    = x_new;
     grad = grad_new;
-    k = k + 1;
+    k    = k + 1;
   }
   free(grad);
   free(s);

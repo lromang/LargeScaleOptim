@@ -9,7 +9,7 @@ Both this methods are meant to work on a large scale optimization environment.
 
 ## Compilation
 
-gcc -o code main.c -L gen_optim.c -L line_alg.c -L utileries.c -lm
+make
 
 ## Execution
 
