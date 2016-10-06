@@ -29,17 +29,21 @@
  */
 double * findH(double* grad, double** s, double** y,
                int nRow, int m, int k){
-  double *q, *r, *alpha;
-  double rho, constant, beta;
+  double *q, *r, *alpha, *rho;
+  double  constant, beta;
   int i, state;
   q = grad;
   // Initialize variables
   alpha = (double*) malloc(nRow * sizeof(double));
+  rho   = (double*) malloc(nRow * sizeof(double));
   state = min(k, m);
+  // Fill in rho
+  for(i = 0; i < state; i++){
+    rho[i] = 1 / (dotProd(y[i], s[i], nRow));
+  }
   // First Loop
   for(i = (state - 1); i > 0; i--){
-    rho      = 1 / (dotProd(y[i], s[i], nRow));
-    alpha[i] = rho * dotProd(s[i], q, nRow);
+    alpha[i] = rho[i] * dotProd(s[i], q, nRow);
     q        = vSum(q, vProd(y[i], -alpha[i], nRow), nRow);
   }
   // r = H0
@@ -53,12 +57,13 @@ double * findH(double* grad, double** s, double** y,
   }
   // Second Loop
   for(i = 0; i < state; i ++){
-    rho   = 1 / (dotProd(y[i], s[i], nRow));
-    beta  = rho * dotProd(y[i], r, nRow);
+    beta  = rho[i] * dotProd(y[i], r, nRow);
     r     = vSum(r, vProd(s[i], (alpha[i] - beta), nRow), nRow);
   }
   // Memory release.
   free(q);
+  free(alpha);
+  free(rho);
   // Return result.
   return r;
 }
@@ -135,6 +140,7 @@ double * LBFGS(double (* func)(double*, int),
     // Update s, y.
     updateSY(s, y, vProd(p, alpha, nRow),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
+
     // ---------------- PRINT ------------------- //
     printf("\n ITER = %d; f(x) = %.10e ; ||x|| = %.10e ; ||grad|| =  %.10e ; ||p|| =  %.10e ; sTy =  %.10e ; alpha = %.10e",
            k,
