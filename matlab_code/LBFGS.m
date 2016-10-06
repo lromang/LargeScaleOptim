@@ -135,6 +135,9 @@ for i = 1:m
 end
 a = bm;
 alfa=zeros(m,1);
+%
+% Two loops start here
+%
 for i=1:m
     alfa(a)= ro(a) * s(:,a)' * q;
     q = q - alfa(a) * y(:,a);
