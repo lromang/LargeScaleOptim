@@ -61,7 +61,6 @@ double * findH(double* grad, double** s, double** y,
     r     = vSum(r, vProd(s[i], (alpha[i] - beta), nRow), nRow);
   }
   // Memory release.
-  free(q);
   free(alpha);
   free(rho);
   // Return result.

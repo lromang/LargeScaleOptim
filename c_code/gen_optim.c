@@ -92,8 +92,7 @@ double* hessCentralDiff(double (*func)(double*, int), double* x, double* p, int 
 
 /* -------------------------------------
  * Backtrack
- * Calculates a step length that meets
- * Wolfenstein inequalities.
+ * Calculates a step length via backtracking
  * IN
  * fun:    Funciton from which the step length
  *         is to be obtained.
@@ -108,7 +107,6 @@ double* hessCentralDiff(double (*func)(double*, int), double* x, double* p, int 
  */
 double backTrack(double (*func)(double*, int), double* x, double* p, int length){
   // Variable declaration.
-  double *x_new;
   double alpha, rho, c;
   int wolf_iters;
   // Variable initialization
@@ -116,19 +114,44 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   rho   = 0.5; //((double) rand()/INT_MAX) + 1;
   c     = 1e-4;
   // Iterate
-  x_new  = vSum(x, vProd(p, alpha, length), length);
-  // alpha > 1e-4 just to avoid numerical 0.
+  // alpha > 1e-10 just to avoid numerical 0.
   wolf_iters = 0;
-  while(func(x_new, length) > (func(x, length) +
+  while(func(vSum(x, vProd(p, alpha, length), length), length) > (func(x, length) +
                                dotProd(vProd(gradCentralDiff(func, x, length),
-                                             c * alpha, length), p, length)) && alpha > 1e-10){
-    x_new  = vSum(x, vProd(p, alpha, length), length);
-    alpha  = alpha * rho;
+                                             c * alpha, length), p, length))){
+    alpha      = alpha * rho;
     wolf_iters = wolf_iters + 1;
   }
   printf("\n backtrack iters = %d\n", wolf_iters);
-  // Memory release.
-  free(x_new);
   // Return result.
+  return alpha;
+}
+
+
+/* -------------------------------------
+ * CSVSRCH
+ * Calculates a step length that meets
+ * Wolfenstein inequalities.
+ * IN
+ * fun:    Funciton from which the step length
+ *         is to be obtained.
+ * x:      Point where the gradient is to be
+ *         obtained.
+ * p:      Vector that multiplies the
+ *         Hessian.
+ * length: x's length.
+ * OUT
+ * alpha: Step length.
+ * -------------------------------------
+ */
+double cvsrch(double (*func)(double*, int),
+              double* x,
+              double* p,
+              int nRow,
+              double TOL){
+  // Variable declaration.
+  double alpha;
+  // Variable initialization.
+  alpha = 1;
   return alpha;
 }
