@@ -126,32 +126,3 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
   // Return result.
   return alpha;
 }
-
-
-/* -------------------------------------
- * CSVSRCH
- * Calculates a step length that meets
- * Wolfenstein inequalities.
- * IN
- * fun:    Funciton from which the step length
- *         is to be obtained.
- * x:      Point where the gradient is to be
- *         obtained.
- * p:      Vector that multiplies the
- *         Hessian.
- * length: x's length.
- * OUT
- * alpha: Step length.
- * -------------------------------------
- */
-double cvsrch(double (*func)(double*, int),
-              double* x,
-              double* p,
-              int nRow,
-              double TOL){
-  // Variable declaration.
-  double alpha;
-  // Variable initialization.
-  alpha = 1;
-  return alpha;
-}
