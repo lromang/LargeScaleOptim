@@ -172,7 +172,8 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
     // Update r
     r = gradCentralDiff(func, x, nRow);
     // ---------------- PRINT ------------------- //
-    printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; ||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d",
+    printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
+           "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d",
            k,
            func(x, nRow),
            norm(r, nRow),

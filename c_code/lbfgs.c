@@ -142,18 +142,18 @@ double * LBFGS(double (* func)(double*, int),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
 
     // ---------------- PRINT ------------------- //
-    printf("\n ITER = %d; f(x) = %.10e ; ||x|| = %.10e ; ||grad|| =  %.10e ; ||p|| =  %.10e ; sTy =  %.10e ; alpha = %.10e",
+    printf("\n ITER = %d; f(x) = %.10e ; "
+           "||x|| = %.10e ; ||grad|| =  %.10e ; "
+           "||p|| =  %.10e ; sTy =  %.10e ; "
+           "alpha = %.10e",
            k,
            func(x, nRow),
            norm(x, nRow),
            norm(grad, nRow),
            norm(p, nRow),
-           dotProd(s[(int)min(k , (m - 1))], y[(int)min(k , (m - 1))], nRow),
+           dotProd(s[(int)min(k , (m - 1))],
+                   y[(int)min(k , (m - 1))], nRow),
            alpha);
-    // imprimeTit("S");
-    // imprimeMatriz(s[(int)min(k, (m - 1))], 1, nRow);
-    // imprimeTit("Y");
-    // imprimeMatriz(y[(int)min(k, (m - 1))], 1, nRow);
     // ---------------- PRINT ------------------- //y
     // Update k, x, grad.
     x    = x_new;

@@ -75,7 +75,7 @@ while  norm_g > tol*(1.0 + normg0)  &&  iter < maxiter
     if sTy <= eps
         fprintf(fout, ' Warning, small sTy < eps  % 8.2e \n', sTy);
     else        
-        a = mod(iter,m) + 1;
+        a = mod(iter, m) + 1;
         ind(a)= iter + 1;
         S(:,a) = s;
         Y(:,a) = y;
