@@ -89,9 +89,11 @@ double* GC(double* A, double* b, int nRow){
  * x: Local minimum of func.
  * -------------------------------------
  */
-double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
+double* NGC(double (*func)(double*, int), int nRow,
+            int N_max, double TOL){
   // Variable declaration.
-  double *r, *d, *z, *r_new, *Bd, *p, *x_new, *x, *r_cg;
+  double *r, *d, *z, *r_new,
+    *Bd, *p, *x_new, *x, *r_cg;
   int k, i, j, stop, wolf_cond;
   double epsilon, alpha, beta, step, eta;
 
@@ -101,7 +103,8 @@ double* NGC(double (*func)(double*, int), int nRow, int N_max, double TOL){
 
   /*
    * Initial point x
-   * Alternative: Some iterations of Stochastic Gradient Descent for a better initial point.
+   * Alternative: Some iterations of Stochastic
+   * Gradient Descent for a better initial point.
    */
   for(i = 0; i < nRow; i++){
     // Improve initial point with Stochastic Gradient Descent!

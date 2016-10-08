@@ -12,7 +12,7 @@
  */
 
 #include <math.h>
-#include "lbfgs.c"
+#include "slm.c"
 
 // Size of file.
 int const MAX_FILE_ROWS = 150;
@@ -27,7 +27,7 @@ double class_error(double*, int);
 
 int main(){
   // Variable declaration.
-  double *optim_point_N, *optim_point_lbfgs;
+  double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
   int i, length, seed;
   // Logistic Variable declaration
   // Ask for size of point.
@@ -112,6 +112,22 @@ int main(){
   // Prediction error.
   // imprimeTit("Class Error:");
   // printf(" %.5lf \n", class_error(optim_point_N, length));
+
+
+  /*
+   * ###############################################################
+   * Test Stochastically Initialized LFBGS
+   * ###############################################################
+   */
+  // Print result easy.
+  optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-2, 20);
+  imprimeTit("Function minimum (SLM-LBFGS):");
+  imprimeMatriz(optim_point_slm_lbfgs, 1, length);
+
+  // Print results hard.
+  optim_point_slm_lbfgs = SLM_LBFGS(testFunc, length, 20, 1e-4, 20);
+  imprimeTit("Function minimum (SLM-LBFGS):");
+  imprimeMatriz(optim_point_slm_lbfgs, 1, length);
 
 
    return 0;
