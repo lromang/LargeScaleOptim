@@ -93,12 +93,12 @@ int main(){
    */
 
   // Print result easy.
-  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-2);
+  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-6);
   imprimeTit("Function minimum (LBFGS):");
   imprimeMatriz(optim_point_lbfgs, 1, length);
 
   // Print results hard.
-  optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-4);
+  optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-6);
   imprimeTit("Function minimum (LBFGS):");
   imprimeMatriz(optim_point_lbfgs, 1, length);
 
@@ -120,7 +120,7 @@ int main(){
    * ###############################################################
    */
   // Print result easy.
-  optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-2, 20);
+  optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-4, 20);
   imprimeTit("Function minimum (SLM-LBFGS):");
   imprimeMatriz(optim_point_slm_lbfgs, 1, length);
 
@@ -129,8 +129,7 @@ int main(){
   imprimeTit("Function minimum (SLM-LBFGS):");
   imprimeMatriz(optim_point_slm_lbfgs, 1, length);
 
-
-   return 0;
+  return 0;
 }
 
 

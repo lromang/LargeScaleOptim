@@ -50,10 +50,10 @@ double * findHSLM(double (*func)(double*, int), double *x,
    * Outputs: r
    */
   // Initialize: epsilon, d, r_cg, z
-  epsilon = min(.5, sqrt(norm(r, nRow))) * norm(r, nRow);
-  d    = vProd(r, -1, nRow);
-  r_cg = vProd(r,  1, nRow);
-  z    = vProd(r, 0, nRow);
+  epsilon = min(.5, sqrt(norm(q, nRow))) * norm(q, nRow);
+  d    = vProd(q,  1, nRow);
+  r_cg = vProd(q,  1, nRow);
+  z    = vProd(q,  0, nRow);
   for(j = 0; j < N_max; j++){
     Bd = hessCentralDiff(func, x, d, nRow);
     // Check if d'Bd <= 0 i.e. d is a descent direction.
@@ -69,7 +69,7 @@ double * findHSLM(double (*func)(double*, int), double *x,
     // alpha_j = rj'rj/d_j'Bd_j
     alpha_cg = dotProd(r_cg, r_cg, nRow) / dotProd(d, Bd, nRow);
     // z_{j+1} = z_j + alpha_j*d_j
-    z     = vSum(z, vProd(d, alpha_cg, nRow), nRow);
+    z        = vSum(z, vProd(d, alpha_cg, nRow), nRow);
     // r_{j+1} = r_j + alpha_j*B_kd_j
     r_new = vSum(r_cg, vProd(Bd, alpha_cg, nRow), nRow);
     if(norm(r_new, nRow) < epsilon){
@@ -127,7 +127,7 @@ double * SLM_LBFGS(double (* func)(double*, int),
     x[i] = ((double) rand() / INT_MAX) ;
   }
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1.5e3;
+  MAX_ITER = 1.5e4;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
@@ -135,10 +135,14 @@ double * SLM_LBFGS(double (* func)(double*, int),
   norm_grad0 = norm(grad, nRow);
   while(norm(grad, nRow) > TOL*(1 + norm_grad0) && k < MAX_ITER){
     // p = -Hgrad(f)
-    p        = vProd(findHSLM(func, x, s,
-                              y, nRow, m,
-                              k, N_max),
-                     -1, nRow);
+    if(k > 0){
+      p = vProd(findHSLM(func, x, s,
+                         y, nRow, m,
+                         k, N_max),
+                -1, nRow);
+    }else{
+      p = vProd(grad, -1, nRow);
+    }
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow);
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);

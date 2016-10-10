@@ -123,7 +123,7 @@ double * LBFGS(double (* func)(double*, int),
     x[i] = ((double) rand() / INT_MAX) ;
   }
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1.5e3;
+  MAX_ITER = 1.5e4;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
