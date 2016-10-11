@@ -17,11 +17,13 @@
 // Size of file.
 int const MAX_FILE_ROWS = 150;
 int const MAX_FILE_COLS = 4;
+int const N_CLASS = 4;
 
 // Value storage.
-int* logistic_labels;
-float logistic_values[150][5];
+int*   logistic_labels;
+double  logistic_values[150][5];
 double stochastic_logistic_regression(double*, int);
+double softmax(double*, int);
 double class_error(double*, int);
 
 
@@ -162,6 +164,43 @@ double stochastic_logistic_regression(double* x, int length){
                         logistic_labels[indexes[i]]));
   }
   return res;
+};
+
+/* -------------------------------------
+ * Multiclass Logistic Function
+ * -------------------------------------
+ * Theta = array of K x N. K = Númber of
+ *         classes. N = Dimension of each
+ *         observation.
+ */
+double softmax(double* theta, int length){
+  double *theta_dot;
+  double score, denom;
+  int i, k, j;
+  // Space allocation.
+  theta_dot = (double*)malloc(length*sizeof(double));
+  // Construct denom
+  for(denom = i = 0; i < MAX_FILE_ROWS; i++){
+    for(k = 0; k < N_CLASS; k++){
+      // Theta dot construction.
+      for(j = 0; j < length; j++){
+        theta_dot[j] = theta[(length * k) + j];
+      }
+      denom = denom + log(exp(dotProd(theta_dot, logistic_values[i], length)));
+    }
+  }
+
+  // Construct score
+  for(score = i = 0; i < MAX_FILE_ROWS; i++){
+    for(k = 0; k < N_CLASS; k++){
+      // Theta dot construction.
+      for(j = 0; j < length; j++){
+        theta_dot[j] = theta[length * k + j];
+      }
+      score = score + (double)(logistic_labels[i] == k) * log(exp(dotProd(theta_dot, logistic_values[i], length)) / denom);
+    }
+  }
+  return -score;
 };
 
 
