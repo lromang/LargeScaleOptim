@@ -105,7 +105,7 @@ double* hessCentralDiff(double (*func)(double*, int), double* x, double* p, int 
  * alpha: Step length.
  * -------------------------------------
  */
-double backTrack(double (*func)(double*, int), double* x, double* p, int length){
+double backTrack(double (*func)(double*, int), double* x, double* p, int length, int verbose){
   // Variable declaration.
   double alpha, rho, c;
   int wolf_iters;
@@ -122,7 +122,9 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length)
     alpha      = alpha * rho;
     wolf_iters = wolf_iters + 1;
   }
-  printf("\n backtrack iters = %d\n", wolf_iters);
+  if(verbose){
+    printf("\n backtrack iters = %d\n", wolf_iters);
+  }
   // Return result.
   return alpha;
 }

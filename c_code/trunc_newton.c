@@ -90,7 +90,7 @@ double* GC(double* A, double* b, int nRow){
  * -------------------------------------
  */
 double* NGC(double (*func)(double*, int), int nRow,
-            int N_max, double TOL){
+            int N_max, double TOL, int verbose){
   // Variable declaration.
   double *r, *d, *z, *r_new,
     *Bd, *p, *x_new, *x, *r_cg;
@@ -175,14 +175,16 @@ double* NGC(double (*func)(double*, int), int nRow,
     // Update r
     r = gradCentralDiff(func, x, nRow);
     // ---------------- PRINT ------------------- //
-    printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
-           "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d",
-           k,
-           func(x, nRow),
-           norm(r, nRow),
-           norm(p, nRow),
-           step,
-           wolf_cond);
+    if(verbose){
+      printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
+             "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d",
+             k,
+             func(x, nRow),
+             norm(r, nRow),
+             norm(p, nRow),
+             step,
+             wolf_cond);
+    }
     // ---------------- PRINT ------------------- //y
   } // Outer loop, modifies x!
   // Memory release.

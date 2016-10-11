@@ -28,12 +28,13 @@ double class_error(double*, int);
 int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
-  int i, length, seed;
+  int i, length, seed, verbose;
   // Logistic Variable declaration
   // Ask for size of point.
   //printf("Enter size of point:\n");
   //scanf("%d", &length);
-  length = 100;
+  verbose = 0;
+  length  = 100;
   // Data file name.
   FILE *file = fopen("../data/iris", "r");
   // Allocate space variables
@@ -60,13 +61,13 @@ int main(){
    */
 
   // Print results easy.
-  optim_point_N = NGC(test_func, length, 10, 1e-2);
+  optim_point_N = NGC(test_func, length, 10, 1e-2, verbose);
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
 
   // Print results hard.
-  optim_point_N = NGC(testFunc, length, 10, 1e-2);
+  optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose);
   imprimeTit("Function minimum (NCG):");
   imprimeMatriz(optim_point_N, 1, length);
 
@@ -93,12 +94,12 @@ int main(){
    */
 
   // Print result easy.
-  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-6);
+  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-6, verbose);
   imprimeTit("Function minimum (LBFGS):");
   imprimeMatriz(optim_point_lbfgs, 1, length);
 
   // Print results hard.
-  optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-6);
+  optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-6, verbose);
   imprimeTit("Function minimum (LBFGS):");
   imprimeMatriz(optim_point_lbfgs, 1, length);
 
@@ -120,12 +121,12 @@ int main(){
    * ###############################################################
    */
   // Print result easy.
-  optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-4, 20);
+  optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-4, 20, verbose);
   imprimeTit("Function minimum (SLM-LBFGS):");
   imprimeMatriz(optim_point_slm_lbfgs, 1, length);
 
   // Print results hard.
-  optim_point_slm_lbfgs = SLM_LBFGS(testFunc, length, 20, 1e-4, 20);
+  optim_point_slm_lbfgs = SLM_LBFGS(testFunc, length, 20, 1e-4, 20, verbose);
   imprimeTit("Function minimum (SLM-LBFGS):");
   imprimeMatriz(optim_point_slm_lbfgs, 1, length);
 

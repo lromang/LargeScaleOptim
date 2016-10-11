@@ -112,7 +112,7 @@ double * findHSLM(double (*func)(double*, int), double *x,
  * -------------------------------------
  */
 double * SLM_LBFGS(double (* func)(double*, int),
-                   int nRow, int m, double TOL, int N_max){
+                   int nRow, int m, double TOL, int N_max, int verbose){
   // Variable declaration.
   double **s, **y;
   double *x, *grad, *p, *x_new, *grad_new;
@@ -144,7 +144,7 @@ double * SLM_LBFGS(double (* func)(double*, int),
       p = vProd(grad, -1, nRow);
     }
     // Alpha that statifies Wolfe conditions.
-    alpha    = backTrack(func, x, p, nRow);
+    alpha    = backTrack(func, x, p, nRow, verbose);
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
     grad_new = gradCentralDiff(func, x_new, nRow);
     // Update s, y.
@@ -152,18 +152,20 @@ double * SLM_LBFGS(double (* func)(double*, int),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
 
     // ---------------- PRINT ------------------- //
-    printf("\n ITER = %d; f(x) = %.10e ; "
-           "||x|| = %.10e ; ||grad|| =  %.10e ; "
-           "||p|| =  %.10e ; sTy =  %.10e ; "
-           "alpha = %.10e",
-           k,
-           func(x, nRow),
-           norm(x, nRow),
-           norm(grad, nRow),
-           norm(p, nRow),
-           dotProd(s[(int)min(k , (m - 1))],
-                   y[(int)min(k , (m - 1))], nRow),
-           alpha);
+    if(verbose){
+      printf("\n ITER = %d; f(x) = %.10e ; "
+             "||x|| = %.10e ; ||grad|| =  %.10e ; "
+             "||p|| =  %.10e ; sTy =  %.10e ; "
+             "alpha = %.10e",
+             k,
+             func(x, nRow),
+             norm(x, nRow),
+             norm(grad, nRow),
+             norm(p, nRow),
+             dotProd(s[(int)min(k , (m - 1))],
+                     y[(int)min(k , (m - 1))], nRow),
+             alpha);
+    }
     // ---------------- PRINT ------------------- //y
     // Update k, x, grad.
     x    = x_new;
