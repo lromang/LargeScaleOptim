@@ -186,7 +186,7 @@ double softmax(double* theta, int length){
       for(j = 0; j < length; j++){
         theta_dot[j] = theta[(length * k) + j];
       }
-      denom = denom + log(exp(dotProd(theta_dot, logistic_values[i], length)));
+      denom = denom + exp(dotProd(theta_dot, logistic_values[i], length));
     }
   }
 
