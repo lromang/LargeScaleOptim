@@ -1,0 +1,495 @@
+\documentclass{book}
+%Para que los números de la tabla de contenidos
+%sean ligas a las distintas secciones.
+\usepackage[linktocpage]{hyperref}
+%Apendices
+\usepackage{appendix}
+\usepackage{chngcntr}
+\usepackage{etoolbox}
+%Para rellenar algunas secciones.
+\usepackage{lipsum}
+%Poder insertar imágenes
+\usepackage{graphicx}
+%Notación matemática
+\usepackage{amsmath,amsthm,epsfig,epstopdf,amsfonts}
+\usepackage{bbm}
+%Ambiente para teoremas, lemmas, definiciones
+%Idioma y encoding
+\usepackage[spanish, mexico]{babel}
+\usepackage[utf8]{inputenc}
+%
+\theoremstyle{plain}
+\newtheorem{thm}{Teorema}[section]
+\newtheorem{lem}[thm]{Lema}
+\newtheorem{prop}[thm]{Proposición}
+\newtheorem*{cor}{Corollary}
+\theoremstyle{definition}
+\newtheorem{defn}{Definición}[section]
+\newtheorem{conj}{Conjetura}[section]
+\newtheorem{exmp}{Ejemplo}[section]
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\newtheorem*{note}{Note}
+% Otros paquetes para notación matemática
+\usepackage{mathtools}
+\usepackage{amssymb}
+%Tablas de color
+\usepackage[table]{xcolor}
+%Secciones con otra estructura aparte de la
+%de la página
+\usepackage{float}
+\selectlanguage{spanish}
+%Pseudo código
+\usepackage[Algoritmo]{algorithm}
+\usepackage[noend]{algpseudocode}
+%Citas
+\usepackage{cite}
+%Formato especial para ocupar toda la hoja
+\usepackage{fullpage}
+%Margenes de parrafos
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist
+%\usepackage[a4paper]{geometry}
+%Secciones con su propio ambiente
+%para código por ejemplo
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{chngcntr}
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{minitoc}
+\usepackage{subcaption}
+\usepackage{multirow}
+%Texto
+\renewcommand{\baselinestretch}{1.5} 
+\addtolength{\skip\footins}{8mm}
+
+%Colores
+\usepackage{xcolor}
+\usepackage{textcomp}
+%-----Epigrafos---------
+\usepackage{epigraph}
+%-----------------------
+%----Títulos de capítulo fancy
+\usepackage{titlesec, blindtext, color}
+\usepackage{titlesec, blindtext, color}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{\vline}\hsp}{0pt}{\Huge\bfseries}
+%Encabezado en cada página
+%-----------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\usepackage[margin=4.4cm,headheight=35pt,showframe]{geometry}
+\fancyhf{}
+\rhead{\rightmark}
+\lhead{Proyecto de Tesis}
+\rfoot{\thepage}
+\usepackage[margin=3cm,headsep=1cm,headheight=2cm]{geometry}
+%-------------------------
+\usepackage{fancyvrb}
+\definecolor{listinggray}{gray}{0.95}
+\definecolor{lbcolor}{rgb}{0.95,0.95,0.95}
+\lstset{
+        backgroundcolor=\color{lbcolor},
+        tabsize=4,
+        language=R,
+    basicstyle=\scriptsize,
+    upquote=true,
+    aboveskip={0.5\baselineskip},
+    columns=fixed,
+    showstringspaces=false,
+    extendedchars=true,
+    breaklines=true,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=none,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    identifierstyle=\ttfamily,
+    keywordstyle=\color[rgb]{0,0,1},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    numbers=left,
+    numberstyle=\footnotesize,
+    stepnumber=1,
+    numbersep=0.5cm,
+    xleftmargin=0.2cm,
+    xrightmargin=0.3cm,
+    frame=tlbr,
+    framesep=5pt,
+    framerule=0pt,
+}
+
+\newcommand{\eqdef}{\overset{\mathrm{def}}{=\joinrel=}}
+
+\addto\captionsspanish{% Replace "english" with the language you use
+  \renewcommand{\contentsname}%
+    {Contenido}%
+}
+%--------pseudocódigo
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+%------------------------Abstracts------------------------
+\makeatletter
+\if@titlepage
+  \newenvironment{abstract}{%
+      \titlepage
+      \null\vfil
+      \@beginparpenalty\@lowpenalty
+      \begin{center}%
+        \bfseries \abstractname
+        \@endparpenalty\@M
+      \end{center}}%
+     {\par\vfil\null\endtitlepage}
+\else
+  \newenvironment{abstract}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \small
+        \begin{center}%
+          {\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \quotation
+      \fi}
+      {\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother
+%-----------------------No cambio de página----------------
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+%----------------------------------------------------------
+
+
+\setlength{\parskip}{1cm}
+\title{Métodos estocásticos de segundo orden con aplicación a problemas de aprendizaje de máquina}
+\author{Luis Manuel Román García}
+\date{\today}
+
+% ambiente de apendice
+\AtBeginEnvironment{subappendices}{%
+\chapter*{Appendix}
+\addcontentsline{toc}{chapter}{Appendices}
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\VerbatimFootnotes
+
+
+\begin{absolutelynopagebreak}
+\begin{abstract}
+En este documento se estudia el desempeño de dos algorítmos de optimización \emph{LBFGS} y \emph{Newton Truncado} cuando se utiliza información incompleta de segundo orden, es decir, cuando la matriz hessiana es aproximada por medio de una muestra de los datos. La idea es aprovechar la naturaleza estocástica de las funciones objetivo que a menudo surgen en aplicaciones del campo de aprendizaje de máquina. De igual forma, se exploran sus propiedades teóricas de convergencia y se pone a prueba su precisión con una tarea de clasificación de mensajes de voz.
+\end{abstract}
+\end{absolutelynopagebreak}
+
+%--------------------
+% Tabla de contenidos
+%\begin{absolutelynopagebreak}
+\addtocontents{toc}{\protect\sloppy}
+\tableofcontents
+\addtocontents{toc}{~\hfill\textbf{Página}\par}
+%\end{absolutelynopagebreak}
+%--------------------
+\pagenumbering{roman}
+
+
+\chapter{Introducción}
+
+
+\epigraph{
+ Probability modelers seem to want to believe that their models are entirely correct.... Data analysts regard their models as a basis from which to measure deviation, as a convenient benchmark in the wilderness, expecting little truth and relying on less.}{\textit{John Tukey \\ 1979}}
+
+\newpage
+
+\section{Estadística y aprendizaje}
+
+Tal y como Vapnik menciona en \cite{VAPNIK1}, el paradígma del aprendizaje estadístico nace en la década de los 60's gracias a que el incremento en la capacidad computacional permitió llevar a cabo análisis multidimensionales de fenómenos naturales, antes impracticables. Estos análisis demostraron que, en su mayoría, los modelos de baja dimensionalidad eran poco precisos e incluso complteamente erróneos. Se comenzaron a cuestionar los planteamientos clásicos de la estadística y se reconcoció que la mayor parte de los supuestos que la sustentan no se cumplen cuando la complejidad del fenómeno bajo estudio aumenta. Derivado de esto, surgieron dos maneras distintas de abordar el problema clásico de la inferencia estadística:
+
+\begin{enumerate}
+\item El particular \emph{paramétrico}: busca generara métodos de estadística inferencial  simples que puedan ser utilizados para resolver problemas de la vida diaria.
+\item El general \emph{no paramétrico}: busca encontrar un método inductivo para cualquier problema de inferencia estadística.
+\end{enumerate}
+
+Ambas filosofías difieren en el número de supuestos que se plantean y en la cantidad de conocimiento que se le atribuye al usuario. De esta manera, el primer paradigma parte del hecho de que:
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{El investigador conoce el problema que analiza y tiene conocimiento de las causas físicas detrás de la estocasticidad de las observaciones.}
+\end{changemargin}
+
+Los principales supuestos que sustentan este planteamiento son los siguientes:
+
+\begin{itemize}
+\item La mayor parte de las relaciones funcionales subyacentes en los datos pueden ser aproximadas satisfactoriamente por una función lineal en sus parámetros.
+\item La normalidad es la regla subyacente en la mayor parte de los fenómenos de la naturaleza.
+\item La máxima verosimilitud es una buena herramienta inductiva para la estimación de parámetros.
+\end{itemize}
+
+Pese a que estos supuestos son razonables, ciertas fallas fundamentales obligaron a los investigadores y teóricos a buscar alternativas. Es curioso que dichas fallas se descubrieron en un corto periodo de tiempo: 1955-1961; Mismo periodo en el que F. Rosenblatt descubrió el primer modelo de aprendizaje: \emph{El Perceptrón} (1958).
+
+La impractibilidad del primer supuesto quedó evidenciada conforme al progreso científico. Dado que las indagaciones teóricas sobre procesos naturales daban por resultado interacciones complejas entre distintos fenómenos, los modelos requeridos para explicarlos fueron exigiendo un mayor número  de variables y flexibilidad (interacciones no lineales). En consecuencia, volviéndose más complejos. Sin embargo, y como R. Bellman demostró en 1961, la cantidad de datos requerida para ajustar un modelo crece de manera exponencial conforme al número de parámetros. Esto hace que sea computacionalmente intratable ajustar modelos lineales (en los parámetros) arbitrariamente complejos. 
+
+Por ejemplo, siguiendo un poco las líneas de \cite{VAPNIK1}, de acuerdo con el teorema de aproximación de Weierstrass. \footnote{\begin{thm}Si $f$ es una función continua definida sobre un compacto $k$, entonces para todo $\epsilon > 0, \exists N_0\in\mathbb{N}$ tal que $\forall n\geq N_0$ se cumple que:
+\begin{equation*}
+  \begin{split}
+    \|f(x) - P_n(x)\|_1 &< \epsilon\quad\forall x\in K
+  \end{split}
+\end{equation*}
+Donde $P_n$ es un polinómio de grado n.
+\end{thm}} Toda función continua de $n$ variables definida sobre el cubo unitario puede ser aproximada con un error arbitrariamente pequeño por polinomios. Sin embargo, si la función tiene únicamente $s<n$ derivadas, entonces con polinomios de grado $N$ sólo se puede aproximar con una precisión de orden $\large{O}(N^{\frac{s}{n}})$. Esto nos dice que si $s$ es pequeña, se requerirá un incremento exponencial en $N$ (el número de observaciones) para compensar incrementos en $n$ (la complejidad del modelo).
+
+El segundo supuesto, comenzó a verse en problemas desde unos años antes, pero fue Tukey en 1960 con\cite{TUKEY} quien puso fin a la universalidad del supuesto de normalidad al analizar muestras bajo distribuciones contaminadas. La principal interrogante consistía en determinar si los métodos de estimación que exhibian propiedades óptimas, tales como eficiencia,  bajo ciertos supuestos, preservaban sus propiedades una vez que dichos supestos eran relajados. El experimento que Tukey llevó a cabo fue introducir cierto número de valores dentro de una muestra proveniente de una distribución normal. Los valores introducidos provenian de una distribución normal con el mismo parámetro de locación pero un parámetro de escala tres veces mayor. Los resultados demostraron que bajo mezclas cási imperceptibles (.008 de los datos provenientes de la muestra con mayor desviación estandar), las propiedades de eficiencia de los estimadores (en este caso el estimador de la varianza) se pierden por completo. En otras palabras, desviaciones nímias del supuesto de normalidad puede deteriorar en gran medida la confiabilidad de las estimaciones.  
+
+En cuanto al tercer supuesto, en 1955, Stein mostró en \cite{STEIN1} que el estimador de máxima verosimilitud para una muestra unitaria proveniente de una normal multivariada con número de dimensiones $n\geq 3$ es un estimador inadmisible \footnote{\begin{defn}Decimos que un estimador $\hat{\theta}$ es \textbf{mejor que} un estimador $\theta^*$ si $\forall\mu,R(\mu,\hat{\theta})\leq R(\mu,\theta^*)$ y $\exists\mu'$ tal que $R(\mu,\hat{\theta})<R(\mu,\theta^*)$. Un estimador $\hat{\theta}$ es \textbf{admisible} si no existe un estimador $\theta^*$ \textbf{mejor que} $\hat{\theta}$, donde $R$ es la función de error definida en el capítulo 2. Un estimador es inadmisible si no es admisible.\end{defn}}. Este resultado fue de tal importancia que según palabras de Bradley Efron:
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{Socavó siglo y medio de teoría de estimación, yendo atrás hasta Karl Friederich Gauss y Adrein Marie Legendre.}
+\end{changemargin}
+
+Para una discusión muy intuitiva sobre este resultado y sobre el estimador propuesto por James y Stein en \cite{STEIN2}, ver \cite{EFRON}. 
+
+Las fallas en los supuestos fundamentales del paradígma clásico de la inferencia estadística urgieron el desarrollo de técnicas más generales que descansaran en un menor número de supuestos. El paradígma \emph{general no paramétrico} resulto ser una alternativa prometedora. Este enfoque para el problema de la inferéncia estadística  es mucho más conservador en cuanto al grado de conocimiento del problema y a las hipótesis subyacentes. A saber, este paradigma sostiene que:
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{El investigador no tiene conocimiento confiable a priori de la regla estadística subyacente en el fenómeno bajo observación o de la función que uno quisiera aproximar.}
+\end{changemargin}
+
+Bajo estas líneas, es necesario preguntarse en que medida el investigador puede hacer uso de los datos a su disposición para hacer inferencia. Más aún, queda determinar que tan adecuado es este método y si es capaz de arrojar resultados adecuados para la tarea propuesta. En esta dirección surgen dos resultados clave, el primero dice que tiene sentido utilizar los datos que el investigador tiene a su disposición para aproximar la distribución subyacente del fenómeno bajo estudio y el segundo habla de la presición asintótica de dicha aproximación. El primer resultado es el teorema  Gilvenko-Cantelli y el segundo se conoce como la desigualdad de Dvoretzky-Kiefer-Wolfowitz \footnote{Usaremos la constante de acotamiento $C=1$ probada en \cite{MASSART} por lo que supondremos que $ e^{-2\lambda^2}\leq\frac{1}{2}$}. Ambos resultados se enunciarán formalmente a continuación por completez y para evitar que el lector tenga que recurrir a las fuentes originales cada vez que se haga mención de los mismos.
+\bigskip
+
+\begin{thm}
+Sean $X_1,X_2,\dots,X_n$ variables aleatorias iid con una distribución $F$ con valores en $\mathbb{R}$. Entonces se cumple que
+\begin{equation*}
+\begin{split}
+\displaystyle\sup_{x\in\mathbb{R}}\bigg\|\frac{1}{n}\displaystyle\sum_{i=1}^n\mathbb{I}_{x_i\leq x}-F_{x}(x_i)\bigg\| &\xrightarrow[n\rightarrow\infty]{a.s} 0
+\end{split}
+\end{equation*}
+\end{thm}
+
+Es decir, la distribución empiríca obtenida de promediar los valores observados en la muestra, converge cási seguramente a la distribución de probabilidad real. Lo que resta es determinar la tasa de convergencia con la cual este límite se lleva a cabo. Resulta que la convergencia es rápida, de hecho, es exponencial.
+\bigskip
+
+\begin{thm}
+Sean $X_1,X_2,\dots,X_n$ variables aleatorias iid con una distribución $F$ con valores en $\mathbb{R}$ y $\lambda\in\mathbb{R}^+$. Entonces se cumple que
+\begin{equation*}
+\begin{split}
+P\bigg\{\sqrt{n}\displaystyle\sup_{x\in\mathbb{R}}\bigg\|\frac{1}{n}\displaystyle\sum_{i=1}^n\mathbb{I}_{x_i\leq x}-F_{x}(x_i)\bigg\| > \lambda \bigg\}& \leq 2e^{-2\lambda^2}
+\end{split}
+\end{equation*}
+\end{thm}
+
+Esto hace evidente que el esquema general permite hacer inferencia sobre el comportamiento del fenómeno independientemente de la distribución subyacente $F$ y por ende relaja gran parte de los supuestos que el anterior enfoque mantenía. De la misma manera, propone un esquema directo para hacer predicciones. Dada una muestra, elegir el modelo que minimize el error empírico y esto te dará una buena aproximación del error de generalización de tu modelo. En \cite{VAPNIK2} Vapnik llama a este esquema \emph{La filosofía del análisis aplicado del proceso de aprendizaje} y resume su filosofía como sigue:
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{Para obtener una buena generalización, es suficiente escoger los coeficientes de la neurona que minimiza el total de errores de entrenamiento. El principio de minimización del error de entrenamiento es un principio de inducción evidente por si mismo y desde el punto de vista práctico no necesita justificación alguna. El objetivo principal del análisis aplicado del proceso de aprendizaje es encontrar métodos que permitan construir los coeficientes de manera simultanea para todas las neuronas de tal modo que la superficie de separación generada por la red exhiba el menor error de entrenamiento posible}\footnote{Notar que en esta cita de Vapnik se hace uso de una red neuronal cómo modelo de aprendizaje sin embargo, el principio se generaliza a cualquier modelo sobre el cual se quieran estimar parámetros.}.
+\end{changemargin}
+
+
+Hoy en día parece evidente que este enfoque traerá problemas a la hora de intentar generalizar las predicciones del modelo. Esto se debe a que al minimizar el error de entrenamiento, se corre el riesgo de que el modelo ajuste el ruido de los datos y no sólo las características que permiten llevara a cabo una clasificación correcta. Teniendo de esta forma un pobre desempeño en datos que presenten la misma señal pero un patrón distinto de ruido. A este problema se le conoce como sobreajuste. 
+
+Para mostrar que la minimización del error de entrenamiento es un enfoque erroneo de ajuste, haremos uso de notación y conceptos que se definirán más adelante. También se supondrá conocimiento previo de algunas características de los modelos de ajuste lineales. Tenemos la esperanza de que la exposición sea lo suficientemente clara como para que la exigencia de dichas nociones sea mínima.
+
+Para este ejemplo seguiremos las lineas expuestas en \cite{HASTIE}. Supongamos que queremos predecir el valor que tomá una variable $Y=f(x)+\epsilon$ donde $E(\epsilon)=0$ y $Var(\epsilon)=\sigma_\epsilon^2$. Si utilizamos el error cuadrático como función de pérdida para evaluar la capacidad de generalización de nuestro modelo, tenemos lo siquiente para todo punto $X=x_0$ usando el estimador $\hat{f}$:
+\begin{equation*}
+\begin{split}
+Err(x_0) & =  E[(Y-\hat{f}(x_0))^2| X = x_o] \\
+         & =  E[(Y+f(x_0)-f(x_0)-\hat{f}(x_0))^2| X = x_o] \\
+         & =  E[(Y-f(x_0))^2|X = x_0] - 2E[(Y-f(x_0))(\hat{f}(x_0)-f(x_0))|X=x_0] \\
+         & \quad + E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
+         & =  E[(Y-f(x_0))^2|X = x_0] - 2E[Y\hat{f}(x_0)-f(x_0)\hat{f}(x_0)-Yf(x_0)+ f(x_0)^2|X=x_0]\\
+         & \quad + E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
+         & =  E[(Y-f(x_0))^2|X = x_0] - 2(\hat{f}(x_0)E[Y|X=x_0]- f(x_0)\hat{f}(x_0)-E[Y|X=x_0]f(x_0)+ f(x_0)^2)\\
+         & \quad +  E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
+         & =  E[(Y-f(x_0))^2|X = x_0] - 2(\hat{f}(x_0)f(x_0)- f(x_0)\hat{f}(x_0)-f(x_0)f(x_0)+ f(x_0)^2)\\
+         & \quad +  E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
+         & =  E[(Y-f(x_0))^2|X = x_0] +  E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]
+\end{split}
+\end{equation*}
+
+Repitiendo el mismo procedimiento con el segundo miembro de la suma, pero esta vez sumando y restando $E(\hat{f}(x_0))$ obtenemos lo siguiente:
+\begin{equation*}
+\begin{split}
+Err(x_0) & =  E[(Y-f(x_0))^2|X = x_0] +  E[(E(\hat{f}(x_0))-f(x_0))^2|X = x_0] + E[\hat{f}(x_0)-E(\hat{f}(x_0))| X = x_0]\\
+         & =  E[(Y-f(x_0))^2|X = x_0] +  (E(\hat{f}(x_0))-f(x_0))^2 + E[\hat{f}(x_0)-E(\hat{f}(x_0))| X = x_0]
+\end{split}
+\end{equation*}
+
+El primer término es independiente del modelo que se utilice y por ende lo llamaremos \emph{error irreducible}. El segundo término es el cuadrado de la diferencia entre el valor esperado de nuestras predicciónes y el verdadero valor de la función, llamaremos a la raíz cuadrada de  este término \emph{sesgo}. Finalmente, el tercer término es la varianza de nuestro estimador, llamaremos a este término \emph{varianza del estimador}. La razón por la cual el principio de minimización del error de entrenamiento es erroneo, es que conforme el nivel de datos aumenta, la complejidad del modelo lo debe hacer en mayor medida (recordar la maldición de la dimensionlaidad vista anteriormetne) esto hace que la \emph{varianza del estimador} crezca en la misma proporción y por ende el error de generalización.
+
+Para ilustrar este hecho, tomemos el caso de un modelo de regresión lineal: $\hat{f}(x)=x'\hat{\beta}$ donde $\beta\in\mathbbm{R}^p$. Suponiendo que el ajuste se llevó a cabo por mínimos cuadrados, tenemos que: 
+\begin{equation*}
+\begin{split}
+Err(x_0) & =  E[(Y-\hat{f}(x_0))^2| X = x_o]\\
+         & = \sigma_\epsilon^2 + (E(\hat{f}(x_0))-f(x_0))^2 + \|X(X'X)^{-1}x_0\|^2\sigma_\epsilon^2
+\end{split}
+\end{equation*}
+
+Tomando promedios sobre todos los datos vemos que:
+\begin{equation*}
+\begin{split}
+\frac{1}{N}\displaystyle\sum_i^NErr(x_i) & =  \sigma_\epsilon^2 +  \frac{1}{N}\displaystyle\sum_i^N (E(\hat{f}(x_i))-f(x_i))^2 + \frac{p}{N}\sigma_\epsilon^2
+\end{split}
+\end{equation*}
+
+De aquí es claro que el valor esperado del error de generalización crecerá proporcionalmente al número de parámetros introducidos en el modelo. En vista de lo anterior, Vapnik en el mismo texto sugiere un enfoque alternativo a \emph{La filosofía del análisis aplicado al proceso de aprendizaje} lo llama \emph{La filosofía del análisis teórico del proceso de aprendizaje}
+
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{El principio inductivo de minimización del error de entrenamiento no es evidente por si mismo y necesita ser justificado. Es posible que existan otros principios inductivos que permitan obtener un mejor nivel de generalización. El objetivo principal de La filosofía del análisis teórico del proceso de aprendizaje es encontrar el principio de inducción con el mayor grado de generalización posible y construir algoritmos que alcancen este principio}.
+\end{changemargin}
+
+
+En las siguiente sección se aprofundizará en la teoría del aprendizaje estadístico y más adelante se hará un breve recuento de las relaciones y sinergias que este paradígma ha generado en el campo de la optimización. 
+
+
+%\begin{subappendices}
+%\section{Inadmisibilidad estimador de máxima verosimilitud}
+%\end{subappendices}
+
+\newpage
+
+\section{El problema del aprendizaje}
+
+
+El objetivo de este capítulo, es introducir la notación y terminología básica utilizada en el campo del aprendizaje estadístico. Así mismo, se desea exponer algunos resultados teóricos de fundamental importancia para el resto del texto. De igual modo, abordaremos ciertas interrogantes inherentes al paradígma del aprendizaje estadístico que Mehryar hace notar en \cite{Mehryar}: ¿Qué puede ser aprendido de manera eficiente?, ¿qué es inherentemente difícil de aprender?, ¿cuántas observaciones son necesarias para aprender de manera exitosa? y ¿existe un modelo general de aprendizaje?
+
+
+Cómo se mencionó en la introducción, el objetivo del aprendizaje estadístico es el diseño e implementación de algoritmos que sean capaces de aprender las interacciones existentes entre un conjunto de datos y un conjunto de respuestas y generalizar dichas percepciones para observaciones futuras. En este capítulo nos centraremos, al igual que \cite{VAPNIK1}, en el contexto de clasificación binaria. Esto lo hacemos por tres motivos. El primero, es porque este escenario es el más simple para analizar. El segundo, porque las ideas orginales del aprendizaje estadístico nacieron en este contexto y por ende la notación y terminología se adapta naturalmente. En este sentido,  una vez obtenidos los resultados principales, extender sus consecuencias a escenarios más generales es relativamente sencillo. El tercero es porque la implementación de los algoritmos explorados más adelante se llevará a cabo en este contexto. 
+
+De manera formal. Supongamos que tenemos un conjunto arbitrario de observaciones $X$ tal que $x_i \stackrel{iid}{\sim} D,\quad\forall x_i\in X$ y un conjunto de respuestas $y_i\in Y$. Más aún, supongamos que existe una función $c:X\rightarrow Y$ que rige la manera en la que cada elemento $x_i$ está relacionado con una etiqueta $y_i$. El problema principal del aprendizaje estadístico se reduce a encontrar de manera \emph{eficiente} una función o hipótesis $h:S\subset X\rightarrow Y$ donde $S\sim D^m$ tal que \emph{probablemente} estime a $c$ de manera \emph{razonable}.
+
+Del párrafo anterior se desprenden varias interrogantes: ¿Qué significa que un algoritmo aprenda razonablemente y con alta probabilidad?, ¿Qué significa que lo haga eficientemente? y ¿Cuándo es esto posible?. Cómo puede notarse, estas cuestiones están directamente relacionadas con las interrogantes expuestas al comienzo de esta sección. Comencemos pues definiendo un criterio bajo el cual podemos calificar el desempeño de un algoritmo.
+\bigskip\bigskip
+
+
+\begin{defn}\label{eq:def_gen_err}
+\textbf{Error de generalización}\\
+  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una función $c:X\rightarrow Y$ y una hipótesis $h:X\rightarrow Y$. El error de generalización de $h$ está dado por:
+\begin{equation*}
+R(h)=P_{x\sim D}\{x\in X| h(x)\neq c(x)\}=E\bigg(\mathbbm{1}_{\{x\in X| h(x)\neq c(x)\}}\bigg)
+\end{equation*}
+\end{defn}
+
+De esta forma podemos definir una tolerancia $\epsilon > 0$ y llamar a todo algoritmo que genere hipótesis $h$ tal que $R(h)\leq\epsilon$ como razonablemente correcto o \emph{aproximadamente} correcto. El problema con lo anterior, es que ni la distribución $D$, ni la función $c$ son conocidas, en consecuencia no es posible calcular $R(h)$ directamente. Más aún, es probable que nisiquiera contemos con $X$ si no con una muestra $S \subset X$ donde $S \sim D^m$. \footnote{Es decir,$S$ es una muestra de tamaño m obtenida de $X$  conforme a $D$}. Por ende, lo mejor que podemos hacer, siguiendo las líneas de la discusión llevada a cabo en la sección anterior, es calcular una aproximación de $R(h)$ utilizando los datos que tenemos.
+\bigskip
+
+\begin{defn}\label{eq:def_emp_err}
+\textbf{Error empírico}\\  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una muestra $S\subset X$ con $S\sim D^m$ y una hipótesis $h:S\subset X\rightarrow Y$. El error de empírico de $h$ está dado por:
+\begin{equation*}
+\hat{R(h)}=\frac{1}{m}\displaystyle\sum_{i=1}^m\mathbbm{1}_{\{x\in S| h(x)\neq c(x)\}}
+\end{equation*}
+\end{defn}
+
+Una pregunta surge inmediatamente. ¿Tiene sentido aproximar a $R(h)$ con $\hat{R(h)}$? si bien en la sección anterior se observó que la distribución empírica de un conjunto de datos converge de manera exponencial a la distribución subyacente de los mismos, esto no nos da ninguna garantía sobre el comportamiento del error de predicción. Por otro lado, es claro que al seleccionar este estimador se estarán sesgando los resultados hacia hipótesis que tiendan a comportarse bien bajo el mismo. Debe llevarse un análisis minucioso antes de poder continuar.  
+
+Para hacer el análisis lo más general posible, dejaremos de utilizar la función de pérdida $\mathbbm{1}_{\{x\in S| h(x)\neq c(x)\}}$ y denotameros nuestra nueva función de pérdida cómo $l(h,c)$. En este contexto, queremos averiguar las propiedades asintótcas del error empírico. 
+\begin{equation*}
+\begin{split}
+\hat{R(h)}=\frac{1}{m}\displaystyle\sum_{i=1}^m l(h,c)
+\end{split}
+\end{equation*}
+
+Para llevar a cabo dicho análisis, debemos contar con una noción de lo que es un estimador \emph{correcto} en términos asintóticos. Para esto, utilizaremos la siguiente definición:
+
+\begin{defn}
+Decimos que una familia de hipótesis H converge uniformemente en términos de su media a su valor esperado si $\forall\epsilon>0$ se cumple que.
+\begin{equation*}
+\begin{split}
+P\Bigg\{\displaystyle\sup_{h\in H}\bigg|\int l(h,c)dD - \frac{1}{m}\displaystyle\sum_{i = 1}^ml(h,c)\bigg|>\epsilon\Bigg\} & \xrightarrow[m\rightarrow\infty]{} 0
+\end{split}
+\end{equation*}
+
+Es decir, decimos que una familia de hipótesis converge uniformemente en términos de su media a su valor esperado cuando la medida de probabilidad de los conjuntos donde estas dos cantidades distan en más de un pequeño error tiende a cero conforme se toman más datos en la muestra. En \cite{VAPNIK1} se muestra que en efecto el método de máxima verosimilitud es consistente. Por lo anterior, de aquí en adelante, no nos preocuparemos más por la idoneidad del método de reducción del error empírico bajo este esquema. 
+\end{defn}
+
+\newpage
+
+\section{Optimización y aprendizaje}
+
+Tomando como base las dos secciones anteriores, podemos ver que bajo el esquema general de la inferencia estadística, aquel que da forma al aprendizaje estadístico, la optimización de ciertas funciones de error es fundamental para la obtención de modelos capaces de generalizar enlos datos. En esta sección se pretende dar un recuento de las distintas interacciones y sinergias que han existido entre estos dos campos. A saber el aprendizaje estadístico y la optimización numérica. 
+
+La interacción entre estos dos campos es tan clara que el Problema Principal del Aprendizaje Estadístico (enunciado en la sección anterior),  se plantea como un problema de optimización. El problema consiste en encontrar, de entre todas las hipótesis posibles, aquella que aproxime razonablemente con alta probabilidad la función de distribución intrínseca en los datos. De esta manera, la capacidad para generar mejores hipótesis va a depender en gran medida de la capacidad del método de optimización para llegar a buenas soluciones en un tiempo aceptable. En consecuencia, avances en el campo de la optimización se ven reflejados en avances en el campo del aprendizaje estadístico. Sin embargo, esta relación no es biunívoca. A lo largo de los años se ha observado cómo el avance en el are de aprendizaje de máquina\footnote{en este texto utilizare los términos aprendizaje de máquina y aprendizaje estadístico de manera intercambiable} traen avances significativos en el campo de la optimización. Un ejemplo de este fenómeno es este mismo documento donde el uso de las propiedades estocásticas inherentes a las funciones objetivo que surgen en problemas de aprendizaje de máquina son utilizadas para volver más eficientes métodos clásicos de optimización numérica. Otro ejemplo en el cual la interrelación se ha dado en esa dirección se encuentra en \cite{BENNETT} donde se observa que los buenos resultados deribados del uso  de \emph{backpropagation} para entrenar redes neuronales provocó un mayor estudio de las propiedades del gradiente estocástico. 
+
+En la siguiente sección, se exploran más a fondo algunos de los algoritmos de optimización estocástica que han producido un mayor impacto en este campo en los últimos años. 
+
+
+%\begin{subappendices}
+
+%\section{Resultados básicos de teoría de la medida}
+
+%\subsection{Tipos de convergencia}
+
+%\subsection{Resultados importantes de límite}
+
+
+
+%\end{subappendices}
+
+
+\chapter{Los compromisos de la optimización a gran escala}
+
+
+
+\epigraph{Optimization lies at the heart of machine learning. Most machine learning problems reduce
+to optimization problems.}{\textit{Kristin P. Bennett \\ Rensselaer Polytechnic Institute}}
+\newpage
+
+
+Cómo se menciona en la sección anterior, los problemas estadísticos y en particular los que tratan con el paradígma de aprendizaje se enfrentan a una 
+
+\chapter{Métodos Similares y estado del arte}
+
+\epigraph{It’s more important than ever to understand the fundamentals of
+algorithms as well as the demands of the application, so that good
+choices are made in matching algorithms to applications.}{\textit{Stephen Wright \\ University of Wisconsin-Madison}}
+\newpage
+
+
+\chapter{Dos algoritmos estocásticos de segundo orden}
+
+\epigraph{You're going to see speech recognition systems that have human or better-than-human accuracy become commercialized.}{\textit{Tim Tuttle \\ Massachusetts Institute of Technology}}
+
+\newpage
+
+\section{SLM-LBFGS}
+
+\section{Newton truncado con gradiente conjugado}
+
+\chapter{Implementación y resultados}
+
+\chapter{Conclusión}
+
+
+\begin{thebibliography}{9}
+\bibitem{BYRD} Richard, H. Byrd, Gillian M. Chin, Will Neveitt \& Jorge Nocedal.
+  \emph{On the Use of Stochastic Hessian Information in Optimization Methdos for Machine Learning.} Society of Industrial and Applied Mathematics, 2011.
+\bibitem{EFRON} Bradly Efron and Carl Morris, \emph{Stein's Paradox in Statistics}. Scientific American, Volume 236, Issue 5.
+\bibitem{MASSART} P. Massart, \emph{The tight constant in the dvoretzky kiefer wolfowitz inequality}. The Annals of Probability, 1990, Vol 18, No 3. pg 1269-1283. 
+\bibitem{BENNETT} Kristin P. Bennett, Emilio Parrado-Hernández, \emph{The Interplay of Optimization and Machine Learning Research}. Journal of Machine Learning Research, 2007.
+\bibitem{Mehryar} Mehryar Mohri, Afshin Rostamizadeh, and Ameet Talwalkar
+  \emph{Foundations of Machine Learning}, MIT Press, USA, 2012.
+\bibitem{NOCEDAL} J. Nocedal and S. J. Wright. \emph{Numerical Optimization}, 2nd ed., Springer Ser. Oper. Res., Springer, New York, 2006.
+\bibitem{SHAI} Shai Shalev-Shwartz, Shai Ben-David. \emph{Understanding Machine Learning, From Theory to Algorithms},Cambridge University Press, New York, 2014.
+\bibitem{STEIN1} Charles Stein. \emph{Inadmissibility of the usual estimator for the mean of a multivariate normal distribution}, Proceedings of the Third Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1956 Vol 1. pp 197-206
+\bibitem{STEIN2} W. James and Charles Stein. \emph{Estimation With Quadratic Loss},  Proceedings of the Fourth Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1961. pp 361-379.
+\bibitem{TUKEY} Tukey, J.W., \emph{A survey of sampling from contaminated distributions.} (1960a), Chapter 39 in: \emph{Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling} (ed. I. Olkin et al.), Stanford University Press, Stanford, California, 448-485.
+\bibitem{HASTIE} Hastie, T.; Tibshirani, R. \& Friedman, J. (2001), \emph{The Elements of Statistical Learning}, Springer New York Inc. , New York, NY, USA .
+\bibitem{VAPNIK1} Vladimir N. Vapnik  \emph{Statistical Learning Theory},JOHN WILEY \& SONS, INC., USA, 1998.
+\bibitem{VAPNIK2} Vladimir N. Vapnik  \emph{The Nature of Statistical Learning Theory},Springer, Second Edition, 1999.
+
+\end{thebibliography}
+
+\end{document}
