@@ -118,7 +118,7 @@ int main(){
 
   if(run_logistic){
     // Test logistic.
-    optim_point_N = NGC(stochastic_softmax, 5, 20, 1e-2, verbose);
+    optim_point_N = NGC(stochastic_softmax, 15, 20, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
@@ -127,7 +127,7 @@ int main(){
     printf(" %.5lf \n", class_error(optim_point_N, length));
 
     // Test multinomial logistic.
-    optim_point_N = LBFGS(stochastic_softmax, 5, 20, 1e-2, verbose);
+    optim_point_N = LBFGS(stochastic_softmax, 15, 20, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
@@ -136,7 +136,7 @@ int main(){
     printf(" %.5lf \n", class_error(optim_point_N, length));
 
     // Test multinomial logistic.
-    optim_point_N = SLM_LBFGS(stochastic_softmax, 5, 20, 1e-2, 20, verbose);
+    optim_point_N = SLM_LBFGS(stochastic_softmax, 15, 20, 1e-2, 20, verbose);
     imprimeTit("Multinomial Logistic minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
