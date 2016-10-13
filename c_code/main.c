@@ -29,10 +29,12 @@ double class_error(double*, int);
 int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
-  int i, length, seed, verbose, run_logistic;
+  int i, length, seed, verbose, run_logistic, run_functions;
   // Run logistic???
   printf("Run logistic?\n");
   scanf("%d", &run_logistic);
+  printf("Run functions?\n");
+  scanf("%d", &run_functions);
   printf("\nVerbose?\n");
   scanf("%d", &verbose);
   // Random seed for Softmax Regression.
@@ -40,10 +42,55 @@ int main(){
   srand(seed);
   // Size of point.
   length  = 100;
-  // Data file name.
-  FILE *file = fopen("../data/iris", "r");
-  // Read in file
-  for(i = 0; i < MAX_FILE_ROWS; i++){
+
+  /*
+   * ###############################################################
+   * Test Functions
+   * ###############################################################
+   */
+
+  if(run_functions){
+    // Print results easy.
+    optim_point_N = NGC(test_func, length, 10, 1e-2, verbose);
+    imprimeTit("Problem 1 minimum (NCG):");
+    imprimeMatriz(optim_point_N, 1, length);
+
+    // Print results hard.
+    optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose);
+    imprimeTit("Problem 2 minimum (NCG):");
+    imprimeMatriz(optim_point_N, 1, length);
+
+    // Print result easy.
+    optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-6, verbose);
+    imprimeTit("Problem 1 minimum (LBFGS):");
+    imprimeMatriz(optim_point_lbfgs, 1, length);
+
+    // Print results hard.
+    optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-6, verbose);
+    imprimeTit("Problem 2 minimum (LBFGS):");
+    imprimeMatriz(optim_point_lbfgs, 1, length);
+
+    // Print result easy.
+    optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-4, 20, verbose);
+    imprimeTit("Problem 1:  minimum (SLM-LBFGS):");
+    imprimeMatriz(optim_point_slm_lbfgs, 1, length);
+
+    // Print results hard.
+    optim_point_slm_lbfgs = SLM_LBFGS(testFunc, length, 20, 1e-4, 20, verbose);
+    imprimeTit("Problem 2: minimum (SLM-LBFGS):");
+    imprimeMatriz(optim_point_slm_lbfgs, 1, length);
+  }
+
+  /*
+   * ###############################################################
+   * Test Logistic
+   * ###############################################################
+   */
+
+  if(run_logistic){
+    FILE *file = fopen("../data/iris", "r");
+    // Read in file
+    for(i = 0; i < MAX_FILE_ROWS; i++){
       if (feof(file))
         break;
       fscanf(file, "%lf %lf %lf %lf %d",
@@ -62,61 +109,6 @@ int main(){
              logistic_labels[i]);
       }
     }
-
-  /*
-   * ###############################################################
-   * Test Truncatd Newton
-   * ###############################################################
-   */
-
-  // Print results easy.
-  optim_point_N = NGC(test_func, length, 10, 1e-2, verbose);
-  imprimeTit("Problem 1 minimum (NCG):");
-  imprimeMatriz(optim_point_N, 1, length);
-
-  // Print results hard.
-  optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose);
-  imprimeTit("Problem 2 minimum (NCG):");
-  imprimeMatriz(optim_point_N, 1, length);
-
-  /*
-   * ###############################################################
-   * Test LBFGS
-   * ###############################################################
-   */
-
-  // Print result easy.
-  optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-6, verbose);
-  imprimeTit("Problem 1 minimum (LBFGS):");
-  imprimeMatriz(optim_point_lbfgs, 1, length);
-
-  // Print results hard.
-  optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-6, verbose);
-  imprimeTit("Problem 2 minimum (LBFGS):");
-  imprimeMatriz(optim_point_lbfgs, 1, length);
-
-  /*
-   * ###############################################################
-   * Test Stochastically Initialized LFBGS
-   * ###############################################################
-   */
-  // Print result easy.
-  optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-4, 20, verbose);
-  imprimeTit("Problem 1:  minimum (SLM-LBFGS):");
-  imprimeMatriz(optim_point_slm_lbfgs, 1, length);
-
-  // Print results hard.
-  optim_point_slm_lbfgs = SLM_LBFGS(testFunc, length, 20, 1e-4, 20, verbose);
-  imprimeTit("Problem 2: minimum (SLM-LBFGS):");
-  imprimeMatriz(optim_point_slm_lbfgs, 1, length);
-
-  /*
-   * ###############################################################
-   * Test Logistic
-   * ###############################################################
-   */
-
-  if(run_logistic){
     // Test logistic.
     optim_point_N = NGC(stochastic_softmax, 15, 20, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (NCG):");
@@ -144,7 +136,6 @@ int main(){
     imprimeTit("Class Error:");
     printf(" %.5lf \n", class_error(optim_point_N, length));
   }
-
   return 0;
 }
 
@@ -157,52 +148,32 @@ int main(){
  */
 double stochastic_softmax(double* theta, int length){
   double *theta_dot;
-  int *indexes;
   double score, denom;
-  int i, k, j, samp_size, proper, deterministic;
-  // Initialize samp_size and res.
-  deterministic = 1;
-  proper        = 10; // Upper bound in size for proper subset of dataset.
-  samp_size     = rand() % (MAX_FILE_ROWS - proper);
-  // Memory allocation.
-  indexes = (int*) malloc(samp_size * sizeof(int));
-  if(deterministic){
-    // Generate array of indexes.
-    for(i = 0; i < samp_size; i++){
-      indexes[i] = rand() % MAX_FILE_ROWS;
-    }
-  }else{
-    for(i = 0; i < MAX_FILE_ROWS; i++){
-      indexes[i] = i;
-    }
-  }
-  /* ------------------------------
-   * Softmax error evaluation.
-   * ------------------------------
-   */
-
+  int i, k, j;
   // Space allocation.
-  theta_dot = (double*)malloc(length*sizeof(double));
+  theta_dot = (double*) malloc(length * sizeof(double));
   // Construct denom
-  for(denom = i = 0; i < samp_size; i++){
+  for(denom = i = 0; i < MAX_FILE_ROWS; i++){
     for(k = 0; k < N_CLASS; k++){
       // Theta dot construction.
       for(j = 0; j < length; j++){
         theta_dot[j] = theta[(length * k) + j];
       }
-      denom = denom + exp(dotProd(theta_dot, logistic_values[indexes[i]], length));
+      denom = denom + exp(dotProd(theta_dot, logistic_values[i], length));
     }
   }
 
   // Construct score
-  for(score = i = 0; i < samp_size; i++){
+  for(score = i = 0; i < MAX_FILE_ROWS; i++){
     for(k = 0; k < N_CLASS; k++){
       // Theta dot construction.
       for(j = 0; j < length; j++){
         theta_dot[j] = theta[length * k + j];
       }
-      score = score + (double)(logistic_labels[indexes[i]] == k) *
-        log(exp(dotProd(theta_dot, logistic_values[indexes[i]], length)) / denom);
+      printf("Theta, Class: %d\n", k);
+      imprimeMatriz(theta_dot, 1, length);
+      score = score + (double)(logistic_labels[i] == k) *
+        log(exp(dotProd(theta_dot, logistic_values[i], length)) / denom);
     }
   }
   return -score;
