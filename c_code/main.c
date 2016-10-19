@@ -17,11 +17,11 @@
 // Size of file.
 int const MAX_FILE_ROWS = 150;
 int const MAX_FILE_COLS = 4;
-int const N_CLASS = 4;
+int const N_CLASS = 3;
 
 // Value storage.
 int    logistic_labels[150];
-double logistic_values[150][5];
+double logistic_values[150][4];
 double stochastic_softmax(double*, int);
 double class_error(double*, int);
 
@@ -35,7 +35,7 @@ int main(){
   scanf("%d", &run_logistic);
   printf("Run functions?\n");
   scanf("%d", &run_functions);
-  printf("\nVerbose?\n");
+  printf("Verbose?\n");
   scanf("%d", &verbose);
   // Random seed for Softmax Regression.
   seed = 34234234;
@@ -147,19 +147,24 @@ int main(){
  *         observation.
  */
 double stochastic_softmax(double* theta, int length){
-  double *theta_dot;
-  double score, denom;
+  double *theta_dot, *denom;
+  double score;
   int i, k, j;
   // Space allocation.
   theta_dot = (double*) malloc(length * sizeof(double));
+  denom     = (double*) malloc(length * sizeof(double));
+  // Fill in denom empty values.
+  for(i = 0; i < MAX_FILE_ROWS; i++){
+    denom[i] = 0;
+  }
   // Construct denom
-  for(denom = i = 0; i < MAX_FILE_ROWS; i++){
+  for(i = 0; i < MAX_FILE_ROWS; i++){
     for(k = 0; k < N_CLASS; k++){
       // Theta dot construction.
       for(j = 0; j < length; j++){
         theta_dot[j] = theta[(length * k) + j];
       }
-      denom = denom + exp(dotProd(theta_dot, logistic_values[i], length));
+      denom[i] = denom[i] + exp(dotProd(theta_dot, logistic_values[i], length));
     }
   }
 
@@ -170,12 +175,12 @@ double stochastic_softmax(double* theta, int length){
       for(j = 0; j < length; j++){
         theta_dot[j] = theta[length * k + j];
       }
-      printf("Theta, Class: %d\n", k);
-      imprimeMatriz(theta_dot, 1, length);
       score = score + (double)(logistic_labels[i] == k) *
-        log(exp(dotProd(theta_dot, logistic_values[i], length)) / denom);
+        log(exp(dotProd(theta_dot, logistic_values[i], length)) / denom[i]);
     }
   }
+  printf("Score: %lf\n", score);
+  free(theta_dot);
   return -score;
 };
 
