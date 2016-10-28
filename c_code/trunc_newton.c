@@ -113,7 +113,7 @@ double* NGC(double (*func)(double*, int), int nRow,
 
   // Calculate the gradient.
   r = gradCentralDiff(func, x, nRow);
-  stop = 1e3;
+  stop = 1e2;
 
   // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){

@@ -92,7 +92,7 @@ int main(){
 
   if(run_logistic){
     length  = MAX_FILE_COLS;
-    FILE *file = fopen("../data/iris", "r");
+    FILE *file = fopen("../data/ecoli", "r");
     // Read in file
     for(i = 0; i < MAX_FILE_ROWS; i++){
       if (feof(file))
@@ -107,7 +107,7 @@ int main(){
              &(logistic_values[i][6]),
              &(logistic_labels[i]));
       if(verbose){
-      printf("Entry: %d | col1 = %lf  col2 = %lf  col3 = %lf  col4 = %lf  col5 = %lf col6 = %lf  col7 = %lf col5 = %d \n",
+      printf("Entry: %d | col1 = %lf  col2 = %lf  col3 = %lf  col4 = %lf  col5 = %lf col6 = %lf  col7 = %lf col8 = %d \n",
              i,
              logistic_values[i][0],
              logistic_values[i][1],
@@ -120,6 +120,7 @@ int main(){
       }
     }
 
+    /*
     // Test logistic.
     optim_point_N = NGC(logistic, length, 100, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (NCG):");
@@ -127,28 +128,29 @@ int main(){
 
     // Prediction error.
     precision = class_precision(optim_point_N, length, verbose);
-    imprimeTit("Class Precision:");
-    printf("\n %.5lf \n", precision);
+    printf("\n");
+    imprimeTit("Classification Precision:");
+    printf("%.5lf \n", precision);
 
-    /*
+
     // Test multinomial logistic.
-    optim_point_N = LBFGS(logistic, 4, 20, 1e-3, verbose);
+    optim_point_N = LBFGS(logistic, length, 20, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
     imprimeTit("Class Precision:");
-    printf(" %.5lf \n", class_precision(optim_point_N, length));
+    printf(" %.5lf \n", class_precision(optim_point_N, length, verbose));
+    */
 
     // Test multinomial logistic.
-    optim_point_N = SLM_LBFGS(logistic, 4, 20, 1e-3, 20, verbose);
+    optim_point_N = SLM_LBFGS(logistic, length, 20, 1e-3, 20, verbose);
     imprimeTit("Multinomial Logistic minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
     imprimeTit("Class Precision:");
-    printf(" %.5lf \n", class_precision(optim_point_N, length));
-    */
+    printf(" %.5lf \n", class_precision(optim_point_N, length, verbose));
 
   }
   return 0;
@@ -219,10 +221,30 @@ double logActive(double* theta, int i, int length){
  */
 double logistic(double* theta, int length){
   double loss = 0;
-  int i;
-  for(i = 0; i < MAX_FILE_ROWS; i++){
-    loss = loss + logistic_labels[i]*log(logActive(theta, i, length)) +
-      (1-logistic_labels[i])*log(1 - logActive(theta, i, length));
+  int *indexes;
+  int i, stochastic, samp_size, proper;
+  stochastic  = 0; // Sample size should be defined outside?
+  proper      = 10; // N - proper = size of batch
+  // Check if framework is stochastic
+  if(stochastic){
+    samp_size     = rand() % (MAX_FILE_ROWS - proper);
+    printf("Tamaño muestra: %d \n", samp_size);
+    // Memory allocation.
+    indexes = (int*) malloc(samp_size * sizeof(int));
+    // Indexes construction.
+    for(i = 0; i < samp_size; i++){
+      indexes[i] = rand() % samp_size;
+    }
+    // Logistic
+    for(i = 0; i < samp_size; i++){
+      loss = loss + logistic_labels[indexes[i]]*log(logActive(theta, indexes[i], length)) +
+        (1 - logistic_labels[indexes[i]])*log(1 - logActive(theta, indexes[i], length));
+    }
+  }else{
+    for(i = 0; i < MAX_FILE_ROWS; i++){
+      loss = loss + logistic_labels[i]*log(logActive(theta, i, length)) +
+        (1 - logistic_labels[i])*log(1 - logActive(theta, i, length));
+    }
   }
   return -loss;
 }
