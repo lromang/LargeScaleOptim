@@ -15,13 +15,13 @@
 #include "slm.c"
 
 // Size of file.
-int const MAX_FILE_ROWS = 150;
-int const MAX_FILE_COLS = 4;
+int const MAX_FILE_ROWS = 479;
+int const MAX_FILE_COLS = 7;
 int const N_CLASS = 3;
 
 // Value storage.
-int    logistic_labels[150];
-double logistic_values[150][4];
+int    logistic_labels[479];
+double logistic_values[479][7];
 double stochastic_softmax(double*, int);
 double logActive(double*, int, int);
 double logistic(double*, int);
@@ -31,6 +31,7 @@ double class_precision(double*, int, int);
 int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
+  double precision;
   int i, length, seed, verbose, run_logistic, run_functions;
   // Run logistic???
   printf("Run logistic?\n");
@@ -90,37 +91,44 @@ int main(){
    */
 
   if(run_logistic){
-    length  = 4;
+    length  = MAX_FILE_COLS;
     FILE *file = fopen("../data/iris", "r");
     // Read in file
     for(i = 0; i < MAX_FILE_ROWS; i++){
       if (feof(file))
         break;
-      fscanf(file, "%lf %lf %lf %lf %d",
+      fscanf(file, "%lf %lf %lf %lf %lf %lf %lf %d",
              &(logistic_values[i][0]),
              &(logistic_values[i][1]),
              &(logistic_values[i][2]),
              &(logistic_values[i][3]),
+             &(logistic_values[i][4]),
+             &(logistic_values[i][5]),
+             &(logistic_values[i][6]),
              &(logistic_labels[i]));
       if(verbose){
-      printf("Entry: %d | col1 = %lf  col2 = %lf  col3 = %lf  col4 = %lf  col5 = %d \n",
+      printf("Entry: %d | col1 = %lf  col2 = %lf  col3 = %lf  col4 = %lf  col5 = %lf col6 = %lf  col7 = %lf col5 = %d \n",
              i,
              logistic_values[i][0],
              logistic_values[i][1],
              logistic_values[i][2],
              logistic_values[i][3],
+             logistic_values[i][4],
+             logistic_values[i][5],
+             logistic_values[i][6],
              logistic_labels[i]);
       }
     }
 
     // Test logistic.
-    optim_point_N = NGC(logistic, 4, 100, 1e-2, verbose);
+    optim_point_N = NGC(logistic, length, 100, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
+    precision = class_precision(optim_point_N, length, verbose);
     imprimeTit("Class Precision:");
-    printf(" %.5lf \n", class_precision(optim_point_N, length, verbose));
+    printf("\n %.5lf \n", precision);
 
     /*
     // Test multinomial logistic.

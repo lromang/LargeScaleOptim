@@ -112,7 +112,6 @@ double* NGC(double (*func)(double*, int), int nRow,
   }
 
   // Calculate the gradient.
-  imprimeTit("Gradient Eval");
   r = gradCentralDiff(func, x, nRow);
   stop = 1e3;
 
@@ -131,10 +130,7 @@ double* NGC(double (*func)(double*, int), int nRow,
      * ########### CG Iteration ##########
      * -----------------------------------
      */
-    imprimeTit("Conjugate Gradient Eval");
     for(j = 0; j < N_max; j++){
-      imprimeTit("Hessian Eval");
-      printf("Iter: %d\n", j);
       Bd = hessCentralDiff(func, x, d, nRow);
       // Check if d'Bd <= 0 i.e. d is a descent direction.
       if(dotProd(d, Bd, nRow) <= 0){
