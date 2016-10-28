@@ -2,6 +2,7 @@
 
 This repository contains a set of scripts to perform:
 
+* Limited Memory BFGS
 * Stochastic Conjugate Gradient Truncated Newton
 * Stochastic Limited Memory BFGS
 

@@ -207,11 +207,10 @@ En este documento se estudia el desempeño de dos algorítmos de optimización \
 \pagenumbering{roman}
 
 
-\chapter{Introducción}
+\chapter{Aprendizaje a gran escala}
 
 
-\epigraph{
- Probability modelers seem to want to believe that their models are entirely correct.... Data analysts regard their models as a basis from which to measure deviation, as a convenient benchmark in the wilderness, expecting little truth and relying on less.}{\textit{John Tukey \\ 1979}}
+\epigraph{Large-scale learning problems are subject to a qualitatively different tradeoff involving the computational complexity of the underlying optimization algorithms in non-trivial ways.}{\textit{Bousquet \\ 2008}}
 
 \newpage
 
@@ -242,7 +241,7 @@ Pese a que estos supuestos son razonables, ciertas fallas fundamentales obligaro
 
 La impractibilidad del primer supuesto quedó evidenciada conforme al progreso científico. Dado que las indagaciones teóricas sobre procesos naturales daban por resultado interacciones complejas entre distintos fenómenos, los modelos requeridos para explicarlos fueron exigiendo un mayor número  de variables y flexibilidad (interacciones no lineales). En consecuencia, volviéndose más complejos. Sin embargo, y como R. Bellman demostró en 1961, la cantidad de datos requerida para ajustar un modelo crece de manera exponencial conforme al número de parámetros. Esto hace que sea computacionalmente intratable ajustar modelos lineales (en los parámetros) arbitrariamente complejos. 
 
-Por ejemplo, siguiendo un poco las líneas de \cite{VAPNIK1}, de acuerdo con el teorema de aproximación de Weierstrass. \footnote{\begin{thm}Si $f$ es una función continua definida sobre un compacto $k$, entonces para todo $\epsilon > 0, \exists N_0\in\mathbb{N}$ tal que $\forall n\geq N_0$ se cumple que:
+Por ejemplo, siguiendo las líneas de \cite{VAPNIK1}, de acuerdo con el teorema de aproximación de Weierstrass. \footnote{\begin{thm}Si $f$ es una función continua definida sobre un compacto $k$, entonces para todo $\epsilon > 0, \exists N_0\in\mathbb{N}$ tal que $\forall n\geq N_0$ se cumple que:
 \begin{equation*}
   \begin{split}
     \|f(x) - P_n(x)\|_1 &< \epsilon\quad\forall x\in K
@@ -267,7 +266,8 @@ Las fallas en los supuestos fundamentales del paradígma clásico de la inferenc
 \emph{El investigador no tiene conocimiento confiable a priori de la regla estadística subyacente en el fenómeno bajo observación o de la función que uno quisiera aproximar.}
 \end{changemargin}
 
-Bajo estas líneas, es necesario preguntarse en que medida el investigador puede hacer uso de los datos a su disposición para hacer inferencia. Más aún, queda determinar que tan adecuado es este método y si es capaz de arrojar resultados adecuados para la tarea propuesta. En esta dirección surgen dos resultados clave, el primero dice que tiene sentido utilizar los datos que el investigador tiene a su disposición para aproximar la distribución subyacente del fenómeno bajo estudio y el segundo habla de la presición asintótica de dicha aproximación. El primer resultado es el teorema  Gilvenko-Cantelli y el segundo se conoce como la desigualdad de Dvoretzky-Kiefer-Wolfowitz \footnote{Usaremos la constante de acotamiento $C=1$ probada en \cite{MASSART} por lo que supondremos que $ e^{-2\lambda^2}\leq\frac{1}{2}$}. Ambos resultados se enunciarán formalmente a continuación por completez y para evitar que el lector tenga que recurrir a las fuentes originales cada vez que se haga mención de los mismos.
+Bajo estas líneas, es necesario preguntarse en que medida el investigador puede hacer uso de los datos a su disposición para hacer inferencia. Más aún, queda determinar que tan adecuado es este método y si es capaz de arrojar resultados adecuados para la tarea propuesta. En esta dirección surgen dos resultados clave, el primero dice que tiene sentido utilizar los datos que el investigador tiene a su disposición para aproximar la distribución subyacente del fenómeno bajo estudio y el segundo habla de la presición asintótica de dicha aproximación. El primer resultado es el teorema  Gilvenko-Cantelli:
+
 \bigskip
 
 \begin{thm}
@@ -279,7 +279,8 @@ Sean $X_1,X_2,\dots,X_n$ variables aleatorias iid con una distribución $F$ con 
 \end{equation*}
 \end{thm}
 
-Es decir, la distribución empiríca obtenida de promediar los valores observados en la muestra, converge cási seguramente a la distribución de probabilidad real. Lo que resta es determinar la tasa de convergencia con la cual este límite se lleva a cabo. Resulta que la convergencia es rápida, de hecho, es exponencial.
+Es decir, la distribución empiríca obtenida de promediar los valores observados en la muestra, converge cási seguramente a la distribución de probabilidad real. Y el segundo se conoce como la desigualdad de Dvoretzky-Kiefer-Wolfowitz \cite{MASSART}.
+
 \bigskip
 
 \begin{thm}
@@ -291,184 +292,130 @@ P\bigg\{\sqrt{n}\displaystyle\sup_{x\in\mathbb{R}}\bigg\|\frac{1}{n}\displaystyl
 \end{equation*}
 \end{thm}
 
-Esto hace evidente que el esquema general permite hacer inferencia sobre el comportamiento del fenómeno independientemente de la distribución subyacente $F$ y por ende relaja gran parte de los supuestos que el anterior enfoque mantenía. De la misma manera, propone un esquema directo para hacer predicciones. Dada una muestra, elegir el modelo que minimize el error empírico y esto te dará una buena aproximación del error de generalización de tu modelo. En \cite{VAPNIK2} Vapnik llama a este esquema \emph{La filosofía del análisis aplicado del proceso de aprendizaje} y resume su filosofía como sigue:
-
-\begin{changemargin}{1.5cm}{1.5cm}
-\emph{Para obtener una buena generalización, es suficiente escoger los coeficientes de la neurona que minimiza el total de errores de entrenamiento. El principio de minimización del error de entrenamiento es un principio de inducción evidente por si mismo y desde el punto de vista práctico no necesita justificación alguna. El objetivo principal del análisis aplicado del proceso de aprendizaje es encontrar métodos que permitan construir los coeficientes de manera simultanea para todas las neuronas de tal modo que la superficie de separación generada por la red exhiba el menor error de entrenamiento posible}\footnote{Notar que en esta cita de Vapnik se hace uso de una red neuronal cómo modelo de aprendizaje sin embargo, el principio se generaliza a cualquier modelo sobre el cual se quieran estimar parámetros.}.
-\end{changemargin}
-
-
-Hoy en día parece evidente que este enfoque traerá problemas a la hora de intentar generalizar las predicciones del modelo. Esto se debe a que al minimizar el error de entrenamiento, se corre el riesgo de que el modelo ajuste el ruido de los datos y no sólo las características que permiten llevara a cabo una clasificación correcta. Teniendo de esta forma un pobre desempeño en datos que presenten la misma señal pero un patrón distinto de ruido. A este problema se le conoce como sobreajuste. 
-
-Para mostrar que la minimización del error de entrenamiento es un enfoque erroneo de ajuste, haremos uso de notación y conceptos que se definirán más adelante. También se supondrá conocimiento previo de algunas características de los modelos de ajuste lineales. Tenemos la esperanza de que la exposición sea lo suficientemente clara como para que la exigencia de dichas nociones sea mínima.
-
-Para este ejemplo seguiremos las lineas expuestas en \cite{HASTIE}. Supongamos que queremos predecir el valor que tomá una variable $Y=f(x)+\epsilon$ donde $E(\epsilon)=0$ y $Var(\epsilon)=\sigma_\epsilon^2$. Si utilizamos el error cuadrático como función de pérdida para evaluar la capacidad de generalización de nuestro modelo, tenemos lo siquiente para todo punto $X=x_0$ usando el estimador $\hat{f}$:
-\begin{equation*}
-\begin{split}
-Err(x_0) & =  E[(Y-\hat{f}(x_0))^2| X = x_o] \\
-         & =  E[(Y+f(x_0)-f(x_0)-\hat{f}(x_0))^2| X = x_o] \\
-         & =  E[(Y-f(x_0))^2|X = x_0] - 2E[(Y-f(x_0))(\hat{f}(x_0)-f(x_0))|X=x_0] \\
-         & \quad + E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
-         & =  E[(Y-f(x_0))^2|X = x_0] - 2E[Y\hat{f}(x_0)-f(x_0)\hat{f}(x_0)-Yf(x_0)+ f(x_0)^2|X=x_0]\\
-         & \quad + E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
-         & =  E[(Y-f(x_0))^2|X = x_0] - 2(\hat{f}(x_0)E[Y|X=x_0]- f(x_0)\hat{f}(x_0)-E[Y|X=x_0]f(x_0)+ f(x_0)^2)\\
-         & \quad +  E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
-         & =  E[(Y-f(x_0))^2|X = x_0] - 2(\hat{f}(x_0)f(x_0)- f(x_0)\hat{f}(x_0)-f(x_0)f(x_0)+ f(x_0)^2)\\
-         & \quad +  E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]\\
-         & =  E[(Y-f(x_0))^2|X = x_0] +  E[(\hat{f}(x_0)-f(x_0))^2|X = x_0]
-\end{split}
-\end{equation*}
-
-Repitiendo el mismo procedimiento con el segundo miembro de la suma, pero esta vez sumando y restando $E(\hat{f}(x_0))$ obtenemos lo siguiente:
-\begin{equation*}
-\begin{split}
-Err(x_0) & =  E[(Y-f(x_0))^2|X = x_0] +  E[(E(\hat{f}(x_0))-f(x_0))^2|X = x_0] + E[\hat{f}(x_0)-E(\hat{f}(x_0))| X = x_0]\\
-         & =  E[(Y-f(x_0))^2|X = x_0] +  (E(\hat{f}(x_0))-f(x_0))^2 + E[\hat{f}(x_0)-E(\hat{f}(x_0))| X = x_0]
-\end{split}
-\end{equation*}
-
-El primer término es independiente del modelo que se utilice y por ende lo llamaremos \emph{error irreducible}. El segundo término es el cuadrado de la diferencia entre el valor esperado de nuestras predicciónes y el verdadero valor de la función, llamaremos a la raíz cuadrada de  este término \emph{sesgo}. Finalmente, el tercer término es la varianza de nuestro estimador, llamaremos a este término \emph{varianza del estimador}. La razón por la cual el principio de minimización del error de entrenamiento es erroneo, es que conforme el nivel de datos aumenta, la complejidad del modelo lo debe hacer en mayor medida (recordar la maldición de la dimensionlaidad vista anteriormetne) esto hace que la \emph{varianza del estimador} crezca en la misma proporción y por ende el error de generalización.
-
-Para ilustrar este hecho, tomemos el caso de un modelo de regresión lineal: $\hat{f}(x)=x'\hat{\beta}$ donde $\beta\in\mathbbm{R}^p$. Suponiendo que el ajuste se llevó a cabo por mínimos cuadrados, tenemos que: 
-\begin{equation*}
-\begin{split}
-Err(x_0) & =  E[(Y-\hat{f}(x_0))^2| X = x_o]\\
-         & = \sigma_\epsilon^2 + (E(\hat{f}(x_0))-f(x_0))^2 + \|X(X'X)^{-1}x_0\|^2\sigma_\epsilon^2
-\end{split}
-\end{equation*}
-
-Tomando promedios sobre todos los datos vemos que:
-\begin{equation*}
-\begin{split}
-\frac{1}{N}\displaystyle\sum_i^NErr(x_i) & =  \sigma_\epsilon^2 +  \frac{1}{N}\displaystyle\sum_i^N (E(\hat{f}(x_i))-f(x_i))^2 + \frac{p}{N}\sigma_\epsilon^2
-\end{split}
-\end{equation*}
-
-De aquí es claro que el valor esperado del error de generalización crecerá proporcionalmente al número de parámetros introducidos en el modelo. En vista de lo anterior, Vapnik en el mismo texto sugiere un enfoque alternativo a \emph{La filosofía del análisis aplicado al proceso de aprendizaje} lo llama \emph{La filosofía del análisis teórico del proceso de aprendizaje}
-
-
-\begin{changemargin}{1.5cm}{1.5cm}
-\emph{El principio inductivo de minimización del error de entrenamiento no es evidente por si mismo y necesita ser justificado. Es posible que existan otros principios inductivos que permitan obtener un mejor nivel de generalización. El objetivo principal de La filosofía del análisis teórico del proceso de aprendizaje es encontrar el principio de inducción con el mayor grado de generalización posible y construir algoritmos que alcancen este principio}.
-\end{changemargin}
-
-
-En las siguiente sección se aprofundizará en la teoría del aprendizaje estadístico y más adelante se hará un breve recuento de las relaciones y sinergias que este paradígma ha generado en el campo de la optimización. 
-
-
-%\begin{subappendices}
-%\section{Inadmisibilidad estimador de máxima verosimilitud}
-%\end{subappendices}
-
-\newpage
+Como puede observarse, la eficiencia del paradígma \emph{general de la estadística} depende de la abundancia de datos \footnote{La dependencia de ambos límites del tamaño de la muestra es evidente.}, no obstante, hay una serie de complicaciones empíricas de las cuales la exposición teórica hasta el momento no ha dado cuenta. En las siguientes secciones aterrizaremos más la problemática en cuestión, daremos una breve introducción al problema principal del aprendizaje de máquina, exploraremos las principales complicaciones que surgen a la hora de implementar dichos algoritmos y en particular nos enfocaremos en el área de optimización y en las diversas técnicas que han surgido para solventar dichas dificultades. 
 
 \section{El problema del aprendizaje}
 
+El objetivo del aprendizaje estadístico es el diseño e implementación de algoritmos que sean capaces de \emph{aprender} las interacciones existentes entre un conjunto de datos y un conjunto de respuestas y generalizar dichas percepciones para observaciones futuras. En este sentido, se supondra que existe una \emph{regla} subyacente que rige la relación entre las variables observables y las respuestas \footnote{Sin perdida de generalidad, siguiendo las líneas de \cite{VAPNIK1}, nos centraremos en el contexto de clasificación binaria. Esto se debe a que es el escenario más simple de analizar, sin que esta simplicidad sacrifique generalidad.}. De manera concreta, supondremos un conjunto arbitrario de observaciones $X=\{x_1,x_2,\dots,x_n\}$ tal que $x_i \stackrel{iid}{\sim} D,\quad\forall x_i\in X$ y un conjunto de respuestas $Y=\{y_1, y_2, \dots,y_n\};y_i\in \{0,1\}$. Tal que existe una función $c:X\rightarrow Y$ que rige la manera en la que cada elemento $x_i$ está relacionado con una respuesta $y_i$. El problema principal del aprendizaje estadístico se reduce entonces a encontrar de manera \emph{eficiente} una función o hipótesis $h:S\subset X\rightarrow Y$ donde $S\sim D^n$ tal que \emph{probablemente} estime a $c$ de manera \emph{razonablemente correcta}.
 
-El objetivo de este capítulo, es introducir la notación y terminología básica utilizada en el campo del aprendizaje estadístico. Así mismo, se desea exponer algunos resultados teóricos de fundamental importancia para el resto del texto. De igual modo, abordaremos ciertas interrogantes inherentes al paradígma del aprendizaje estadístico que Mehryar hace notar en \cite{Mehryar}: ¿Qué puede ser aprendido de manera eficiente?, ¿qué es inherentemente difícil de aprender?, ¿cuántas observaciones son necesarias para aprender de manera exitosa? y ¿existe un modelo general de aprendizaje?
+Del párrafo anterior se desprenden varias interrogantes: ¿Qué significa que un algoritmo aprenda con \emph{alta probabilidad} una representación \emph{razonablemente correcta}?, ¿Qué significa que lo haga eficientemente? y ¿Cuándo es esto posible?. Con estas interrogantes en mente, resulta conveniente entonces definir un criterio bajo el cual se puede evaluar el desempeño de un determinado \emph{algoritmo de aprendizaje} con tal de determinar si cumple las características de lo que puede llegar a ser \emph{aprendible}:
 
-
-Cómo se mencionó en la introducción, el objetivo del aprendizaje estadístico es el diseño e implementación de algoritmos que sean capaces de aprender las interacciones existentes entre un conjunto de datos y un conjunto de respuestas y generalizar dichas percepciones para observaciones futuras. En este capítulo nos centraremos, al igual que \cite{VAPNIK1}, en el contexto de clasificación binaria. Esto lo hacemos por tres motivos. El primero, es porque este escenario es el más simple para analizar. El segundo, porque las ideas orginales del aprendizaje estadístico nacieron en este contexto y por ende la notación y terminología se adapta naturalmente. En este sentido,  una vez obtenidos los resultados principales, extender sus consecuencias a escenarios más generales es relativamente sencillo. El tercero es porque la implementación de los algoritmos explorados más adelante se llevará a cabo en este contexto. 
-
-De manera formal. Supongamos que tenemos un conjunto arbitrario de observaciones $X$ tal que $x_i \stackrel{iid}{\sim} D,\quad\forall x_i\in X$ y un conjunto de respuestas $y_i\in Y$. Más aún, supongamos que existe una función $c:X\rightarrow Y$ que rige la manera en la que cada elemento $x_i$ está relacionado con una etiqueta $y_i$. El problema principal del aprendizaje estadístico se reduce a encontrar de manera \emph{eficiente} una función o hipótesis $h:S\subset X\rightarrow Y$ donde $S\sim D^m$ tal que \emph{probablemente} estime a $c$ de manera \emph{razonable}.
-
-Del párrafo anterior se desprenden varias interrogantes: ¿Qué significa que un algoritmo aprenda razonablemente y con alta probabilidad?, ¿Qué significa que lo haga eficientemente? y ¿Cuándo es esto posible?. Cómo puede notarse, estas cuestiones están directamente relacionadas con las interrogantes expuestas al comienzo de esta sección. Comencemos pues definiendo un criterio bajo el cual podemos calificar el desempeño de un algoritmo.
 \bigskip\bigskip
 
 
 \begin{defn}\label{eq:def_gen_err}
 \textbf{Error de generalización}\\
-  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una función $c:X\rightarrow Y$ y una hipótesis $h:X\rightarrow Y$. El error de generalización de $h$ está dado por:
+  Dado un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una función $c:X\rightarrow Y$ y una hipótesis $h:X\rightarrow Y$. El error de generalización de $h$ está dado por:
 \begin{equation*}
 R(h)=P_{x\sim D}\{x\in X| h(x)\neq c(x)\}=E\bigg(\mathbbm{1}_{\{x\in X| h(x)\neq c(x)\}}\bigg)
 \end{equation*}
 \end{defn}
 
-De esta forma podemos definir una tolerancia $\epsilon > 0$ y llamar a todo algoritmo que genere hipótesis $h$ tal que $R(h)\leq\epsilon$ como razonablemente correcto o \emph{aproximadamente} correcto. El problema con lo anterior, es que ni la distribución $D$, ni la función $c$ son conocidas, en consecuencia no es posible calcular $R(h)$ directamente. Más aún, es probable que nisiquiera contemos con $X$ si no con una muestra $S \subset X$ donde $S \sim D^m$. \footnote{Es decir,$S$ es una muestra de tamaño m obtenida de $X$  conforme a $D$}. Por ende, lo mejor que podemos hacer, siguiendo las líneas de la discusión llevada a cabo en la sección anterior, es calcular una aproximación de $R(h)$ utilizando los datos que tenemos.
+Como puede observarse, el error de generalización no es otra cosa que la \emph{medida} del espacio en el cual la hipótesis aprendida $h$ diferirá de la relación intrínseca $c$. De esta forma podemos determinar una tolerancia $\epsilon > 0$ y llamar a todo algoritmo que genere hipótesis $h$ tal que $R(h)\leq\epsilon$ como razonablemente correcto o \emph{aproximadamente} correcto. Además de esto, también nos da una medida para comparar el desempeño de un algoritmo con respecto a otro. No obstante lo adecuado de esta definición, una dificultad evidente al querer evaluar el desempeño de un modelo de manera empírica es que ni la distribución $D$, ni la función $c$ son conocidas. Más aún, es probable, salvo casos triviales, que nisiquiera se cuente con $X$ si no con una muestra finita $S \subset X$. En consecuencia, se define el \emph{Error empírico} como un aproximador insesgado de $R(h)$ de la siguiente manera:
 \bigskip
 
 \begin{defn}\label{eq:def_emp_err}
-\textbf{Error empírico}\\  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una muestra $S\subset X$ con $S\sim D^m$ y una hipótesis $h:S\subset X\rightarrow Y$. El error de empírico de $h$ está dado por:
+\textbf{Error empírico}\\  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una muestra $S\subset X$ con $S\sim D^n$ y una hipótesis $h:S\subset X\rightarrow Y$. El error de empírico de $h$ está dado por\footnote{El que este estimador sea insesgado es una consecuencia directa de la ley de los grandes números.\cite{BERNOULLI}}:
 \begin{equation*}
-\hat{R(h)}=\frac{1}{m}\displaystyle\sum_{i=1}^m\mathbbm{1}_{\{x\in S| h(x)\neq c(x)\}}
+\hat{R(h)}=\frac{1}{n}\displaystyle\sum_{i=1}^n\mathbbm{1}_{\{x\in S| h(x)\neq c(x)\}}
 \end{equation*}
 \end{defn}
 
-Una pregunta surge inmediatamente. ¿Tiene sentido aproximar a $R(h)$ con $\hat{R(h)}$? si bien en la sección anterior se observó que la distribución empírica de un conjunto de datos converge de manera exponencial a la distribución subyacente de los mismos, esto no nos da ninguna garantía sobre el comportamiento del error de predicción. Por otro lado, es claro que al seleccionar este estimador se estarán sesgando los resultados hacia hipótesis que tiendan a comportarse bien bajo el mismo. Debe llevarse un análisis minucioso antes de poder continuar.  
-
-Para hacer el análisis lo más general posible, dejaremos de utilizar la función de pérdida $\mathbbm{1}_{\{x\in S| h(x)\neq c(x)\}}$ y denotameros nuestra nueva función de pérdida cómo $l(h,c)$. En este contexto, queremos averiguar las propiedades asintótcas del error empírico. 
+Para aligerar la notación, en lo siguiente se denotará la función de pérdida como $l(h,c)$. En este contexto, y con tal de esclarecer las nociones de estimación \emph{probablemente aproximadamente correcta} para una regla $c$, se buscará caracterizar el comportamiento de:
+\begin{defn}\label{eq:def_emp_err_g}
 \begin{equation*}
 \begin{split}
-\hat{R(h)}=\frac{1}{m}\displaystyle\sum_{i=1}^m l(h,c)
+\hat{R(h)}=\frac{1}{n}\displaystyle\sum_{i=i}^n l(h,c)
 \end{split}
 \end{equation*}
-
-Para llevar a cabo dicho análisis, debemos contar con una noción de lo que es un estimador \emph{correcto} en términos asintóticos. Para esto, utilizaremos la siguiente definición:
-
-\begin{defn}
-Decimos que una familia de hipótesis H converge uniformemente en términos de su media a su valor esperado si $\forall\epsilon>0$ se cumple que.
-\begin{equation*}
-\begin{split}
-P\Bigg\{\displaystyle\sup_{h\in H}\bigg|\int l(h,c)dD - \frac{1}{m}\displaystyle\sum_{i = 1}^ml(h,c)\bigg|>\epsilon\Bigg\} & \xrightarrow[m\rightarrow\infty]{} 0
-\end{split}
-\end{equation*}
-
-Es decir, decimos que una familia de hipótesis converge uniformemente en términos de su media a su valor esperado cuando la medida de probabilidad de los conjuntos donde estas dos cantidades distan en más de un pequeño error tiende a cero conforme se toman más datos en la muestra. En \cite{VAPNIK1} se muestra que en efecto el método de máxima verosimilitud es consistente. Por lo anterior, de aquí en adelante, no nos preocuparemos más por la idoneidad del método de reducción del error empírico bajo este esquema. 
 \end{defn}
 
-\newpage
+Dada una familia de hipótesis $H$. Por lo tanto diremos que una regla $c$ es \emph{Probablemente aproximadamente correctamente aprendible} o \emph{PAC} aprendible por H si:
 
-\section{Optimización y aprendizaje}
+\begin{defn}\label{eq:pac_aprendible}
+\textbf{PAC Aprendible}\\  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$ existe una hipótesis $h_{n^{*}}:S\subset X\rightarrow Y\in H$. Tal que $\forall \epsilon,\delta > 0$ $\exists n^{*} > 0 \in \mathbb{N}$ con $|S|\geq n^{*}$ que cumple que:
+\begin{equation*}
+P\{\hat{R(h_{n^{*}})}\geq R(h) + \epsilon\} < \delta
+\end{equation*}
+\end{defn}
 
-Tomando como base las dos secciones anteriores, podemos ver que bajo el esquema general de la inferencia estadística, aquel que da forma al aprendizaje estadístico, la optimización de ciertas funciones de error es fundamental para la obtención de modelos capaces de generalizar enlos datos. En esta sección se pretende dar un recuento de las distintas interacciones y sinergias que han existido entre estos dos campos. A saber el aprendizaje estadístico y la optimización numérica. 
+En \cite{VALIANT}, Valiant agregó la característica que para que una familia de \emph{reglas} o \emph{conceptos} sean aprendibles, estos deben poder serlo en tiempo polinomial con respecto al tamaño de los datos, de ahí la noción de eficiencia. En este sentido, en la siguiente sección, se explorará que es lo que ocurre cuando entra en contexto el tamaño de los en las aplicaciones de aprendizaje a gran escala.
 
-La interacción entre estos dos campos es tan clara que el Problema Principal del Aprendizaje Estadístico (enunciado en la sección anterior),  se plantea como un problema de optimización. El problema consiste en encontrar, de entre todas las hipótesis posibles, aquella que aproxime razonablemente con alta probabilidad la función de distribución intrínseca en los datos. De esta manera, la capacidad para generar mejores hipótesis va a depender en gran medida de la capacidad del método de optimización para llegar a buenas soluciones en un tiempo aceptable. En consecuencia, avances en el campo de la optimización se ven reflejados en avances en el campo del aprendizaje estadístico. Sin embargo, esta relación no es biunívoca. A lo largo de los años se ha observado cómo el avance en el are de aprendizaje de máquina\footnote{en este texto utilizare los términos aprendizaje de máquina y aprendizaje estadístico de manera intercambiable} traen avances significativos en el campo de la optimización. Un ejemplo de este fenómeno es este mismo documento donde el uso de las propiedades estocásticas inherentes a las funciones objetivo que surgen en problemas de aprendizaje de máquina son utilizadas para volver más eficientes métodos clásicos de optimización numérica. Otro ejemplo en el cual la interrelación se ha dado en esa dirección se encuentra en \cite{BENNETT} donde se observa que los buenos resultados deribados del uso  de \emph{backpropagation} para entrenar redes neuronales provocó un mayor estudio de las propiedades del gradiente estocástico. 
+\section{El efecto de la escala}
 
-En la siguiente sección, se exploran más a fondo algunos de los algoritmos de optimización estocástica que han producido un mayor impacto en este campo en los últimos años. 
+Partiendo de la definición  \ref{eq:pac_aprendible} y con tal de investigar cómo es que el tamaño de los datos afecta la capacidad de un algoritmo para aprender de manera empírica, nos concentraremos en explorar el valor esperado de la diferencia entre $\hat{R(h_n)}$ y $R(h)$. Suponiendo, cómo es de esperarse en la práctica, que el tamaño de nuestra muestra es $0< n < n^{*}$. De esta manera, siguiendo los pasos de  \cite{BOUSQUET}, podemos descomponer el valor esperado de la siguiente manera:
 
+\begin{equation*}
+  \begin{split}
+    \mathbf{E}[\hat{R(h_{n})} - R(h)] & = \mathbf{E}[\hat{R(h_{n^{*}})} - R(h)] + \mathbf{E}[\hat{R(h_{n^{*}})} - R(h_n)]\\
+                                     & = Err_{app} + Err_{est}
+  \end{split}
+\end{equation*}
 
-%\begin{subappendices}
+El primer error, $Err_{app}$ proviene del \emph{tamaño} de la familia de hipótesis $H$. Entre más \emph{grande} sea la familia de hipótesis $H$\footnote{Ver Appendice A para definición de dimensión VC}, la probabilidad de que $\hat{R(h_{n^{*}})}$ y $R(h)$ difieran será baja y por lo tanto el valor esperado de este error será pequeño. De hecho, el orden de decrecimiento del error  está dado por la siguiente desigualdad\cite{VAPNIK2} con una probabilidad de almenos $1-\eta;\eta >0$:
 
-%\section{Resultados básicos de teoría de la medida}
-
-%\subsection{Tipos de convergencia}
-
-%\subsection{Resultados importantes de límite}
-
-
-
-%\end{subappendices}
-
-
-\chapter{Los compromisos de la optimización a gran escala}
-
-
-
-\epigraph{Optimization lies at the heart of machine learning. Most machine learning problems reduce
-to optimization problems.}{\textit{Kristin P. Bennett \\ Rensselaer Polytechnic Institute}}
-\newpage
-
-Como se vio en la sección anterior, todo modelo de aprendizaje enfrenta un compromiso en cuanto al balance que debe hacer entre sesgo y varianza. No obstante, cuando se introduce una gran cantidad de datos, este balance tiene que contemplar otro tipo de error, a saber, el error producido por el algoritmo de optimización. 
+\begin{equation*}
+  \begin{split}
+    \displaystyle_{h \in H} |R(h) - R_{n^{*}}(h)| & \leq O\bigg( \sqrt{\frac{1}{2n}log(\frac{2}{\eta}) + \frac{d_H}{n}log(\frac{n}{d_H})}\bigg)
+  \end{split}
+\end{equation*}
 
 
+Por otra parte, el error $Err_{est}$ proviene de la dificultad intrínseca de aproximar $h$ dado un tamaño de muestra $n<n^{*}$. El compromiso existente entre los dos tipos de errores es claro. Si bien por un lado una familia de hipótesis \emph{grande} permitirá disminuir el primer error, el simple aumento en el espacio de búsqueda hará que $h$ sea más dificil de aproximar y por ende el segundo error crecerá.
 
-\chapter{Métodos Similares y estado del arte}
+Ahora bien, es claro que el problema de encontrar $h_n$ que minimice \ref{eq:def_emp_err} es una operación computacionalmente costosa. Tomemos por ejemplo\cite{JUDD} donde $H$ está constituida por redes neuronales \emph{feed-forward}. Ahí se muestra que el problema de \emph{carga de información} a las distintas capas de la red es un problema NP-completo. Por esta razón, con valores grandes del tamaño de muestra $n$, el sistema computacional que lleve la optimización a cabo muy probablemente se verá restringido por un tiempo máximo aceptable de cómputo $T_{max}$. De aquí que en el caso de aprendizaje a gran escala no se pueda aspirar a estimar $h_n$ si no a lo más $h_{opt}$. De aquí se desprende una nueva descomposición del error esperado:
+
+\begin{equation*}
+  \begin{split}
+    \mathbf{E}[\hat{R(h_{n})} - R(h)] & = \mathbf{E}[\hat{R(h_{n^{*}})} - R(h)] + \mathbf{E}[\hat{R(h_{n^{*}})} - R(h_n)] +  \mathbf{E}[\hat{R(h_{opt})} - R(h_n)]\\
+                                     & = Err_{app} + Err_{est} + Err_{opt}
+  \end{split}
+\end{equation*}
+
+Esta ecuación comprende ahora tres variables que se comprometen mutuamente: El tamaño de la familia de hipótesis, el número de observaciones disponibles en la muestra y el tiempo tolerable para el algoritmo de optimización. Surge entonces una disyuntiva antes inexistente, a saber, que tanto utilizar los datos en la muestra $n$ para que el balance entre tamaño de $Err_{opt}$ y el tiempo en el proceso de optimización $T_{max}$ sea satisfactorio. Esto da origen a los algoritmos de optimización que utilizan submuestras aleatorias de los datos disponibles. Estos algoritmos se denominan de optimización estocástica. En la siguiente sección exploraremos las diferentes formas de dichos algoritmos, veremos que difieren en cuanto al tipo de información que utilizan, primer orden o segundo orden. Veremos la cantidad de datos que utilizan en cada iteración, en línea, \emph{mini-batch} o \emph{full-batch}. Además de esto, estudiaremos sus tasas de convergencia y contextos bajo los cuales se puede esperar un buen o mal comportamiento de los mismos. De manera concreta y con tal de aterrizar las ideas, en la siguiente sección y por el resto de este documento, en lugar de enfocarnos en una familia de hipótesis abstracta, supondremos que la familia $H$ está parametrizada por un conjunto de parámetros $w$. De esta forma, el objetivo será analizar el comportamiento de diversos algoritmos que busquen resolver el siguiente problema de opitmización:
+
+\begin{defn}\label{eq:central_prob}
+\begin{equation*}
+\begin{split}
+\displaystyle\min_{w\in W}\hat{R(h_{w,n})}=\frac{1}{n}\displaystyle\sum_{i=i}^n l(h_{w_i,n},c) &; n\leq n^{*}
+\end{split}
+\end{equation*}
+
+\end{defn}
+
+\chapter{Optimización estocástica}
 
 \epigraph{It’s more important than ever to understand the fundamentals of
 algorithms as well as the demands of the application, so that good
 choices are made in matching algorithms to applications.}{\textit{Stephen Wright \\ University of Wisconsin-Madison}}
 \newpage
 
+\section{Métodos de primer orden}
+
+Estos métodos, como su nombre lo indica, hacen uso de una aproximación local de primer orden para encontrar, de manera iterativa, una dirección de descenso que, bajo ciertos supuestos de regularidad \cite{NOCEDAL} eventualmente llegará a un mínimo local\footnote{En este trabajo nos enfocaremos en optimización local. Para un recuento extensivo de métodos de optimización global, el lector puede referirse a \cite{TORN}}.
+
+Sin duda, el algoritmo más importante en este contexto es \emph{Descenso en Gradiente Estocástico (DGE)}\cite{ROBBINS}. Con el fin de minimizar \ref{eq:central_prob} cada iteración de DGE tendría la siguiente forma:
+
+\begin{equation*}
+\begin{split}
+w_{k+1} = w_k - \alpha_k \nabla R(h_{w_k, i})) & = w_k - \alpha_k \nabla l(h_{w_i, n}, c)
+\end{split}
+\end{equation*}
 
 
-\chapter{Dos algoritmos estocásticos de segundo orden}
+
+\section{Métodos de segundo orden}
+
+
+\chapter{Dos algoritmos de segundo orden}
 
 \epigraph{You're going to see speech recognition systems that have human or better-than-human accuracy become commercialized.}{\textit{Tim Tuttle \\ Massachusetts Institute of Technology}}
 
 \newpage
 
-\section{SLM-LBFGS}
-
 \section{Newton truncado con gradiente conjugado}
+
+\section{SLM-LBFGS}
 
 \chapter{Implementación y resultados}
 
@@ -476,21 +423,26 @@ choices are made in matching algorithms to applications.}{\textit{Stephen Wright
 
 
 \begin{thebibliography}{9}
+\bibitem{BENNETT} Kristin P. Bennett, Emilio Parrado-Hernández, \emph{The Interplay of Optimization and Machine Learning Research}. Journal of Machine Learning Research, 2007.
+\bibitem{BERNOULLI}Bernoulli, Jakob. \emph{Ars Conjectandi, opus posthumum.} (1795).
+\bibitem{BOUSQUET}Bousquet, Olivier, and Léon Bottou. \emph{The tradeoffs of large scale learning}. Advances in neural information processing systems. 2008.
 \bibitem{BYRD} Richard, H. Byrd, Gillian M. Chin, Will Neveitt \& Jorge Nocedal.
   \emph{On the Use of Stochastic Hessian Information in Optimization Methdos for Machine Learning.} Society of Industrial and Applied Mathematics, 2011.
 \bibitem{EFRON} Bradly Efron and Carl Morris, \emph{Stein's Paradox in Statistics}. Scientific American, Volume 236, Issue 5.
+\bibitem{HASTIE} Hastie, T.; Tibshirani, R. \& Friedman, J. (2001), \emph{The Elements of Statistical Learning}, Springer New York Inc. , New York, NY, USA .
 \bibitem{MASSART} P. Massart, \emph{The tight constant in the dvoretzky kiefer wolfowitz inequality}. The Annals of Probability, 1990, Vol 18, No 3. pg 1269-1283. 
-\bibitem{BENNETT} Kristin P. Bennett, Emilio Parrado-Hernández, \emph{The Interplay of Optimization and Machine Learning Research}. Journal of Machine Learning Research, 2007.
-\bibitem{Mehryar} Mehryar Mohri, Afshin Rostamizadeh, and Ameet Talwalkar
-  \emph{Foundations of Machine Learning}, MIT Press, USA, 2012.
+\bibitem{JUDD}Judd, Stephen. \emph{On the complexity of loading shallow neural networks.} Journal of Complexity 4.3 (1988): 177-192.
+\bibitem{MAYER} Mayer-Schönberger, Viktor, and Kenneth Cukier. \emph{Big data: A revolution that will transform how we live, work, and think}. Houghton Mifflin Harcourt, 2013.
 \bibitem{NOCEDAL} J. Nocedal and S. J. Wright. \emph{Numerical Optimization}, 2nd ed., Springer Ser. Oper. Res., Springer, New York, 2006.
 \bibitem{SHAI} Shai Shalev-Shwartz, Shai Ben-David. \emph{Understanding Machine Learning, From Theory to Algorithms},Cambridge University Press, New York, 2014.
 \bibitem{STEIN1} Charles Stein. \emph{Inadmissibility of the usual estimator for the mean of a multivariate normal distribution}, Proceedings of the Third Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1956 Vol 1. pp 197-206
 \bibitem{STEIN2} W. James and Charles Stein. \emph{Estimation With Quadratic Loss},  Proceedings of the Fourth Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1961. pp 361-379.
+\bibitem{TORN} Törn, Aimo, Montaz M. Ali, and Sami Viitanen. \emph{Stochastic global optimization: Problem classes and solution techniques}. Journal of Global Optimization 14.4 (1999): 437-447.
 \bibitem{TUKEY} Tukey, J.W., \emph{A survey of sampling from contaminated distributions.} (1960a), Chapter 39 in: \emph{Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling} (ed. I. Olkin et al.), Stanford University Press, Stanford, California, 448-485.
-\bibitem{HASTIE} Hastie, T.; Tibshirani, R. \& Friedman, J. (2001), \emph{The Elements of Statistical Learning}, Springer New York Inc. , New York, NY, USA .
 \bibitem{VAPNIK1} Vladimir N. Vapnik  \emph{Statistical Learning Theory},JOHN WILEY \& SONS, INC., USA, 1998.
 \bibitem{VAPNIK2} Vladimir N. Vapnik  \emph{The Nature of Statistical Learning Theory},Springer, Second Edition, 1999.
+\bibitem{VALIANT} Valiant, Leslie G. \emph{A theory of the learnable}. Communications of the ACM 27.11 (1984): 1134-1142.
+\bibitem{WALLER} Waller, Matthew A., and Stanley E. Fawcett. \emph{Data science, predictive analytics, and big data: a revolution that will transform supply chain design and management}." Journal of Business Logistics 34.2 (2013): 77-84.
 
 \end{thebibliography}
 

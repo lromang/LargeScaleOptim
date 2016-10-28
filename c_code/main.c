@@ -23,7 +23,9 @@ int const N_CLASS = 3;
 int    logistic_labels[150];
 double logistic_values[150][4];
 double stochastic_softmax(double*, int);
-double class_error(double*, int);
+double logActive(double*, int, int);
+double logistic(double*, int);
+double class_precision(double*, int, int);
 
 
 int main(){
@@ -88,6 +90,7 @@ int main(){
    */
 
   if(run_logistic){
+    length  = 4;
     FILE *file = fopen("../data/iris", "r");
     // Read in file
     for(i = 0; i < MAX_FILE_ROWS; i++){
@@ -109,32 +112,36 @@ int main(){
              logistic_labels[i]);
       }
     }
+
     // Test logistic.
-    optim_point_N = NGC(stochastic_softmax, 15, 20, 1e-2, verbose);
+    optim_point_N = NGC(logistic, 4, 100, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
-    imprimeTit("Class Error:");
-    printf(" %.5lf \n", class_error(optim_point_N, length));
+    imprimeTit("Class Precision:");
+    printf(" %.5lf \n", class_precision(optim_point_N, length, verbose));
 
+    /*
     // Test multinomial logistic.
-    optim_point_N = LBFGS(stochastic_softmax, 15, 20, 1e-2, verbose);
+    optim_point_N = LBFGS(logistic, 4, 20, 1e-3, verbose);
     imprimeTit("Multinomial Logistic minimum (LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
-    imprimeTit("Class Error:");
-    printf(" %.5lf \n", class_error(optim_point_N, length));
+    imprimeTit("Class Precision:");
+    printf(" %.5lf \n", class_precision(optim_point_N, length));
 
     // Test multinomial logistic.
-    optim_point_N = SLM_LBFGS(stochastic_softmax, 15, 20, 1e-2, 20, verbose);
+    optim_point_N = SLM_LBFGS(logistic, 4, 20, 1e-3, 20, verbose);
     imprimeTit("Multinomial Logistic minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
-    imprimeTit("Class Error:");
-    printf(" %.5lf \n", class_error(optim_point_N, length));
+    imprimeTit("Class Precision:");
+    printf(" %.5lf \n", class_precision(optim_point_N, length));
+    */
+
   }
   return 0;
 }
@@ -184,23 +191,59 @@ double stochastic_softmax(double* theta, int length){
   return -score;
 };
 
+/* -------------------------------------
+ * Logistic Activation
+ * -------------------------------------
+ * Theta = array of K x N. K = Númber of
+ *         classes. N = Dimension of each
+ *         observation.
+ */
+double logActive(double* theta, int i, int length){
+  return 1 / (1 + exp(-dotProd(logistic_values[i], theta, length)));
+}
+
+/* -------------------------------------
+ * Binary Logistic
+ * -------------------------------------
+ * Theta = array of K x N. K = Númber of
+ *         classes. N = Dimension of each
+ *         observation.
+ */
+double logistic(double* theta, int length){
+  double loss = 0;
+  int i;
+  for(i = 0; i < MAX_FILE_ROWS; i++){
+    loss = loss + logistic_labels[i]*log(logActive(theta, i, length)) +
+      (1-logistic_labels[i])*log(1 - logActive(theta, i, length));
+  }
+  return -loss;
+}
+
 
 /*
  * -------------------------------------
  * Eval function
  * -------------------------------------
  */
-double class_error(double* coefs, int length){
+double class_precision(double* coefs, int length, int verbose){
   // Variable declaration.
   double class_error, entry_val;
   int i, pred;
   // Evaluate logistic.
   pred = 0;
   for(i = 0; i < MAX_FILE_ROWS; i++){
-    entry_val = exp(- dotProd(coefs, (double*) logistic_values[i], length));
+    entry_val = exp(- dotProd(coefs, logistic_values[i], length));
     entry_val = 1 / (1 + entry_val);
     // Classification threshold = .5
-    pred < .5 ? pred = 1 : -1;
+    if(entry_val > .5){
+      pred = 1;
+    }else{
+      pred = 0;
+    }
+    if(verbose){
+      imprimeTit("PRED");
+      printf("ACTIVATION VALUE: %lf | PREDICTION: %d | ACTUAL: %d", entry_val, pred, logistic_labels[i]);
+    }
     class_error = class_error + (pred == logistic_labels[i] ? 1 : 0);
     //res = res + log(1 + exp(-dotProd(x, (double*) logistic_values[i], 5) * logistic_labels[i]));
   }
