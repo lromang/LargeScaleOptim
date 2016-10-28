@@ -131,7 +131,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-
+    */
 
     // Test multinomial logistic.
     optim_point_N = LBFGS(logistic, length, 20, 1e-2, verbose);
@@ -139,19 +139,22 @@ int main(){
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
-    imprimeTit("Class Precision:");
-    printf(" %.5lf \n", class_precision(optim_point_N, length, verbose));
-    */
-
+    precision = class_precision(optim_point_N, length, verbose);
+    printf("\n");
+    imprimeTit("Classification Precision (LBFGS):");
+    printf("%.5lf \n", precision);
+    /*
     // Test multinomial logistic.
-    optim_point_N = SLM_LBFGS(logistic, length, 20, 1e-3, 20, verbose);
+    optim_point_N = SLM_LBFGS(logistic, length, 7, 1e-6, 100, verbose);
     imprimeTit("Multinomial Logistic minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
-    imprimeTit("Class Precision:");
-    printf(" %.5lf \n", class_precision(optim_point_N, length, verbose));
-
+    precision = class_precision(optim_point_N, length, verbose);
+    printf("\n");
+    imprimeTit("Classification Precision (SLM_LBFGS):");
+    printf("%.5lf \n", precision);
+  */
   }
   return 0;
 }

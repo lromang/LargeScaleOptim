@@ -120,8 +120,8 @@ double * SLM_LBFGS(double (* func)(double*, int),
   int i, k, MAX_ITER;
   // Space allocation.
   x = (double *)malloc(nRow * sizeof(double));
-  s = (double **)malloc((nRow * nRow) * sizeof(double));
-  y = (double **)malloc((nRow * nRow) * sizeof(double));
+  s = (double **)malloc((nRow*m) * sizeof(double));
+  y = (double **)malloc((nRow*m) * sizeof(double));
   // Initialize x.
   for(i = 0; i < nRow; i++){
     x[i] = ((double) rand() / INT_MAX) ;

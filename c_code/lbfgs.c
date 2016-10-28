@@ -79,7 +79,7 @@ double * findH(double* grad, double** s, double** y,
  * x: Local minimum of func.
  * -------------------------------------
  */
-void updateSY(double** s, double** y, double * s_new,
+void updateSY(double** s, double** y, double* s_new,
               double* y_new, int m, int k){
   int i;
   if(k < m){
@@ -116,8 +116,8 @@ double * LBFGS(double (* func)(double*, int),
   int i, k, MAX_ITER;
   // Space allocation.
   x = (double *)malloc(nRow * sizeof(double));
-  s = (double **)malloc((nRow * nRow) * sizeof(double));
-  y = (double **)malloc((nRow * nRow) * sizeof(double));
+  s = (double **)malloc((m * nRow) * sizeof(double));
+  y = (double **)malloc((m * nRow) * sizeof(double));
   // Initialize x.
   for(i = 0; i < nRow; i++){
     x[i] = ((double) rand() / INT_MAX) ;
