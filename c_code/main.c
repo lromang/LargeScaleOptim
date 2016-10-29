@@ -120,7 +120,7 @@ int main(){
       }
     }
 
-    /*
+
     // Test logistic.
     optim_point_N = NGC(logistic, length, 100, 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (NCG):");
@@ -131,10 +131,10 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-    */
+
 
     // Test multinomial logistic.
-    optim_point_N = LBFGS(logistic, length, 20, 1e-2, verbose);
+    optim_point_N = LBFGS(logistic, length, min(length, 20), 1e-2, verbose);
     imprimeTit("Multinomial Logistic minimum (LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
 
@@ -158,51 +158,6 @@ int main(){
   }
   return 0;
 }
-
-/* -------------------------------------
- * Multiclass Logistic Function
- * -------------------------------------
- * Theta = array of K x N. K = Númber of
- *         classes. N = Dimension of each
- *         observation.
- */
-double stochastic_softmax(double* theta, int length){
-  double *theta_dot, *denom;
-  double score;
-  int i, k, j;
-  // Space allocation.
-  theta_dot = (double*) malloc(length * sizeof(double));
-  denom     = (double*) malloc(length * sizeof(double));
-  // Fill in denom empty values.
-  for(i = 0; i < MAX_FILE_ROWS; i++){
-    denom[i] = 0;
-  }
-  // Construct denom
-  for(i = 0; i < MAX_FILE_ROWS; i++){
-    for(k = 0; k < N_CLASS; k++){
-      // Theta dot construction.
-      for(j = 0; j < length; j++){
-        theta_dot[j] = theta[(length * k) + j];
-      }
-      denom[i] = denom[i] + exp(dotProd(theta_dot, logistic_values[i], length));
-    }
-  }
-
-  // Construct score
-  for(score = i = 0; i < MAX_FILE_ROWS; i++){
-    for(k = 0; k < N_CLASS; k++){
-      // Theta dot construction.
-      for(j = 0; j < length; j++){
-        theta_dot[j] = theta[length * k + j];
-      }
-      score = score + (double)(logistic_labels[i] == k) *
-        log(exp(dotProd(theta_dot, logistic_values[i], length)) / denom[i]);
-    }
-  }
-  printf("Score: %lf\n", score);
-  free(theta_dot);
-  return -score;
-};
 
 /* -------------------------------------
  * Logistic Activation
