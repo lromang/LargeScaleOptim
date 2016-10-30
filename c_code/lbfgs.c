@@ -10,7 +10,6 @@
  * implementation have been taken
  * as a guide for this script.
  * -----------------------------------------
-
  */
 
 #include "trunc_newton.c"
@@ -123,7 +122,7 @@ double * LBFGS(double (* func)(double*, int),
     x[i] = ((double) rand() / INT_MAX) ;
   }
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1.5e4;
+  MAX_ITER = 1e3;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
@@ -135,11 +134,11 @@ double * LBFGS(double (* func)(double*, int),
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow, verbose);
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
+    // New gradient.
     grad_new = gradCentralDiff(func, x_new, nRow);
     // Update s, y.
     updateSY(s, y, vProd(p, alpha, nRow),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
-
     // ---------------- PRINT ------------------- //
     if(verbose){
       printf("\n ITER = %d; f(x) = %.10e ; "

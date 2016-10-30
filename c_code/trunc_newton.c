@@ -108,13 +108,12 @@ double* NGC(double (*func)(double*, int), int nRow,
    */
   for(i = 0; i < nRow; i++){
     // Improve initial point with Stochastic Gradient Descent!
-    x[i] = ((double) rand() / INT_MAX); //rand() % 1;
+    x[i] = ((double) rand() / INT_MAX);
   }
 
   // Calculate the gradient.
   r = gradCentralDiff(func, x, nRow);
   stop = 1e2;
-
   // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
     // ############ CG Variables ###########
@@ -122,7 +121,7 @@ double* NGC(double (*func)(double*, int), int nRow,
     epsilon = min(.5, sqrt(norm(r, nRow))) * norm(r, nRow);
     // Initialize d, z, eta, r_cg.
     d    = vProd(r, -1, nRow);
-    r_cg = vProd(r, 1, nRow);
+    r_cg = r; // testing
     for(i = 0; i < nRow; i++){
       z[i] = 0;
     }
