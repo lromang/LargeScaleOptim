@@ -29,8 +29,14 @@ int main(){
   printf("Run logistic?\n");
   scanf("%d", &run_logistic);
   if(run_logistic){
+    printf("Regularization Parameter?\n");
+    scanf("%lf", &regularization);
     printf("Stochastic Mode?\n");
     scanf("%d", &stocMode);
+    if(stocMode){
+      printf("Sample proportion of dataset?\n");
+      scanf("%lf", &sampProp);
+    }
   }else{
     stocMode = 0;
   }
@@ -187,7 +193,6 @@ double logActive(double* theta, int i, int length){
  */
 double logistic(double* theta, int length){
   double loss = 0;
-  double regularization = .01;
   int i;
   if(!stocMode){
     SAMPLE = MAX_FILE_ROWS;

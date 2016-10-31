@@ -113,7 +113,7 @@ double* NGC(double (*func)(double*, int), int nRow,
   // Sample mode
   if(stocMode){
       printf("\nRUNNING STOCASTIC MODE\n");
-      SAMPLE = rand() % MAX_FILE_ROWS;
+      SAMPLE = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(verbose);
   }
   // Calculate the gradient.
@@ -124,7 +124,7 @@ double* NGC(double (*func)(double*, int), int nRow,
     // Stochastic mode.
     if(stocMode && k){
       printf("\nRUNNING STOCASTIC MODE\n");
-      SAMPLE = rand() % MAX_FILE_ROWS;
+      SAMPLE = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(verbose);
     }
     // ############ CG Variables ###########

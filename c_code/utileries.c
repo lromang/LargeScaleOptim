@@ -10,7 +10,6 @@
  * -----------------------------------------
  *
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,8 +23,10 @@ int const N_CLASS = 2;
 int    logistic_labels[2000];
 double logistic_values[2000][27];
 // Sample values
-int    sample_logistic_labels[2000];
 double sample_logistic_values[2000][27];
+int    sample_logistic_labels[2000];
+double sampProp = 1;
+double regularization = .001;
 int run_logistic, SAMPLE, stocMode;
 
 /* -------------------------------------
