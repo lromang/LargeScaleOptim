@@ -116,15 +116,15 @@ double* NGC(double (*func)(double*, int), int nRow,
    * Improve Loop Conditions...
    * Parameters Tolerance, size of sample.
    */
-  if(stocMode){
+  if(run_logistic){
     for(grad_iter = 0; grad_iter < gradN; grad_iter++){
     // Choose random observation
       SAMPLE = gradSamp;
-      create_sample(verbose);
+      create_sample(0);
       r        = gradCentralDiff(func, x, nRow);
       sg_alpha = .0001; //backTrack(func, x, r, nRow, verbose); // beware
       x        = vSum(x, vProd(r, -sg_alpha, nRow), nRow);
-      if(verbose){
+      if(verbose && (grad_iter % 10 == 0)){
         printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
                " alpha =  %.10e;",
                grad_iter,
@@ -137,7 +137,6 @@ double* NGC(double (*func)(double*, int), int nRow,
   /*
    * STOCHASTIC GRADIENT DESCENT END
    */
-
   // Sample mode
   if(stocMode){
       printf("\nRUNNING STOCASTIC MODE\n");
@@ -145,8 +144,8 @@ double* NGC(double (*func)(double*, int), int nRow,
       create_sample(verbose);
   }
   // Calculate the gradient.
-  r = gradCentralDiff(func, x, nRow);
-  stop = 1e2;
+  r    = gradCentralDiff(func, x, nRow);
+  stop = 8;
   // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
     // Stochastic mode.
