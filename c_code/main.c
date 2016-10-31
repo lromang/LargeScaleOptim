@@ -14,7 +14,6 @@
 #include "slm.c"
 
 // Function declaration.
-double stochastic_softmax(double*, int);
 double logActive(double*, int, int);
 double logistic(double*, int);
 double class_precision(double*, int, int);
@@ -24,28 +23,87 @@ int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
   double precision;
-  int i, length, seed, verbose, run_functions;
+  int i, length, option;
+  int correct = 0;
+  char isCorrect;
   // Run logistic???
-  printf("Run logistic?\n");
-  scanf("%d", &run_logistic);
-  if(run_logistic){
-    printf("Regularization Parameter?\n");
-    scanf("%lf", &regularization);
-    printf("Stochastic Mode?\n");
-    scanf("%d", &stocMode);
-    if(stocMode){
-      printf("Sample proportion of dataset?\n");
-      scanf("%lf", &sampProp);
+  do{
+    printConfig();
+    printf("Is this configuration correct (y/n)?\n");
+    scanf(" %c", &isCorrect);
+    if(isCorrect == 'y'){
+      correct = 1;
     }
-  }else{
-    stocMode = 0;
-  }
-  printf("Run functions?\n");
-  scanf("%d", &run_functions);
-  printf("Verbose?\n");
-  scanf("%d", &verbose);
+    if(!correct){
+      printf("Choose the option you want to change:\n");
+      scanf("%d", &option);
+      switch(option){
+      case 1:
+        printf("Run logistic? (0/1)\n");
+        scanf("%d", &run_logistic);
+        break;
+      case 2:
+        if(!run_logistic){
+          printf("Run functions? (0/1)\n");
+          scanf("%d", &run_functions);
+        }else{
+          printf("Regularization Parameter?\n");
+          scanf("%lf", &regularization);
+        }
+        break;
+      case 3:
+        if(!run_logistic){
+          printf("Verbose? (0/1)\n");
+        scanf("%d", &verbose);
+        }else{
+          printf("Stochastic Mode?\n");
+          scanf("%d", &stocMode);
+        }
+        break;
+      case 4:
+        if(!run_logistic){
+          printf("Please choose a number between 1 and 3 \n");
+        }else{
+          printf("Random seed?\n");
+          scanf("%d", &seed);
+        }
+        break;
+      case 5:
+        if(!run_logistic){
+          printf("Please choose a number between 1 and 3 \n");
+        }else{
+          printf("Sample proportion of dataset?\n");
+          scanf("%lf", &sampProp);
+        }
+        break;
+      case 6:
+        if(!run_logistic){
+          printf("Please choose a number between 1 and 3 \n");
+        }else{
+        printf("Run functions? (0/1)\n");
+        scanf("%d", &run_functions);
+        }
+        break;
+      case 7:
+        if(!run_logistic){
+          printf("Please choose a number between 1 and 3 \n");
+        }else{
+        printf("Verbose? (0/1)\n");
+        scanf("%d", &verbose);
+        }
+        break;
+      default:
+        if(!run_logistic){
+          printf("Please choose a number between 1 and 3 \n");
+        }else{
+          printf(" Please choose a number between 1 and 7 \n");
+        }
+        break;
+      }
+    }
+  }while(!correct);
+
   // Random seed for Logistic Regression.
-  seed = 34234234;
   srand(seed);
 
   /*

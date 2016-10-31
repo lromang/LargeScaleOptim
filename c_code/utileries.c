@@ -15,20 +15,23 @@
 #include <string.h>
 #include <math.h>
 
-// Size of file.
+// ACTUAL DATA VARIABLES
 int const MAX_FILE_ROWS = 2000;//7000000;
 int const MAX_FILE_COLS = 27;
-int const N_CLASS = 2;
-// Value storage.
 int    logistic_labels[2000];
 double logistic_values[2000][27];
-// Sample values
+// SAMPLE VARIABLES
 double sample_logistic_values[2000][27];
 int    sample_logistic_labels[2000];
-double sampProp = 1;
+int SAMPLE;
+// DEFAULT CONFIGURATION
+double sampProp       = 1;
 double regularization = .001;
-int run_logistic, SAMPLE, stocMode;
-
+int run_logistic      = 1;
+int stocMode          = 1;
+int seed              = 123454321;
+int verbose           = 1;
+int run_functions     = 0;
 /* -------------------------------------
  * Print title
  * IN
@@ -102,5 +105,35 @@ void create_sample(int verbose){
     for(j = 0; j < MAX_FILE_COLS; j++){
       sample_logistic_values[i][j] = logistic_values[indexes[i]][j];
     }
+  }
+}
+
+/* -------------------------------------
+ * Print Configuration
+ * -------------------------------------
+ * This function receives a size and modifies
+ * the structure of a global array of data
+ */
+void printConfig(){
+  if(run_logistic){
+  printf("\n\n#################################################");
+  imprimeTit("LARGE SCALE OPTIMIZATION");
+  printf("Actual configuration: \n");
+  printf("1) EXECUTE LOGISTIC FUNCTION: %d\n", run_logistic);
+  printf("2)       - REGULARIZATION: %lf\n", regularization);
+  printf("3)       - STOCASTIC OPTIM: %d\n", stocMode);
+  printf("4)       - RANDOM SEED: %d\n", seed);
+  printf("5)       - PROPORTION OF SAMPLE: %lf\n", sampProp);
+  printf("6) EXECUTE FUNCTIONS: %d\n", run_functions);
+  printf("7) VERBOSE MODE: %d\n", verbose);
+  printf("#################################################\n");
+  }else{
+  printf("\n\n#################################################");
+  imprimeTit("LARGE SCALE OPTIMIZATION");
+  printf("Actual configuration: \n");
+  printf("1) EXECUTE LOGISTIC FUNCTION: %d\n", run_logistic);
+  printf("2) EXECUTE FUNCTIONS: %d\n", run_functions);
+  printf("3) VERBOSE MODE: %d\n", verbose);
+  printf("#################################################\n");
   }
 }
