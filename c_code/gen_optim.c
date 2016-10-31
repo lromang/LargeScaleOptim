@@ -116,6 +116,8 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length,
   // Iterate
   // alpha > 1e-10 just to avoid numerical 0.
   wolf_iters = 0;
+  //printf("FUNC: %lf\n", func(x, length));
+  //printf("FUNC: %lf\n", func(vSum(x, vProd(p, alpha, length), length), length));
   while(func(vSum(x, vProd(p, alpha, length), length), length) > (func(x, length) +
                                dotProd(vProd(gradCentralDiff(func, x, length),
                                              c * alpha, length), p, length))){

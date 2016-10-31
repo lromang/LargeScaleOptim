@@ -90,12 +90,13 @@ double* GC(double* A, double* b, int nRow){
  * -------------------------------------
  */
 double* NGC(double (*func)(double*, int), int nRow,
-            int N_max, double TOL, int verbose){
+            int N_max, double TOL, int verbose,
+            int gradN, int gradSamp){
   // Variable declaration.
   double *r, *d, *z, *r_new,
     *Bd, *p, *x_new, *x, *r_cg;
-  int k, i, j, stop, wolf_cond;
-  double epsilon, alpha, beta, step, eta;
+  int k, i, j, stop, wolf_cond, grad_iter;
+  double epsilon, alpha, beta, step, eta, sg_alpha;
 
   // Space allocation.
   z = (double*) malloc(nRow * sizeof(double));
@@ -110,10 +111,37 @@ double* NGC(double (*func)(double*, int), int nRow,
     // Improve initial point with Stochastic Gradient Descent!
     x[i] = ((double) rand() / INT_MAX);
   }
+  /*
+   * STOCHASTIC GRADIENT DESCENT BEGIN
+   * Improve Loop Conditions...
+   * Parameters Tolerance, size of sample.
+   */
+  if(stocMode){
+    for(grad_iter = 0; grad_iter < gradN; grad_iter++){
+    // Choose random observation
+      SAMPLE = gradSamp;
+      create_sample(verbose);
+      r        = gradCentralDiff(func, x, nRow);
+      sg_alpha = .0001; //backTrack(func, x, r, nRow, verbose); // beware
+      x        = vSum(x, vProd(r, -sg_alpha, nRow), nRow);
+      if(verbose){
+        printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
+               " alpha =  %.10e;",
+               grad_iter,
+               func(x, nRow),
+               norm(r, nRow),
+               sg_alpha);
+      }
+    }
+  }
+  /*
+   * STOCHASTIC GRADIENT DESCENT END
+   */
+
   // Sample mode
   if(stocMode){
       printf("\nRUNNING STOCASTIC MODE\n");
-      SAMPLE = rand() % (int)(MAX_FILE_ROWS * sampProp);
+      SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(verbose);
   }
   // Calculate the gradient.

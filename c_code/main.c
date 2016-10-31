@@ -23,7 +23,7 @@ int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
   double precision;
-  int i, length;
+  int length;
 
   // Print options
   menu();
@@ -37,12 +37,12 @@ int main(){
     // Size of point.
     length  = 100;
     // Print results easy.
-    optim_point_N = NGC(test_func, length, 10, 1e-2, verbose);
+    optim_point_N = NGC(test_func, length, 10, 1e-2, verbose, 100, 1);
     imprimeTit("Problem 1 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Print results hard.
-    optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose);
+    optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose, 100, 1);
     imprimeTit("Problem 2 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
@@ -80,7 +80,7 @@ int main(){
     // RUNNING NGC MODEL
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic.
-    optim_point_N = NGC(logistic, length, 30, 6e-1, verbose);
+    optim_point_N = NGC(logistic, length, 30, 6e-1, verbose, 100, 1);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
@@ -88,7 +88,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-
+    // RUNNING LBFGS MODEL
     /*
     imprimeTit("RUNNING LBFGS MODEL");
 
