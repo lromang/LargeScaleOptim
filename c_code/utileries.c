@@ -25,8 +25,8 @@ double sample_logistic_values[2000][27];
 int    sample_logistic_labels[2000];
 int SAMPLE;
 // DEFAULT CONFIGURATION
-double sampProp       = 1;
-double regularization = .001;
+double sampProp       = .9;
+double regularization = .0001;
 int run_logistic      = 1;
 int stocMode          = 1;
 int seed              = 123454321;
@@ -150,6 +150,12 @@ void printConfig(){
   }
 }
 
+/* -------------------------------------
+ * Print Configuration
+ * -------------------------------------
+ * Iteratively print menu until optimal
+ * configuration.
+ */
 void menu(){
   int option;
   int correct = 0;
@@ -259,4 +265,43 @@ void menu(){
     }
   }while(!correct);
   srand(seed);
+}
+
+/* -------------------------------------
+ * READ FILE
+ * -------------------------------------
+ * Read file.
+ * File that is to be read.
+ */
+void readFile(){
+  int i;
+  FILE *file = fopen("../data/higgs/train_clean", "r");
+  // Read in file
+  for(i = 0; i < MAX_FILE_ROWS; i++){
+    if (feof(file))
+      break;
+    fscanf(file, "%d %lf %lf %lf %lf %lf %lf %lf %lf  %lf"
+           "%lf %lf %lf %lf %lf %lf %lf %lf  %lf"
+           "%lf %lf %lf %lf %lf %lf %lf %lf  %lf",
+           &(logistic_labels[i]),     &(logistic_values[i][0]),  &(logistic_values[i][1]),  &(logistic_values[i][2]),
+           &(logistic_values[i][3]),  &(logistic_values[i][4]),  &(logistic_values[i][5]),  &(logistic_values[i][6]),
+           &(logistic_values[i][7]),  &(logistic_values[i][8]),  &(logistic_values[i][9]),  &(logistic_values[i][10]),
+           &(logistic_values[i][11]), &(logistic_values[i][12]), &(logistic_values[i][13]), &(logistic_values[i][14]),
+           &(logistic_values[i][15]), &(logistic_values[i][16]), &(logistic_values[i][17]), &(logistic_values[i][18]),
+           &(logistic_values[i][19]), &(logistic_values[i][20]), &(logistic_values[i][21]), &(logistic_values[i][22]),
+           &(logistic_values[i][23]), &(logistic_values[i][24]), &(logistic_values[i][25]), &(logistic_values[i][26]));
+    if(verbose && (i % 100) == 0){
+      printf("Entry: %d | label = %d  col1 = %lf  col2 = %lf  col3 = %lf  col4 = %lf  col5 = %lf  col6 = %lf col7 = %lf col8 = %lf \n "
+             "col9 = %lf col10 = %lf col11 = %lf col12 = %lf col13 = %lf col14 = %lf col15 = %lf col16 = %lf col17 = %lf col18 = %lf \n"
+             "col19 = %lf col20 = %lf col21 = %lf col22 = %lf col23 = %lf col24 = %lf col25 = %lf col26 = %lf col27 = %lf \n",
+             i,
+             logistic_labels[i],     logistic_values[i][0],  logistic_values[i][1],  logistic_values[i][2],
+             logistic_values[i][3],  logistic_values[i][4],  logistic_values[i][5],  logistic_values[i][6],
+             logistic_values[i][7],  logistic_values[i][8],  logistic_values[i][9],  logistic_values[i][10],
+             logistic_values[i][11], logistic_values[i][12], logistic_values[i][13], logistic_values[i][14],
+             logistic_values[i][15], logistic_values[i][16], logistic_values[i][17], logistic_values[i][18],
+             logistic_values[i][19], logistic_values[i][20], logistic_values[i][21], logistic_values[i][22],
+             logistic_values[i][23], logistic_values[i][24], logistic_values[i][25], logistic_values[i][26]);
+    }
+  }
 }
