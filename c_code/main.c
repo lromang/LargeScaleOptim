@@ -37,12 +37,12 @@ int main(){
     // Size of point.
     length  = 100;
     // Print results easy.
-    optim_point_N = NGC(test_func, length, 10, 1e-2, verbose, 100, 1);
+    optim_point_N = NGC(test_func, length, 10, 1e-2, verbose, 100, 1, .0001);
     imprimeTit("Problem 1 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Print results hard.
-    optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose, 100, 1);
+    optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose, 100, 1, .0001);
     imprimeTit("Problem 2 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
@@ -80,7 +80,7 @@ int main(){
     // RUNNING NGC MODEL
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic.
-    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 100, 1);
+    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 200, 1, .0001);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
@@ -88,22 +88,20 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-    // RUNNING LBFGS MODEL
-    /*
-    imprimeTit("RUNNING LBFGS MODEL");
 
+    /*
+    // RUNNING LBFGS MODEL
+    imprimeTit("RUNNING LBFGS MODEL");
     // Test multinomial logistic.
-    optim_point_N = LBFGS(logistic, length, min(length, 30), 1e-1, verbose);
+    optim_point_N = LBFGS(logistic, length, min(length, 20), 1e-1, verbose);
     imprimeTit("Multinomial Logistic minimum (LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
-
     // Prediction error.
     precision = class_precision(optim_point_N, length, 0);
     printf("\n");
     imprimeTit("Classification Precision (LBFGS):");
     printf("%.5lf \n", precision);
-    */
-    /*
+
     imprimeTit("RUNNING SLM-LBFGS MODEL");
 
     // Test multinomial logistic.
