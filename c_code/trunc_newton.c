@@ -110,12 +110,23 @@ double* NGC(double (*func)(double*, int), int nRow,
     // Improve initial point with Stochastic Gradient Descent!
     x[i] = ((double) rand() / INT_MAX);
   }
-
+  // Sample mode
+  if(stocMode){
+      printf("\nRUNNING STOCASTIC MODE\n");
+      SAMPLE = rand() % MAX_FILE_ROWS;
+      create_sample(verbose);
+  }
   // Calculate the gradient.
   r = gradCentralDiff(func, x, nRow);
   stop = 1e2;
   // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
+    // Stochastic mode.
+    if(stocMode && k){
+      printf("\nRUNNING STOCASTIC MODE\n");
+      SAMPLE = rand() % MAX_FILE_ROWS;
+      create_sample(verbose);
+    }
     // ############ CG Variables ###########
     // Set tolerance.
     epsilon = min(.5, sqrt(norm(r, nRow))) * norm(r, nRow);

@@ -10,18 +10,10 @@
  * -----------------------------------------
  *
  */
-
 #include <math.h>
 #include "slm.c"
 
-// Size of file.
-int const MAX_FILE_ROWS = 20000;//7000000;
-int const MAX_FILE_COLS = 27;
-int const N_CLASS = 2;
-
-// Value storage.
-int    logistic_labels[20000];
-double logistic_values[20000][27];
+// Function declaration.
 double stochastic_softmax(double*, int);
 double logActive(double*, int, int);
 double logistic(double*, int);
@@ -32,27 +24,32 @@ int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
   double precision;
-  int i, length, seed, verbose, run_logistic, run_functions;
+  int i, length, seed, verbose, run_functions;
   // Run logistic???
   printf("Run logistic?\n");
   scanf("%d", &run_logistic);
+  if(run_logistic){
+    printf("Stochastic Mode?\n");
+    scanf("%d", &stocMode);
+  }else{
+    stocMode = 0;
+  }
   printf("Run functions?\n");
   scanf("%d", &run_functions);
   printf("Verbose?\n");
   scanf("%d", &verbose);
-  // Random seed for Softmax Regression.
+  // Random seed for Logistic Regression.
   seed = 34234234;
   srand(seed);
-  // Size of point.
-  length  = 100;
 
   /*
    * ###############################################################
    * Test Functions
    * ###############################################################
    */
-
   if(run_functions){
+    // Size of point.
+    length  = 100;
     // Print results easy.
     optim_point_N = NGC(test_func, length, 10, 1e-2, verbose);
     imprimeTit("Problem 1 minimum (NCG):");
@@ -126,7 +123,7 @@ int main(){
 
     // Test logistic.
     optim_point_N = NGC(logistic, length, 30, 6e-1, verbose);
-    imprimeTit("Multinomial Logistic minimum (NCG):");
+    imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
 
     // Prediction error.
@@ -135,7 +132,7 @@ int main(){
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
 
-
+    /*
     imprimeTit("RUNNING LBFGS MODEL");
 
     // Test multinomial logistic.
@@ -148,7 +145,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (LBFGS):");
     printf("%.5lf \n", precision);
-
+    */
     /*
     imprimeTit("RUNNING SLM-LBFGS MODEL");
 
@@ -175,7 +172,10 @@ int main(){
  *         observation.
  */
 double logActive(double* theta, int i, int length){
-  return 1 / (1 + exp(-dotProd(logistic_values[i], theta, length)));
+  if(!stocMode){
+    return 1 / (1 + exp(-dotProd(logistic_values[i], theta, length)));
+  }
+  return 1 / (1 + exp(-dotProd(sample_logistic_values[i], theta, length)));
 }
 
 /* -------------------------------------
@@ -187,34 +187,24 @@ double logActive(double* theta, int i, int length){
  */
 double logistic(double* theta, int length){
   double loss = 0;
-  int *indexes;
-  int i, stochastic, samp_size, proper;
-  stochastic  = 0; // Sample size should be defined outside?
-  proper      = 10; // N - proper = size of batch
-  // Check if framework is stochastic
-  if(stochastic){
-    samp_size     = rand() % (MAX_FILE_ROWS - proper);
-    printf("Tamaño muestra: %d \n", samp_size);
-    // Memory allocation.
-    indexes = (int*) malloc(samp_size * sizeof(int));
-    // Indexes construction.
-    for(i = 0; i < samp_size; i++){
-      indexes[i] = rand() % samp_size;
-    }
-    // Logistic
-    for(i = 0; i < samp_size; i++){
-      loss = loss + logistic_labels[indexes[i]]*log(logActive(theta, indexes[i], length)) +
-        (1 - logistic_labels[indexes[i]])*log(1 - logActive(theta, indexes[i], length));
+  double regularization = .01;
+  int i;
+  if(!stocMode){
+    SAMPLE = MAX_FILE_ROWS;
+    for(i = 0; i < SAMPLE; i++){
+      loss = loss + logistic_labels[i]*log(logActive(theta, i, length)) +
+        (1 - logistic_labels[i])*log(1 - logActive(theta, i, length)) +
+        regularization*dotProd(theta, theta, length);
     }
   }else{
-    for(i = 0; i < MAX_FILE_ROWS; i++){
-      loss = loss + logistic_labels[i]*log(logActive(theta, i, length)) +
-        (1 - logistic_labels[i])*log(1 - logActive(theta, i, length)) + .001*dotProd(theta, theta, length);
+    for(i = 0; i < SAMPLE; i++){
+      loss = loss + sample_logistic_labels[i]*log(logActive(theta, i, length)) +
+        (1 - sample_logistic_labels[i])*log(1 - logActive(theta, i, length)) +
+        regularization*dotProd(theta, theta, length);
     }
   }
   return -loss;
 }
-
 
 /*
  * -------------------------------------
