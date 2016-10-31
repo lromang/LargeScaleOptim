@@ -28,11 +28,17 @@ int main(){
   char isCorrect;
   // Run logistic???
   do{
+  choose:
     printConfig();
     printf("Is this configuration correct (y/n)?\n");
     scanf(" %c", &isCorrect);
     if(isCorrect == 'y'){
       correct = 1;
+    }else if(isCorrect == 'n'){
+      correct = 0;
+    }else{
+      printf("\nPlease choose (y)es or (n)o:");
+      goto choose;
     }
     if(!correct){
       printf("Choose the option you want to change:\n");
@@ -64,39 +70,61 @@ int main(){
         if(!run_logistic){
           printf("Please choose a number between 1 and 3 \n");
         }else{
-          printf("Random seed?\n");
-          scanf("%d", &seed);
+          if(stocMode){
+            printf("Random seed?\n");
+            scanf("%d", &seed);
+          }else{
+            printf("Run functions? (0/1)\n");
+            scanf("%d", &run_functions);
+          }
         }
         break;
       case 5:
         if(!run_logistic){
           printf("Please choose a number between 1 and 3 \n");
         }else{
-          printf("Sample proportion of dataset?\n");
-          scanf("%lf", &sampProp);
+          if(stocMode){
+            printf("Sample proportion of dataset?\n");
+            scanf("%lf", &sampProp);
+          }else{
+            printf("Verbose? (0/1)\n");
+            scanf("%d", &verbose);
+          }
         }
         break;
       case 6:
         if(!run_logistic){
           printf("Please choose a number between 1 and 3 \n");
         }else{
-        printf("Run functions? (0/1)\n");
-        scanf("%d", &run_functions);
+          if(stocMode){
+            printf("Run functions? (0/1)\n");
+            scanf("%d", &run_functions);
+          }else{
+            printf("Please choose a number between 1 and 5 \n");
+          }
         }
         break;
       case 7:
         if(!run_logistic){
           printf("Please choose a number between 1 and 3 \n");
         }else{
-        printf("Verbose? (0/1)\n");
-        scanf("%d", &verbose);
+          if(stocMode){
+            printf("Verbose? (0/1)\n");
+            scanf("%d", &verbose);
+          }else{
+            printf("Please choose a number between 1 and 5 \n");
+          }
         }
         break;
       default:
         if(!run_logistic){
           printf("Please choose a number between 1 and 3 \n");
         }else{
-          printf(" Please choose a number between 1 and 7 \n");
+          if(stocMode){
+            printf(" Please choose a number between 1 and 7 \n");
+          }else{
+            printf("Please choose a number between 1 and 5 \n");
+          }
         }
         break;
       }

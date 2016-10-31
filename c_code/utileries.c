@@ -116,24 +116,36 @@ void create_sample(int verbose){
  */
 void printConfig(){
   if(run_logistic){
-  printf("\n\n#################################################");
-  imprimeTit("LARGE SCALE OPTIMIZATION");
-  printf("Actual configuration: \n");
-  printf("1) EXECUTE LOGISTIC FUNCTION: %d\n", run_logistic);
-  printf("2)       - REGULARIZATION: %lf\n", regularization);
-  printf("3)       - STOCASTIC OPTIM: %d\n", stocMode);
-  printf("4)       - RANDOM SEED: %d\n", seed);
-  printf("5)       - PROPORTION OF SAMPLE: %lf\n", sampProp);
-  printf("6) EXECUTE FUNCTIONS: %d\n", run_functions);
-  printf("7) VERBOSE MODE: %d\n", verbose);
-  printf("#################################################\n");
+    if(stocMode){
+      printf("\n\n#################################################");
+      imprimeTit("LARGE SCALE OPTIMIZATION");
+      printf("Actual configuration: \n");
+      printf("1) EXECUTE LOGISTIC FUNCTION: %d\n", run_logistic);
+      printf("2)       - REGULARIZATION: %lf\n", regularization);
+      printf("3)       - STOCASTIC OPTIM: %d\n", stocMode);
+      printf("4)       - RANDOM SEED: %d\n", seed);
+      printf("5)       - PROPORTION OF SAMPLE: %lf\n", sampProp);
+      printf("6) EXECUTE FUNCTIONS: %d\n", run_functions);
+      printf("7) VERBOSE MODE: %d\n", verbose);
+      printf("#################################################\n");
+    }else{
+      printf("\n\n#################################################");
+      imprimeTit("LARGE SCALE OPTIMIZATION");
+      printf("Actual configuration: \n");
+      printf("1) EXECUTE LOGISTIC FUNCTION: %d\n", run_logistic);
+      printf("2)       - REGULARIZATION: %lf\n", regularization);
+      printf("3)       - STOCASTIC OPTIM: %d\n", stocMode);
+      printf("4) EXECUTE FUNCTIONS: %d\n", run_functions);
+      printf("5) VERBOSE MODE: %d\n", verbose);
+      printf("#################################################\n");
+    }
   }else{
-  printf("\n\n#################################################");
-  imprimeTit("LARGE SCALE OPTIMIZATION");
-  printf("Actual configuration: \n");
-  printf("1) EXECUTE LOGISTIC FUNCTION: %d\n", run_logistic);
-  printf("2) EXECUTE FUNCTIONS: %d\n", run_functions);
-  printf("3) VERBOSE MODE: %d\n", verbose);
-  printf("#################################################\n");
+      printf("\n\n#################################################");
+      imprimeTit("LARGE SCALE OPTIMIZATION");
+      printf("Actual configuration: \n");
+      printf("1) EXECUTE LOGISTIC FUNCTION: %d\n", run_logistic);
+      printf("2) EXECUTE FUNCTIONS: %d\n", run_functions);
+      printf("3) VERBOSE MODE: %d\n", verbose);
+      printf("#################################################\n");
   }
 }
