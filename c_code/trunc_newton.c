@@ -119,6 +119,8 @@ double* NGC(double (*func)(double*, int), int nRow,
    * Parameters Tolerance, size of sample.
    */
   if(run_logistic){
+    // int stocState = stocMode;
+    // stocMode = 1;  // No matter what, run stochastic mode.
     for(grad_iter = 0; grad_iter < gradN; grad_iter++){
     // Choose random observation
       SAMPLE = gradSamp;
@@ -134,6 +136,7 @@ double* NGC(double (*func)(double*, int), int nRow,
                sg_alpha);
       }
     }
+    // stocMode = stocState;
   }
   /*
    * ***********************************************

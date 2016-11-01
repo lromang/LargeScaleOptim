@@ -10,7 +10,6 @@
  */
 
 #include "line_alg.c"
-
 /* -------------------------------------
  * Gradient approximation.
  * Approximates the gradient of func via

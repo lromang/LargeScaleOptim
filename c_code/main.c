@@ -18,16 +18,13 @@ double logActive(double*, int, int);
 double logistic(double*, int);
 double class_precision(double*, int, int);
 
-
 int main(){
   // Variable declaration.
   double *optim_point_N, *optim_point_lbfgs, *optim_point_slm_lbfgs;
   double precision;
   int length;
-
   // Print options
   menu();
-
   /*
    * ###############################################################
    * Test Functions
@@ -40,39 +37,32 @@ int main(){
     optim_point_N = NGC(test_func, length, 10, 1e-2, verbose, 100, 1, .0001);
     imprimeTit("Problem 1 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
-
     // Print results hard.
     optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose, 100, 1, .0001);
     imprimeTit("Problem 2 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
-
     // Print result easy.
     optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-6, verbose);
     imprimeTit("Problem 1 minimum (LBFGS):");
     imprimeMatriz(optim_point_lbfgs, 1, length);
-
     // Print results hard.
     optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-6, verbose);
     imprimeTit("Problem 2 minimum (LBFGS):");
     imprimeMatriz(optim_point_lbfgs, 1, length);
-
     // Print result easy.
     optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-4, 20, verbose);
     imprimeTit("Problem 1:  minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
-
     // Print results hard.
     optim_point_slm_lbfgs = SLM_LBFGS(testFunc, length, 20, 1e-4, 20, verbose);
     imprimeTit("Problem 2: minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
   }
-
   /*
    * ###############################################################
    * Test Logistic
    * ###############################################################
    */
-
   if(run_logistic){
     length  = MAX_FILE_COLS;
     // READ FILE
@@ -80,7 +70,7 @@ int main(){
     // RUNNING NGC MODEL
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic.
-    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 200, 1, .0001);
+    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 100, 1, .0001);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
@@ -88,7 +78,6 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-
     /*
     // RUNNING LBFGS MODEL
     imprimeTit("RUNNING LBFGS MODEL");

@@ -16,13 +16,13 @@
 #include <math.h>
 
 // ACTUAL DATA VARIABLES
-int const MAX_FILE_ROWS = 100000;//7000000;
+int const MAX_FILE_ROWS = 120000;//7000000;
 int const MAX_FILE_COLS = 27;
-int    logistic_labels[100000];
-double logistic_values[100000][27];
+int    logistic_labels[120000];
+double logistic_values[120000][27];
 // SAMPLE VARIABLES GRADIENT
-double sample_logistic_values[100000][27];
-int    sample_logistic_labels[100000];
+double sample_logistic_values[120000][27];
+int    sample_logistic_labels[120000];
 int SAMPLE;
 // DEFAULT CONFIGURATION
 double sampProp       = .05;
@@ -160,7 +160,6 @@ void menu(){
   int option;
   int correct = 0;
   char isCorrect;
-
   do{
   choose:
     printConfig();
@@ -196,7 +195,7 @@ void menu(){
           printf("Verbose? (0/1)\n");
         scanf("%d", &verbose);
         }else{
-          printf("Stochastic Mode?\n");
+          printf("Stochastic Mode? (0/1)\n");
           scanf("%d", &stocMode);
         }
         break;
@@ -290,7 +289,7 @@ void readFile(){
            &(logistic_values[i][15]), &(logistic_values[i][16]), &(logistic_values[i][17]), &(logistic_values[i][18]),
            &(logistic_values[i][19]), &(logistic_values[i][20]), &(logistic_values[i][21]), &(logistic_values[i][22]),
            &(logistic_values[i][23]), &(logistic_values[i][24]), &(logistic_values[i][25]), &(logistic_values[i][26]));
-    if(verbose && (i % 10000) == 0){
+    if(verbose && (i % (int)(MAX_FILE_ROWS*.1)) == 0){
       printf("Entry: %d | label = %d  col1 = %lf  col2 = %lf  col3 = %lf  col4 = %lf  col5 = %lf  col6 = %lf col7 = %lf col8 = %lf \n "
              "col9 = %lf col10 = %lf col11 = %lf col12 = %lf col13 = %lf col14 = %lf col15 = %lf col16 = %lf col17 = %lf col18 = %lf \n"
              "col19 = %lf col20 = %lf col21 = %lf col22 = %lf col23 = %lf col24 = %lf col25 = %lf col26 = %lf col27 = %lf \n",
