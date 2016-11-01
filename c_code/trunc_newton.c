@@ -92,7 +92,7 @@ double* NGC(double (*func)(double*, int), int nRow,
             int gradN, int gradSamp, double sg_alpha){
   // Variable declaration.
   double *r, *d, *z, *r_new,
-    *Bd, *p, *x_new, *x, *r_cg;
+    *Bd, *p, *x, *r_cg;
   int k, i, j, stop, wolf_cond, grad_iter;
   double epsilon, alpha, beta, step, eta;
 
@@ -202,17 +202,16 @@ double* NGC(double (*func)(double*, int), int nRow,
 
     // Choose step via backtracking
     step = 1;
-    x_new = vSum(x, vProd(p, step, nRow), nRow);
     // Backtrack loop
     eta = 1e-4;
     wolf_cond = 0;
-    while(func(x_new, nRow) > func(x, nRow) + (eta * step *  dotProd(r, p, nRow))){
+    while(func(vSum(x, vProd(p, step, nRow), nRow), nRow) >
+          func(x, nRow) + (eta * step *  dotProd(r, p, nRow))){
       // Update x
-      x_new = vSum(x, vProd(p, step, nRow), nRow);
       step  = step / 2;
       wolf_cond = wolf_cond + 1;
     }
-    x = vSum(x, vProd(p, step, nRow), nRow);//x_new;
+    x = vSum(x, vProd(p, step, nRow), nRow);
     // Update r
     r = gradCentralDiff(func, x, nRow);
     // ---------------- PRINT ------------------- //

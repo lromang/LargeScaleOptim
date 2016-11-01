@@ -71,11 +71,11 @@ int main(){
 
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic. // ADD THIS CONFIGURATIONS TO CODE
-    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 100, 1e5, .0001);
+    optim_point_N = NGC(logistic, length, 10, 6e-1, verbose, 100, 1e4, .0001);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
-    precision = class_precision(optim_point_N, length, 1); // Change for 0
+    precision = class_precision(optim_point_N, length, 0);
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);

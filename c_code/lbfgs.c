@@ -121,9 +121,15 @@ double * LBFGS(double (* func)(double*, int),
   for(i = 0; i < nRow; i++){
     x[i] = ((double) rand() / INT_MAX) ;
   }
+  // PRINT
+  imprimeTit("X");
+  imprimeMatriz(x, 1, nRow);
   // Until Convergence or MAX_ITER.
   MAX_ITER = 1e3;
   grad     = gradCentralDiff(func, x, nRow);
+  // PRINT
+  imprimeTit("GRAD");
+  imprimeMatriz(x, 1, nRow);
   // Update s, y.
   k = 0;
   // Initial norm of gradient.
@@ -134,8 +140,14 @@ double * LBFGS(double (* func)(double*, int),
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow, verbose);
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
+    // PRINT
+    imprimeTit("X_NEW");
+    imprimeMatriz(x_new, 1, nRow);
     // New gradient.
     grad_new = gradCentralDiff(func, x_new, nRow);
+    // PRINT
+    imprimeTit("GRAD_NEW");
+    imprimeMatriz(grad_new, 1, nRow);
     // Update s, y.
     updateSY(s, y, vProd(p, alpha, nRow),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
