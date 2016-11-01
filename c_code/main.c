@@ -68,9 +68,10 @@ int main(){
     // READ FILE
     readFile();
     // RUNNING NGC MODEL
+
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic.
-    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 100, 1, .0001);
+    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 100, 0, .0001);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.

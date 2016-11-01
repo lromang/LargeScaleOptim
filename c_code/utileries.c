@@ -16,13 +16,13 @@
 #include <math.h>
 
 // ACTUAL DATA VARIABLES
-int const MAX_FILE_ROWS = 120000;//7000000;
+int const MAX_FILE_ROWS = 100000;//7000000;
 int const MAX_FILE_COLS = 27;
-int    logistic_labels[120000];
-double logistic_values[120000][27];
+int    logistic_labels[100000];
+double logistic_values[100000][27];
 // SAMPLE VARIABLES GRADIENT
-double sample_logistic_values[120000][27];
-int    sample_logistic_labels[120000];
+double sample_logistic_values[100000][27];
+int    sample_logistic_labels[100000];
 int SAMPLE;
 // DEFAULT CONFIGURATION
 double sampProp       = .05;
@@ -91,13 +91,13 @@ void create_sample(int verbose){
   int i, j;
   // Modify global SAMPLE.
   if(verbose){
-    printf("Tamaño muestra: %d \n", SAMPLE);
+    printf("Sample size: %d \n", SAMPLE);
   }
   // Memory allocation.
   indexes = (int*) malloc(SAMPLE * sizeof(int));
   // Random indexes construction.
   for(i = 0; i < SAMPLE; i++){
-    indexes[i] = rand() % SAMPLE;
+    indexes[i] = rand() % MAX_FILE_ROWS;
   }
   // Fill in sample labels and sample values.
   for(i = 0; i < SAMPLE; i++){

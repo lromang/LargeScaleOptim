@@ -95,7 +95,7 @@ double* NGC(double (*func)(double*, int), int nRow,
   // Variable declaration.
   double *r, *d, *z, *r_new,
     *Bd, *p, *x_new, *x, *r_cg;
-  int k, i, j, stop, wolf_cond, grad_iter;
+  int k, i, j, stop, wolf_cond, grad_iter, stocState;
   double epsilon, alpha, beta, step, eta;
 
   // Space allocation.
@@ -119,8 +119,11 @@ double* NGC(double (*func)(double*, int), int nRow,
    * Parameters Tolerance, size of sample.
    */
   if(run_logistic){
-    // int stocState = stocMode;
-    // stocMode = 1;  // No matter what, run stochastic mode.
+    imprimeTit("Gradient Descent Initialization");
+    if(gradSamp != 0){ // Grad Samp != means stochastic sampling
+      stocState = stocMode; // Choose stochastic gradient or Full gradient
+      stocMode = 1;  // No matter what, run stochastic mode.
+    }
     for(grad_iter = 0; grad_iter < gradN; grad_iter++){
     // Choose random observation
       SAMPLE = gradSamp;
@@ -136,14 +139,16 @@ double* NGC(double (*func)(double*, int), int nRow,
                sg_alpha);
       }
     }
-    // stocMode = stocState;
+    if(gradSamp != 0){
+      stocMode = stocState;
+    }
   }
   /*
    * ***********************************************
    * STOCHASTIC GRADIENT DESCENT END
    * ***********************************************
    */
-
+  imprimeTit("Truncated Newton Iterations");
   // Sample mode
   if(stocMode){
       printf("\nRUNNING STOCASTIC MODE\n");
@@ -152,7 +157,9 @@ double* NGC(double (*func)(double*, int), int nRow,
   }
   // Calculate the gradient.
   r    = gradCentralDiff(func, x, nRow);
-  stop = 8;
+  imprimeTit("|| GRAD ||");
+  printf("%lf\n", norm(r, nRow));
+  stop = 10;
   // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
     // Stochastic mode.
