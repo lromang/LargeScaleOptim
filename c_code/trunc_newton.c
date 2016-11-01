@@ -11,9 +11,7 @@
  * -----------------------------------------
  *
  */
-
 #include "gen_optim.c"
-
 /* -------------------------------------
  * Conjugate gradient.
  * Applies conjugate gradient method to
@@ -95,7 +93,7 @@ double* NGC(double (*func)(double*, int), int nRow,
   // Variable declaration.
   double *r, *d, *z, *r_new,
     *Bd, *p, *x_new, *x, *r_cg;
-  int k, i, j, stop, wolf_cond, grad_iter, stocState;
+  int k, i, j, stop, wolf_cond, grad_iter;
   double epsilon, alpha, beta, step, eta;
 
   // Space allocation.
@@ -151,8 +149,6 @@ double* NGC(double (*func)(double*, int), int nRow,
   imprimeTit("Truncated Newton Iterations");
   // Calculate the gradient.
   r    = gradCentralDiff(func, x, nRow);
-  imprimeTit("|| GRAD ||");
-  printf("%lf\n", norm(r, nRow));
   stop = 10;
   // Outer loop, this modifies x!
   for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
@@ -216,7 +212,7 @@ double* NGC(double (*func)(double*, int), int nRow,
       step  = step / 2;
       wolf_cond = wolf_cond + 1;
     }
-    x = x_new;
+    x = vSum(x, vProd(p, step, nRow), nRow);//x_new;
     // Update r
     r = gradCentralDiff(func, x, nRow);
     // ---------------- PRINT ------------------- //
