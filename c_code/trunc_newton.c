@@ -120,10 +120,6 @@ double* NGC(double (*func)(double*, int), int nRow,
    */
   if(run_logistic){
     imprimeTit("Gradient Descent Initialization");
-    if(gradSamp != 0){ // Grad Samp != means stochastic sampling
-      stocState = stocMode; // Choose stochastic gradient or Full gradient
-      stocMode = 1;  // No matter what, run stochastic mode.
-    }
     for(grad_iter = 0; grad_iter < gradN; grad_iter++){
     // Choose random observation
       SAMPLE = gradSamp;
@@ -139,22 +135,20 @@ double* NGC(double (*func)(double*, int), int nRow,
                sg_alpha);
       }
     }
-    if(gradSamp != 0){
-      stocMode = stocState;
-    }
   }
   /*
    * ***********************************************
    * STOCHASTIC GRADIENT DESCENT END
    * ***********************************************
    */
-  imprimeTit("Truncated Newton Iterations");
   // Sample mode
   if(stocMode){
       printf("\nRUNNING STOCASTIC MODE\n");
       SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(verbose);
   }
+  // Truncated Newton Iteration
+  imprimeTit("Truncated Newton Iterations");
   // Calculate the gradient.
   r    = gradCentralDiff(func, x, nRow);
   imprimeTit("|| GRAD ||");

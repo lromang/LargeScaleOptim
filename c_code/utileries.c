@@ -16,13 +16,13 @@
 #include <math.h>
 
 // ACTUAL DATA VARIABLES
-int const MAX_FILE_ROWS = 100000;//7000000;
+int const MAX_FILE_ROWS = 4000000;//7000000;
 int const MAX_FILE_COLS = 27;
-int    logistic_labels[100000];
-double logistic_values[100000][27];
+int    logistic_labels[4000000];
+double logistic_values[4000000][27];
 // SAMPLE VARIABLES GRADIENT
-double sample_logistic_values[100000][27];
-int    sample_logistic_labels[100000];
+double sample_logistic_values[4000000][27];
+int    sample_logistic_labels[4000000];
 int SAMPLE;
 // DEFAULT CONFIGURATION
 double sampProp       = .05;
@@ -124,7 +124,7 @@ void printConfig(){
       printf("2)       - REGULARIZATION: %lf\n", regularization);
       printf("3)       - STOCASTIC OPTIM: %d\n", stocMode);
       printf("4)       - RANDOM SEED: %d\n", seed);
-      printf("5)       - PROPORTION OF SAMPLE (Gradient): %lf\n", sampProp);
+      printf("5)       - PROPORTION OF SAMPLE: %lf\n", sampProp);
       printf("6) EXECUTE FUNCTIONS: %d\n", run_functions);
       printf("7) VERBOSE MODE: %d\n", verbose);
       printf("#################################################\n");
