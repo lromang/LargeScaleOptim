@@ -16,19 +16,19 @@
 #include <math.h>
 
 // ACTUAL DATA VARIABLES
-int const MAX_FILE_ROWS = 4000000;//7000000;
+int const MAX_FILE_ROWS = 1000;//7000000;
 int const MAX_FILE_COLS = 27;
-int    logistic_labels[4000000];
-double logistic_values[4000000][27];
+int    logistic_labels[1000];
+double logistic_values[1000][27];
 // SAMPLE VARIABLES GRADIENT
-double sample_logistic_values[4000000][27];
-int    sample_logistic_labels[4000000];
+double sample_logistic_values[1000][27];
+int    sample_logistic_labels[1000];
 int SAMPLE;
 // DEFAULT CONFIGURATION
 double sampProp       = .05;
 double regularization = .0001;
 int run_logistic      = 1;
-int stocMode          = 1;
+int stocMode          = 0;
 int seed              = 123454321;
 int verbose           = 1;
 int run_functions     = 0;
@@ -47,13 +47,32 @@ void imprimeTit(char * title){
   printf("\n------------\n");
 }
 
+
 /* -------------------------------------
  * Test function:
  * ## Characteristics ##
- * Ill conditioned.
+ * EASY
  * -------------------------------------
  */
-double testFunc(double* x, int length){
+double test_func1(double* x, int length){
+  int i;
+  double sum;
+  sum = 0;
+  for(i = 0; i < length; i++){
+    sum = sum  + (100 - i) * (x[i] * x[i]);
+  }
+  // Return result.
+  return sum;
+};
+
+
+/* -------------------------------------
+ * Test function:
+ * ## Characteristics ##
+ * HARD
+ * -------------------------------------
+ */
+double test_func2(double* x, int length){
   int i;
   double sum;
   sum = 0;
@@ -63,21 +82,6 @@ double testFunc(double* x, int length){
   // Return result.
   return sum;
 }
-
-/* -------------------------------------
- * Test function:
- * ## Characteristics ##
- * Easy
- * -------------------------------------
- */
-double test_func(double* x, int length){
-  double res;
-  int i;
-  for(res = i = 0; i < length; i++){
-    res = res + x[i]*x[i]*x[i]*x[i] + (3 - x[i])*(4 - x[i]);
-  }
-  return res;
-};
 
 /* -------------------------------------
  * Create sample

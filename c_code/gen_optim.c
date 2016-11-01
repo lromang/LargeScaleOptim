@@ -107,8 +107,9 @@ double* hessCentralDiff(double (*func)(double*, int), double* x, double* p, int 
  */
 double backTrack(double (*func)(double*, int), double* x, double* p, int length, int verbose){
   // Variable declaration.
-  double alpha, rho, c;
-  int wolf_iters;
+  double *grad;
+  double  alpha, rho, c;
+  int     wolf_iters;
   // Variable initialization
   alpha = 1; // Return alpha = 1 whenever possible.
   rho   = 0.5; //((double) rand()/INT_MAX) + 1;
@@ -118,8 +119,9 @@ double backTrack(double (*func)(double*, int), double* x, double* p, int length,
   wolf_iters = 0;
   // printf("FUNC: %lf\n", func(x, length));
   // printf("FUNC: %lf\n", func(vSum(x, vProd(p, alpha, length), length), length));
+  grad = gradCentralDiff(func, x, length);
   while(func(vSum(x, vProd(p, alpha, length), length), length) > (func(x, length) +
-                               dotProd(vProd(gradCentralDiff(func, x, length),
+                               dotProd(vProd(grad,
                                              c * alpha, length), p, length))){
     alpha      = alpha * rho;
     wolf_iters = wolf_iters + 1;

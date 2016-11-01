@@ -34,27 +34,27 @@ int main(){
     // Size of point.
     length  = 100;
     // Print results easy.
-    optim_point_N = NGC(test_func, length, 10, 1e-2, verbose, 100, 1, .0001);
+    optim_point_N = NGC(test_func1, length, 10, 1e-2, verbose, 100, 1, .0001);
     imprimeTit("Problem 1 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Print results hard.
-    optim_point_N = NGC(testFunc, length, 10, 1e-2, verbose, 100, 1, .0001);
+    optim_point_N = NGC(test_func2, length, 10, 1e-2, verbose, 100, 1, .0001);
     imprimeTit("Problem 2 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Print result easy.
-    optim_point_lbfgs = LBFGS(test_func, length, 20, 1e-6, verbose);
+    optim_point_lbfgs = LBFGS(test_func1, length, 20, 1e-6, verbose);
     imprimeTit("Problem 1 minimum (LBFGS):");
     imprimeMatriz(optim_point_lbfgs, 1, length);
     // Print results hard.
-    optim_point_lbfgs = LBFGS(testFunc, length, 20, 1e-6, verbose);
+    optim_point_lbfgs = LBFGS(test_func2, length, 20, 1e-6, verbose);
     imprimeTit("Problem 2 minimum (LBFGS):");
     imprimeMatriz(optim_point_lbfgs, 1, length);
     // Print result easy.
-    optim_point_slm_lbfgs = SLM_LBFGS(test_func, length, 20, 1e-4, 20, verbose);
+    optim_point_slm_lbfgs = SLM_LBFGS(test_func1, length, 20, 1e-4, 20, verbose);
     imprimeTit("Problem 1:  minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
     // Print results hard.
-    optim_point_slm_lbfgs = SLM_LBFGS(testFunc, length, 20, 1e-4, 20, verbose);
+    optim_point_slm_lbfgs = SLM_LBFGS(test_func2, length, 20, 1e-4, 20, verbose);
     imprimeTit("Problem 2: minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
   }
@@ -68,7 +68,7 @@ int main(){
     // READ FILE
     readFile();
     // RUNNING NGC MODEL
-
+    /*
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic. // ADD THIS CONFIGURATIONS TO CODE
     optim_point_N = NGC(logistic, length, 10, 6e-1, verbose, 100, 1e4, .0001);
@@ -79,7 +79,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-    /*
+    */
     // RUNNING LBFGS MODEL
     imprimeTit("RUNNING LBFGS MODEL");
     // Test multinomial logistic.
@@ -91,7 +91,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (LBFGS):");
     printf("%.5lf \n", precision);
-
+    /*
     imprimeTit("RUNNING SLM-LBFGS MODEL");
 
     // Test multinomial logistic.
