@@ -125,8 +125,8 @@ double* NGC(double (*func)(double*, int), int nRow,
       r        = gradCentralDiff(func, x, nRow);
       x        = vSum(x, vProd(r, -sg_alpha, nRow), nRow);
       if(verbose && (grad_iter % 10 == 0)){
-        printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
-               " alpha =  %.10e;",
+        printf("ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
+               " alpha =  %.10e;\n",
                grad_iter,
                func(x, nRow),
                norm(r, nRow),

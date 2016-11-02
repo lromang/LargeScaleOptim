@@ -14,21 +14,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
+#define BIG_N 4500000
 // ACTUAL DATA VARIABLES
-int const MAX_FILE_ROWS = 4000000;//7000000;
+
+int const MAX_FILE_ROWS = BIG_N;//7000000;
 int const MAX_FILE_COLS = 27;
-int    logistic_labels[4000000];
-double logistic_values[4000000][27];
+int    logistic_labels[BIG_N];
+double logistic_values[BIG_N][27];
 // SAMPLE VARIABLES GRADIENT
-double sample_logistic_values[4000000][27];
-int    sample_logistic_labels[4000000];
-int SAMPLE;
+double sample_logistic_values[BIG_N][27];
+int    sample_logistic_labels[BIG_N];
+
 // DEFAULT CONFIGURATION
-double sampProp       = .05;
+int SAMPLE = 0;
+double sampProp       = .9;
 double regularization = .0001;
 int run_logistic      = 1;
-int stocMode          = 0;
+int stocMode          = 1;
 int seed              = 123454321;
 int verbose           = 1;
 int run_functions     = 0;
