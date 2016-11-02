@@ -17,6 +17,7 @@
 double logActive(double*, int, int);
 double logistic(double*, int);
 double class_precision(double*, int, int);
+double logSumExp(double*, int, int);
 
 int main(){
   // Variable declaration.
@@ -79,7 +80,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-    /*
+
     // RUNNING LBFGS MODEL
     imprimeTit("RUNNING LBFGS MODEL");
     // Test multinomial logistic.
@@ -91,7 +92,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (LBFGS):");
     printf("%.5lf \n", precision);
-
+    /*
     imprimeTit("RUNNING SLM-LBFGS MODEL");
 
     // Test multinomial logistic.
@@ -108,6 +109,24 @@ int main(){
   }
   return 0;
 }
+
+/* -------------------------------------
+ * Logistic Activation
+ * -------------------------------------
+ * Theta = array of K x N. K = Númber of
+ *         classes. N = Dimension of each
+ *         observation.
+ */
+double logSumExp(double* theta, int i, int length){
+  if(!stocMode){
+    return -log(1 + exp(pow(-1, logistic_labels[i])*
+                        dotProd(logistic_values[i], theta, length)));
+  }
+  return -log(1 + exp(pow(-1, sample_logistic_labels[i])*
+                        dotProd(sample_logistic_values[i], theta, length)));
+}
+
+
 
 /* -------------------------------------
  * Logistic Activation
@@ -136,14 +155,14 @@ double logistic(double* theta, int length){
   if(!stocMode){
     SAMPLE = MAX_FILE_ROWS;
     for(i = 0; i < SAMPLE; i++){
-      loss = loss + logistic_labels[i]*log(logActive(theta, i, length)) +
-        (1 - logistic_labels[i])*log(1 - logActive(theta, i, length)) +
+      loss = loss + logistic_labels[i]*logSumExp(theta, i, length) +
+        (1 - logistic_labels[i])*logSumExp(theta, i, length) +
         regularization*dotProd(theta, theta, length);
     }
   }else{
     for(i = 0; i < SAMPLE; i++){
-      loss = loss + sample_logistic_labels[i]*log(logActive(theta, i, length)) +
-        (1 - sample_logistic_labels[i])*log(1 - logActive(theta, i, length)) +
+      loss = loss + sample_logistic_labels[i]*logSumExp(theta, i, length) +
+        (1 - sample_logistic_labels[i])*logSumExp(theta, i, length) +
         regularization*dotProd(theta, theta, length);
     }
   }
