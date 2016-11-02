@@ -68,7 +68,7 @@ int main(){
     // READ FILE
     readFile();
     // RUNNING NGC MODEL
-    /*
+
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic. // ADD THIS CONFIGURATIONS TO CODE
     optim_point_N = NGC(logistic, length, 10, 6e-1, verbose, 100, 1e4, .0001);
@@ -79,7 +79,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-    */
+    /*
     // RUNNING LBFGS MODEL
     imprimeTit("RUNNING LBFGS MODEL");
     // Test multinomial logistic.
@@ -91,7 +91,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (LBFGS):");
     printf("%.5lf \n", precision);
-    /*
+
     imprimeTit("RUNNING SLM-LBFGS MODEL");
 
     // Test multinomial logistic.
