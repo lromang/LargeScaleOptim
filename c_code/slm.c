@@ -126,6 +126,13 @@ double * SLM_LBFGS(double (* func)(double*, int),
   for(i = 0; i < nRow; i++){
     x[i] = ((double) rand() / INT_MAX) ;
   }
+  // Stochastic Mode
+  if(stocMode){
+    //printf("\nRUNNING STOCASTIC MODE\n");
+    SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
+    create_sample(0);
+  }
+
   // Until Convergence or MAX_ITER.
   MAX_ITER = 1.5e4;
   grad     = gradCentralDiff(func, x, nRow);
@@ -134,6 +141,12 @@ double * SLM_LBFGS(double (* func)(double*, int),
   // Initial norm of gradient.
   norm_grad0 = norm(grad, nRow);
   while(norm(grad, nRow) > TOL*(1 + norm_grad0) && k < MAX_ITER){
+    if(stocMode){
+      printf("\nRUNNING STOCASTIC MODE\n");
+      SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
+      create_sample(k);
+    }
+
     // p = -Hgrad(f)
     if(k > 0){
       p = vProd(findHSLM(func, x, s,
@@ -146,7 +159,11 @@ double * SLM_LBFGS(double (* func)(double*, int),
     // Alpha that statifies Wolfe conditions.
     alpha    = backTrack(func, x, p, nRow, verbose);
     x_new    = vSum(x, vProd(p, alpha, nRow), nRow);
+    //imprimeTit("X_NEW");
+    //imprimeMatriz(x_new, 1, nRow);
     grad_new = gradCentralDiff(func, x_new, nRow);
+    //imprimeTit("GRAD_NEW");
+    //imprimeMatriz(grad_new, 1, nRow);
     // Update s, y.
     updateSY(s, y, vProd(p, alpha, nRow),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);

@@ -51,11 +51,11 @@ int main(){
     imprimeTit("Problem 2 minimum (LBFGS):");
     imprimeMatriz(optim_point_lbfgs, 1, length);
     // Print result easy.
-    optim_point_slm_lbfgs = SLM_LBFGS(test_func1, length, 20, 1e-4, 100, verbose);
+    optim_point_slm_lbfgs = SLM_LBFGS(test_func1, length, 20, 1e-4, 10, verbose);
     imprimeTit("Problem 1:  minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
     // Print results hard.
-    optim_point_slm_lbfgs = SLM_LBFGS(test_func2, length, 20, 1e-4, 100, verbose);
+    optim_point_slm_lbfgs = SLM_LBFGS(test_func2, length, 20, 1e-4, 10, verbose);
     imprimeTit("Problem 2: minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
   }
@@ -79,7 +79,6 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
-
     // RUNNING LBFGS MODEL
     imprimeTit("RUNNING LBFGS MODEL");
     // Test multinomial logistic.
@@ -91,7 +90,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (LBFGS):");
     printf("%.5lf \n", precision);
-    /*
+    // RUNNING SLM-LBFGS MODEL
     imprimeTit("RUNNING SLM-LBFGS MODEL");
     // Test multinomial logistic.
     optim_point_N = SLM_LBFGS(logistic, length, 7, 1e-1, 100, verbose);
@@ -102,7 +101,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (SLM_LBFGS):");
     printf("%.5lf \n", precision);
-    */
+
   }
   return 0;
 }
@@ -122,6 +121,10 @@ double logSumExp(double* theta, int i, int length){
     }
     return -log(1 + exp(pow(-1, logistic_labels[i])*
                         dotProd(logistic_values[i], theta, length)));
+  }
+  if(-log(1 + exp(pow(-1, sample_logistic_labels[i])*
+                    dotProd(sample_logistic_values[i], theta, length))) <  -1e30){
+      return -1e10; // Numerical stability...
   }
   return -log(1 + exp(pow(-1, sample_logistic_labels[i])*
                         dotProd(sample_logistic_values[i], theta, length)));
