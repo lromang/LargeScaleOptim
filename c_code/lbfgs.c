@@ -112,7 +112,11 @@ double * LBFGS(double (* func)(double*, int),
   double **s, **y;
   double *x, *grad, *p, *x_new, *grad_new;
   double alpha, norm_grad0;
-  int i, k, MAX_ITER;
+  int i, k, MAX_ITER, stoc_state;
+  // Avoid taking samples.
+  stoc_state = stocMode;
+  stocMode = 0;
+  imprimeTit("Running Non-Stochastic mode");
   // Space allocation.
   x = (double *)malloc(nRow * sizeof(double));
   s = (double **)malloc((m * nRow) * sizeof(double));
@@ -125,7 +129,7 @@ double * LBFGS(double (* func)(double*, int),
   // imprimeTit("X");
   // imprimeMatriz(x, 1, nRow);
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1e3;
+  MAX_ITER = 1e1;
   grad     = gradCentralDiff(func, x, nRow);
   // PRINT
   // imprimeTit("GRAD");
@@ -175,5 +179,6 @@ double * LBFGS(double (* func)(double*, int),
   free(grad);
   free(s);
   free(y);
+  stocMode = stoc_state;
   return x;
 }

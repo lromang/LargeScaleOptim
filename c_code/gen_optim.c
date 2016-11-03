@@ -46,6 +46,7 @@ double* gradCentralDiff(double (*func)(double*, int), double* x, int length){
   for(i = 0; i < length; i++){
     laux[i] = laux[i] + epsilon;
     raux[i] = raux[i] - epsilon;
+    // printf("l[%i] = %lf | r[%i] = %lf | (l-r)[%i] = %lf \n", i, laux[i], i, raux[i], i, (func(laux, length) - func(raux, length)));
     res[i]  = (func(laux, length) - func(raux, length)) / (2 * epsilon);
     raux[i] = x[i];
     laux[i] = x[i];

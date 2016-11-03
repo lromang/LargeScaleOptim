@@ -51,11 +51,11 @@ int main(){
     imprimeTit("Problem 2 minimum (LBFGS):");
     imprimeMatriz(optim_point_lbfgs, 1, length);
     // Print result easy.
-    optim_point_slm_lbfgs = SLM_LBFGS(test_func1, length, 20, 1e-4, 20, verbose);
+    optim_point_slm_lbfgs = SLM_LBFGS(test_func1, length, 20, 1e-4, 100, verbose);
     imprimeTit("Problem 1:  minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
     // Print results hard.
-    optim_point_slm_lbfgs = SLM_LBFGS(test_func2, length, 20, 1e-4, 20, verbose);
+    optim_point_slm_lbfgs = SLM_LBFGS(test_func2, length, 20, 1e-4, 100, verbose);
     imprimeTit("Problem 2: minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_slm_lbfgs, 1, length);
   }
@@ -69,7 +69,6 @@ int main(){
     // READ FILE
     readFile();
     // RUNNING NGC MODEL
-
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic. // ADD THIS CONFIGURATIONS TO CODE
     optim_point_N = NGC(logistic, length, 10, 6e-1, verbose, 100, 1e3, .0001);
@@ -94,12 +93,10 @@ int main(){
     printf("%.5lf \n", precision);
     /*
     imprimeTit("RUNNING SLM-LBFGS MODEL");
-
     // Test multinomial logistic.
     optim_point_N = SLM_LBFGS(logistic, length, 7, 1e-1, 100, verbose);
     imprimeTit("Multinomial Logistic minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
-
     // Prediction error.
     precision = class_precision(optim_point_N, length, 0);
     printf("\n");
@@ -119,13 +116,16 @@ int main(){
  */
 double logSumExp(double* theta, int i, int length){
   if(!stocMode){
+    if(-log(1 + exp(pow(-1, logistic_labels[i])*
+                    dotProd(logistic_values[i], theta, length))) <  -1e30){
+      return -1e10; // Numerical stability...
+    }
     return -log(1 + exp(pow(-1, logistic_labels[i])*
                         dotProd(logistic_values[i], theta, length)));
   }
   return -log(1 + exp(pow(-1, sample_logistic_labels[i])*
                         dotProd(sample_logistic_values[i], theta, length)));
 }
-
 
 
 /* -------------------------------------
@@ -155,6 +155,7 @@ double logistic(double* theta, int length){
   if(!stocMode){
     SAMPLE = MAX_FILE_ROWS;
     for(i = 0; i < SAMPLE; i++){
+      // printf("logistic_label[%d] = %d | logSumExp[%d] = %lf\n", i, logistic_labels[i], i, logSumExp(theta,  i, length));
       loss = loss + logistic_labels[i]*logSumExp(theta, i, length) +
         (1 - logistic_labels[i])*logSumExp(theta, i, length) +
         regularization*dotProd(theta, theta, length);
