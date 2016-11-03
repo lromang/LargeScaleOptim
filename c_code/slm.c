@@ -134,7 +134,7 @@ double * SLM_LBFGS(double (* func)(double*, int),
   }
 
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1.5e4;
+  MAX_ITER = 1e1;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
