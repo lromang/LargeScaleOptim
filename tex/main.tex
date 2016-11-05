@@ -390,24 +390,38 @@ algorithms as well as the demands of the application, so that good
 choices are made in matching algorithms to applications.}{\textit{Stephen Wright \\ University of Wisconsin-Madison}}
 \newpage
 
-\section{Métodos de primer orden}
+\section{Descenso en gradiente estocástico}
 
-Estos métodos, como su nombre lo indica, hacen uso de una aproximación local de primer orden para encontrar, de manera iterativa, una dirección de descenso que, bajo ciertos supuestos de regularidad \cite{NOCEDAL} eventualmente llegará a un mínimo local\footnote{En este trabajo nos enfocaremos en optimización local. Para un recuento extensivo de métodos de optimización global, el lector puede referirse a \cite{TORN}}.
+En esta sección nos enfocaremos en analizar métodos que utilizan información incompleta, de ahí la parte estocástica, referente al gradiente de la función que se desea minimizar. De manera general, estos métodos hacen uso de una aproximación local de primer orden para encontrar, de manera iterativa, una dirección de descenso que, bajo ciertos supuestos de regularidad \cite{NOCEDAL}, eventualmente llegará a un mínimo local\footnote{En este trabajo nos enfocaremos en optimización local. Para un recuento extensivo de métodos de optimización global, el lector puede referirse a \cite{TORN}}. Todos estos métodos tienen, en principio, la misma \emph{forma} que el algoritmo propuesto por \cite{ROBBINS}. Por esta razón, al igual que \cite{BOTTOU}, nos referiremos a todos los algorimos expuestos en esta sección y en lo que queda de la tesis como métodos de \emph{Descenso en Gradiente Estocástico (DGE)}. 
 
-Sin duda, el algoritmo más importante en este contexto es \emph{Descenso en Gradiente Estocástico (DGE)}\cite{ROBBINS}. Con el fin de minimizar \ref{eq:central_prob} cada iteración de DGE tendría la siguiente forma:
+Esta sección seguirá muy de cerca las líneas de \cite{BOTTOU} y , con tal de minimizar \ref{eq:central_prob}, el algoritmo de \emph{Descenso en Gradiente Estocástico (DGE)} se define de la siguiente manera:
 
-\begin{equation*}
-\begin{split}
-w_{k+1} = w_k - \alpha_k \nabla R(h_{w_k, i})) & = w_k - \alpha_k \nabla l(h_{w_i, n}, c)
-\end{split}
-\end{equation*}
+%\begin{algorithm}[H]
+%\caption{DGE}\label{dge}
+%\begin{algorithmic}[1]
+%\Procedure{DGE}{}
+%\State $\textit{w_0} \gets \text{punto inicial}$
+%\BState \emph{top}:
+%\State $j \gets \textit{patlen}$
+%\BState \emph{loop}:
+%\State $j \gets j-1$.
+%\State $i \gets i-1$.
+%\State \textbf{goto} \emph{loop}.
+%\State \textbf{close};
+%\EndProcedure
+%\end{algorithmic}
+%\end{algorithm}
+
+En este análisis, $g(w_k, \zeta_k)$ tiene la siguiente forma:
+
+Cómo puede apreciarse fácilmente, esta definición nos da la flexibilidad de optar por un descenso de tipo \emph{batch} u \emph{online}. Nos permite además hacer el análisis de métodos que tomen en cuenta exclusivamente información de primer orden, haciendo $H_k = I_{nxn}$ o que incluyan información de segundo orden. Ya sea de manera exacta, haciendo $H^{-1}_k = \nabla^2_{ww}\hat{R(h_{w,n})}$ obteniendo así la dirección de descenso de Newton o con una aproximación a esta última, utilizando un pseudo Newton.
+
+Ahora bien, para llevar a cabo el análisis de la velocidad de convergencia y determinar los compromisos que deben hacerse para seleccionar un método \emph{batch} sobre un \emph{en línea} es necesario hacer dos supuestos adicionales. 
+
+\subsection{Más allá del primer orden}
 
 
-
-\section{Métodos de segundo orden}
-
-
-\chapter{Dos algoritmos de segundo orden}
+\chapter{Dos algoritmos estocásticos de segundo orden}
 
 \epigraph{You're going to see speech recognition systems that have human or better-than-human accuracy become commercialized.}{\textit{Tim Tuttle \\ Massachusetts Institute of Technology}}
 
@@ -425,6 +439,8 @@ w_{k+1} = w_k - \alpha_k \nabla R(h_{w_k, i})) & = w_k - \alpha_k \nabla l(h_{w_
 \begin{thebibliography}{9}
 \bibitem{BENNETT} Kristin P. Bennett, Emilio Parrado-Hernández, \emph{The Interplay of Optimization and Machine Learning Research}. Journal of Machine Learning Research, 2007.
 \bibitem{BERNOULLI}Bernoulli, Jakob. \emph{Ars Conjectandi, opus posthumum.} (1795).
+\bibitem{BOTTOU}Bottou, Léon, Frank E. Curtis, and Jorge Nocedal. \emph{Optimization Methods for Large-Scale Machine Learning}. arXiv preprint arXiv:1606.04838 (2016).
+  \bibitem{BOTTOU2}Bottou, Léon. \emph{Large-scale machine learning with stochastic gradient descent}. Proceedings of COMPSTAT'2010. Physica-Verlag HD, 2010. 177-186.
 \bibitem{BOUSQUET}Bousquet, Olivier, and Léon Bottou. \emph{The tradeoffs of large scale learning}. Advances in neural information processing systems. 2008.
 \bibitem{BYRD} Richard, H. Byrd, Gillian M. Chin, Will Neveitt \& Jorge Nocedal.
   \emph{On the Use of Stochastic Hessian Information in Optimization Methdos for Machine Learning.} Society of Industrial and Applied Mathematics, 2011.
@@ -439,9 +455,9 @@ w_{k+1} = w_k - \alpha_k \nabla R(h_{w_k, i})) & = w_k - \alpha_k \nabla l(h_{w_
 \bibitem{STEIN2} W. James and Charles Stein. \emph{Estimation With Quadratic Loss},  Proceedings of the Fourth Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1961. pp 361-379.
 \bibitem{TORN} Törn, Aimo, Montaz M. Ali, and Sami Viitanen. \emph{Stochastic global optimization: Problem classes and solution techniques}. Journal of Global Optimization 14.4 (1999): 437-447.
 \bibitem{TUKEY} Tukey, J.W., \emph{A survey of sampling from contaminated distributions.} (1960a), Chapter 39 in: \emph{Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling} (ed. I. Olkin et al.), Stanford University Press, Stanford, California, 448-485.
+\bibitem{VALIANT} Valiant, Leslie G. \emph{A theory of the learnable}. Communications of the ACM 27.11 (1984): 1134-1142.
 \bibitem{VAPNIK1} Vladimir N. Vapnik  \emph{Statistical Learning Theory},JOHN WILEY \& SONS, INC., USA, 1998.
 \bibitem{VAPNIK2} Vladimir N. Vapnik  \emph{The Nature of Statistical Learning Theory},Springer, Second Edition, 1999.
-\bibitem{VALIANT} Valiant, Leslie G. \emph{A theory of the learnable}. Communications of the ACM 27.11 (1984): 1134-1142.
 \bibitem{WALLER} Waller, Matthew A., and Stanley E. Fawcett. \emph{Data science, predictive analytics, and big data: a revolution that will transform supply chain design and management}." Journal of Business Logistics 34.2 (2013): 77-84.
 
 \end{thebibliography}
