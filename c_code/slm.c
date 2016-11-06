@@ -117,7 +117,7 @@ double * SLM_LBFGS(double (* func)(double*, int),
   double **s, **y;
   double *x, *grad, *p, *x_new, *grad_new;
   double alpha, norm_grad0;
-  int i, k, MAX_ITER;
+  int i, k, MAX_ITER, exploredDataPoints;
   // Space allocation.
   x = (double *)malloc(nRow * sizeof(double));
   s = (double **)malloc((nRow*m) * sizeof(double));
@@ -128,9 +128,11 @@ double * SLM_LBFGS(double (* func)(double*, int),
   }
   // Stochastic Mode
   if(stocMode){
+    exploredDataPoints = 0;
     //printf("\nRUNNING STOCASTIC MODE\n");
     SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
     create_sample(0);
+    exploredDataPoints += SAMPLE;
   }
 
   // Until Convergence or MAX_ITER.
@@ -145,6 +147,7 @@ double * SLM_LBFGS(double (* func)(double*, int),
       printf("\nRUNNING STOCASTIC MODE\n");
       SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(k);
+      exploredDataPoints += SAMPLE;
     }
 
     // p = -Hgrad(f)
@@ -170,6 +173,23 @@ double * SLM_LBFGS(double (* func)(double*, int),
 
     // ---------------- PRINT ------------------- //
     if(verbose){
+      if(stocMode){
+        printf("\n ITER = %d; f(x) = %.10e ; "
+               "||x|| = %.10e ; ||grad|| =  %.10e ; "
+               "||p|| =  %.10e ; sTy =  %.10e ; "
+               "alpha = %.10e; explored data points = %d; precision = %fl ",
+               k,
+               func(x, nRow),
+               norm(x, nRow),
+               norm(grad, nRow),
+               norm(p, nRow),
+               dotProd(s[(int)min(k , (m - 1))],
+                       y[(int)min(k , (m - 1))], nRow),
+               alpha,
+               exploredDataPoints,
+               class_precision(x, nRow, 0));
+
+      }else{
       printf("\n ITER = %d; f(x) = %.10e ; "
              "||x|| = %.10e ; ||grad|| =  %.10e ; "
              "||p|| =  %.10e ; sTy =  %.10e ; "
@@ -182,6 +202,7 @@ double * SLM_LBFGS(double (* func)(double*, int),
              dotProd(s[(int)min(k , (m - 1))],
                      y[(int)min(k , (m - 1))], nRow),
              alpha);
+      }
     }
     // ---------------- PRINT ------------------- //y
     // Update k, x, grad.
