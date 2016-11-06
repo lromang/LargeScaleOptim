@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#define BIG_N 10000
+#define BIG_N 100000
 // ACTUAL DATA VARIABLES
 
 int const MAX_FILE_ROWS = BIG_N;//7000000;
@@ -27,7 +27,7 @@ int    sample_logistic_labels[BIG_N];
 
 // DEFAULT CONFIGURATION
 int SAMPLE = 0;
-double sampProp       = .9;
+double sampProp       = .1;
 double regularization = .0001;
 int run_logistic      = 1;
 int stocMode          = 1;

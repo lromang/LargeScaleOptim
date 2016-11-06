@@ -112,7 +112,7 @@ double * LBFGS(double (* func)(double*, int),
   double **s, **y;
   double *x, *grad, *p, *x_new, *grad_new;
   double alpha, norm_grad0;
-  int i, k, MAX_ITER, stoc_state;
+  int i, k, MAX_ITER, stoc_state, exploredDataPoints;
   // Avoid taking samples.
   stoc_state = stocMode;
   stocMode = 0;
@@ -138,6 +138,7 @@ double * LBFGS(double (* func)(double*, int),
   k = 0;
   // Initial norm of gradient.
   norm_grad0 = norm(grad, nRow);
+  exploredDataPoints = 0;
   while(norm(grad, nRow) > TOL*(1 + norm_grad0) && k < MAX_ITER){
     // p = -Hgrad(f)
     p        = vProd(findH(grad, s, y, nRow, m, k), -1, nRow);
@@ -157,18 +158,36 @@ double * LBFGS(double (* func)(double*, int),
              vSum(grad_new, vProd(grad, -1, nRow), nRow), m, k);
     // ---------------- PRINT ------------------- //
     if(verbose){
-      printf("\n ITER = %d; f(x) = %.10e ; "
-             "||x|| = %.10e ; ||grad|| =  %.10e ; "
-             "||p|| =  %.10e ; sTy =  %.10e ; "
-             "alpha = %.10e",
-             k,
-             func(x, nRow),
-             norm(x, nRow),
-             norm(grad, nRow),
-             norm(p, nRow),
-             dotProd(s[(int)min(k , (m - 1))],
-                     y[(int)min(k , (m - 1))], nRow),
-             alpha);
+      if(run_logistic){
+        exploredDataPoints += SAMPLE;
+        printf("\n ITER = %d; f(x) = %.10e ; "
+               "||x|| = %.10e ; ||grad|| =  %.10e ; "
+               "||p|| =  %.10e ; sTy =  %.10e ; "
+               "alpha = %.10e; explored data points = %d; precision = %fl ",
+               k,
+               func(x, nRow),
+               norm(x, nRow),
+               norm(grad, nRow),
+               norm(p, nRow),
+               dotProd(s[(int)min(k , (m - 1))],
+                       y[(int)min(k , (m - 1))], nRow),
+               alpha,
+               exploredDataPoints,
+               class_precision(x, nRow, 0));
+      }else{
+        printf("\n ITER = %d; f(x) = %.10e ; "
+               "||x|| = %.10e ; ||grad|| =  %.10e ; "
+               "||p|| =  %.10e ; sTy =  %.10e ; "
+               "alpha = %.10e",
+               k,
+               func(x, nRow),
+               norm(x, nRow),
+               norm(grad, nRow),
+               norm(p, nRow),
+               dotProd(s[(int)min(k , (m - 1))],
+                       y[(int)min(k , (m - 1))], nRow),
+               alpha);
+      }
     }
     // ---------------- PRINT ------------------- //y
     // Update k, x, grad.

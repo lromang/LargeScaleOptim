@@ -329,3 +329,33 @@ double min (double x, double y){
 double max (double x, double y){
   return x > y ? x : y;
 }
+
+/*
+ * -------------------------------------
+ * Eval function
+ * -------------------------------------
+ */
+double class_precision(double* coefs, int length, int verbose){
+  // Variable declaration.
+  double class_error, entry_val;
+  int i, pred;
+  // Evaluate logistic.
+  pred = 0;
+  for(i = 0; i < MAX_FILE_ROWS; i++){
+    entry_val = exp(- dotProd(coefs, logistic_values[i], length));
+    entry_val = 1 / (1 + entry_val);
+    // Classification threshold = .5
+    if(entry_val > .5){
+      pred = 1;
+    }else{
+      pred = 0;
+    }
+    if(verbose){
+      imprimeTit("PRED");
+      printf("ACTIVATION VALUE: %lf | PREDICTION: %d | ACTUAL: %d", entry_val, pred, logistic_labels[i]);
+    }
+    class_error = class_error + (pred == logistic_labels[i] ? 1 : 0);
+    //res = res + log(1 + exp(-dotProd(x, (double*) logistic_values[i], 5) * logistic_labels[i]));
+  }
+  return class_error / MAX_FILE_ROWS;
+};

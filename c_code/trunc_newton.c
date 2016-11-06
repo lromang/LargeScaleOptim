@@ -93,7 +93,7 @@ double* NGC(double (*func)(double*, int), int nRow,
   // Variable declaration.
   double *r, *d, *z, *r_new,
     *Bd, *p, *x, *r_cg;
-  int k, i, j, stop, wolf_cond, grad_iter;
+  int k, i, j, stop, wolf_cond, grad_iter, exploredDataPoints;
   double epsilon, alpha, beta, step, eta;
 
   // Space allocation.
@@ -116,21 +116,26 @@ double* NGC(double (*func)(double*, int), int nRow,
    * Improve Loop Conditions...
    * Parameters Tolerance, size of sample.
    */
+  exploredDataPoints = 0;
   if(run_logistic){
     imprimeTit("Gradient Descent Initialization");
     for(grad_iter = 0; grad_iter < gradN; grad_iter++){
     // Choose random observation
       SAMPLE = gradSamp;
       create_sample(0);
+      exploredDataPoints += SAMPLE;
       r        = gradCentralDiff(func, x, nRow);
       x        = vSum(x, vProd(r, -sg_alpha, nRow), nRow);
+      // Class precision:
       if(verbose && (grad_iter % 10 == 0)){
         printf("ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
-               " alpha =  %.10e;\n",
+               " alpha =  %.10e; explored data points = %d;  precision = %fl\n",
                grad_iter,
                func(x, nRow),
                norm(r, nRow),
-               sg_alpha);
+               sg_alpha,
+               exploredDataPoints,
+               class_precision(x, nRow, 0));
       }
     }
   }
@@ -144,19 +149,21 @@ double* NGC(double (*func)(double*, int), int nRow,
       printf("\nRUNNING STOCASTIC MODE\n");
       SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(verbose);
+      exploredDataPoints += SAMPLE;
   }
   // Truncated Newton Iteration
   imprimeTit("Truncated Newton Iterations");
   // Calculate the gradient.
   r    = gradCentralDiff(func, x, nRow);
-  stop = 10;
+  stop = 2e5;
   // Outer loop, this modifies x!
-  for(k = 0; (norm(r, nRow) >= TOL) && (k < stop); k++){
+  for(k = 0; (norm(r, nRow) >= TOL) && ((run_logistic*exploredDataPoints + (1 - run_logistic*k)) < stop); k++){
     // Stochastic mode.
     if(stocMode && k){
       printf("\nRUNNING STOCASTIC MODE\n");
       SAMPLE = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(verbose);
+      exploredDataPoints += SAMPLE;
     }
     // ############ CG Variables ###########
     // Set tolerance.
@@ -216,14 +223,27 @@ double* NGC(double (*func)(double*, int), int nRow,
     r = gradCentralDiff(func, x, nRow);
     // ---------------- PRINT ------------------- //
     if(verbose){
+      if(run_logistic){
       printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
-             "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d",
+             "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d; explored data points = %d; precision = %fl \n",
              k,
              func(x, nRow),
              norm(r, nRow),
              norm(p, nRow),
              step,
-             wolf_cond);
+             wolf_cond,
+             exploredDataPoints,
+             class_precision(x, nRow, 0));
+      }else{
+        printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
+               "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d\n",
+               k,
+               func(x, nRow),
+               norm(r, nRow),
+               norm(p, nRow),
+               step,
+               wolf_cond);
+      }
     }
     // ---------------- PRINT ------------------- //y
   } // Outer loop, modifies x!

@@ -25,7 +25,7 @@ int main(){
   double precision;
   int length;
   // Print options
-  menu();
+  // menu();
   /*
    * ###############################################################
    * Test Functions
@@ -71,7 +71,7 @@ int main(){
     // RUNNING NGC MODEL
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic. // ADD THIS CONFIGURATIONS TO CODE
-    optim_point_N = NGC(logistic, length, 10, 6e-1, verbose, 100, 1e2, .0001);
+    optim_point_N = NGC(logistic, length, 10, 6e-1, verbose, 100, 1e3, .0001);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
@@ -79,6 +79,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
+
     // RUNNING LBFGS MODEL
     imprimeTit("RUNNING LBFGS MODEL");
     // Test multinomial logistic.
@@ -90,6 +91,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (LBFGS):");
     printf("%.5lf \n", precision);
+    /*
     // RUNNING SLM-LBFGS MODEL
     imprimeTit("RUNNING SLM-LBFGS MODEL");
     // Test multinomial logistic.
@@ -101,7 +103,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (SLM_LBFGS):");
     printf("%.5lf \n", precision);
-
+    */
   }
   return 0;
 }
@@ -172,33 +174,3 @@ double logistic(double* theta, int length){
   }
   return -loss;
 }
-
-/*
- * -------------------------------------
- * Eval function
- * -------------------------------------
- */
-double class_precision(double* coefs, int length, int verbose){
-  // Variable declaration.
-  double class_error, entry_val;
-  int i, pred;
-  // Evaluate logistic.
-  pred = 0;
-  for(i = 0; i < MAX_FILE_ROWS; i++){
-    entry_val = exp(- dotProd(coefs, logistic_values[i], length));
-    entry_val = 1 / (1 + entry_val);
-    // Classification threshold = .5
-    if(entry_val > .5){
-      pred = 1;
-    }else{
-      pred = 0;
-    }
-    if(verbose){
-      imprimeTit("PRED");
-      printf("ACTIVATION VALUE: %lf | PREDICTION: %d | ACTUAL: %d", entry_val, pred, logistic_labels[i]);
-    }
-    class_error = class_error + (pred == logistic_labels[i] ? 1 : 0);
-    //res = res + log(1 + exp(-dotProd(x, (double*) logistic_values[i], 5) * logistic_labels[i]));
-  }
-  return class_error / MAX_FILE_ROWS;
-};
