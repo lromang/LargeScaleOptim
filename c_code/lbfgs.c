@@ -129,7 +129,7 @@ double * LBFGS(double (* func)(double*, int),
   // imprimeTit("X");
   // imprimeMatriz(x, 1, nRow);
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1e1;
+  MAX_ITER = 1e6;
   grad     = gradCentralDiff(func, x, nRow);
   // PRINT
   // imprimeTit("GRAD");

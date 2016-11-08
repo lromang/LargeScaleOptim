@@ -225,7 +225,7 @@ double* NGC(double (*func)(double*, int), int nRow,
     if(verbose){
       if(run_logistic){
       printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
-             "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d; explored data points = %d; precision = %fl \n",
+             "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d; explored data points = %d; precision = %fl; CG iters = %d\n",
              k,
              func(x, nRow),
              norm(r, nRow),
@@ -233,7 +233,8 @@ double* NGC(double (*func)(double*, int), int nRow,
              step,
              wolf_cond,
              exploredDataPoints,
-             class_precision(x, nRow, 0));
+             class_precision(x, nRow, 0),
+             j);
       }else{
         printf("\n ITER = %d; f(x) = %.10e;  ||grad|| =  %.10e ; "
                "||p|| =  %.10e ; alpha =  %.10e; backtrack iters = %d\n",
