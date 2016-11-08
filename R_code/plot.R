@@ -1,26 +1,47 @@
 library(ggplot2)
+library(plyr)
+library(stringr)
 
-
+## -----------------------
 ## Read in dataset
-ndata        <- read.csv("../tests/lbfgsT02.csv", header = FALSE)
-names(ndata) <- c("data_points", "precision")
+## -----------------------
 
-## Additional variables LBFGS
-ndata$T <- rep("02", nrow(ndata))
+## List all Directories:
+files <- list.files("../tests")
+files <- files[!str_detect(files, ".sh")]
 
+## List all subfiels
+all_files <- llply(files,
+                  function(t) t <- list.files(paste0("../tests/", t)))
+all_files <- llply(all_files, function(t) t <- t[!str_detect(t, ".txt")])
 
-## Additional variables TN
-data$sampleSize  <- rep(.05, nrow(data))
-data$CG          <- rep(5, nrow(data))
-data$SGD_iters   <- rep(100, nrow(data))
-data$SGD_batch   <- rep(1000, nrow(data))
+## All data
+all_data <- c()
+for(i in 1:length(files)){
+    for(j in 1:length(all_files[[i]])){
+        if(length(all_files[[i]]) > 0){
+            file <- paste("../tests",
+                         files[i],
+                         all_files[[i]][j],
+                         sep = "/")
+            aux_data<- read.csv(file, header = FALSE)
+            names(aux_data) <- c("data_points", "precision")
+            aux_data$params <- rep(str_replace(all_files[[i]][j], ".csv", ""),
+                                  nrow(aux_data))
+            all_data <- rbind(all_data, aux_data)
+        }
+    }
+}
 
-all_data <- rbind(all_data, ndata)
-
-## Plot
-ggplot(data = ndata,
+## Plot Everything
+ggplot(data = all_data,
        aes(x = data_points,
            y = precision,
-           col = as.factor(T))) +
-    geom_line() +
+           col = as.factor(params))) +
+    geom_point() +
+    geom_line(data = all_data,
+       aes(x = data_points,
+           y = precision,
+           col = as.factor(params))) +
+    xlim(0, 1e6) +
     theme(panel.background = element_blank())
