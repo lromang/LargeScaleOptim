@@ -1,0 +1,570 @@
+
+------------
+RUNNING NGC MODEL
+------------
+
+------------
+Gradient Descent Initialization
+------------
+
+RUNNING STOCASTIC MODE
+Sample size: 65123 
+
+------------
+Truncated Newton Iterations
+------------
+
+ ITER = 0; f(x) = 4.3002679648e+04;  ||grad|| =  2.4269565598e+04 ; ||p|| =  1.0338136182e+03 ; alpha =  4.3368086899e-19; backtrack iters = 61; explored data points = 65123; precision = 0.748080l; CG iters = 6
+
+RUNNING STOCASTIC MODE
+Sample size: 80232 
+
+ ITER = 1; f(x) = 5.2735110976e+04;  ||grad|| =  2.9863538983e+04 ; ||p|| =  8.5308552822e+02 ; alpha =  1.0842021725e-19; backtrack iters = 63; explored data points = 145355; precision = 0.748080l; CG iters = 7
+
+RUNNING STOCASTIC MODE
+Sample size: 87551 
+
+ ITER = 2; f(x) = 5.8200373715e+04;  ||grad|| =  3.2925828376e+04 ; ||p|| =  5.6092214205e+02 ; alpha =  1.7347234760e-18; backtrack iters = 59; explored data points = 232906; precision = 0.748080l; CG iters = 5
+
+RUNNING STOCASTIC MODE
+Sample size: 46513 
+
+ ITER = 3; f(x) = 3.0372800821e+04;  ||grad|| =  1.7270110939e+04 ; ||p|| =  5.9161474663e+02 ; alpha =  2.7755575616e-17; backtrack iters = 55; explored data points = 279419; precision = 0.748080l; CG iters = 4
+
+RUNNING STOCASTIC MODE
+Sample size: 75170 
+
+ ITER = 4; f(x) = 4.9652643094e+04;  ||grad|| =  2.7753027115e+04 ; ||p|| =  1.2058104736e+03 ; alpha =  1.0842021725e-19; backtrack iters = 63; explored data points = 354589; precision = 0.748080l; CG iters = 7
+
+RUNNING STOCASTIC MODE
+Sample size: 49846 
+
+ ITER = 5; f(x) = 3.2712644445e+04;  ||grad|| =  1.8529926239e+04 ; ||p|| =  9.3867074627e+02 ; alpha =  1.7347234760e-18; backtrack iters = 59; explored data points = 404435; precision = 0.748080l; CG iters = 4
+
+RUNNING STOCASTIC MODE
+Sample size: 15124 
+
+ ITER = 6; f(x) = 9.9281865355e+03;  ||grad|| =  5.5433188961e+03 ; ||p|| =  3.2368918960e+03 ; alpha =  2.1684043450e-19; backtrack iters = 62; explored data points = 419559; precision = 0.748080l; CG iters = 7
+
+RUNNING STOCASTIC MODE
+Sample size: 54844 
+
+ ITER = 7; f(x) = 2.1489047760e+04;  ||grad|| =  8.0251768978e+03 ; ||p|| =  1.1107877143e+00 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 474403; precision = 0.851020l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 11717 
+
+ ITER = 8; f(x) = 4.5465113346e+03;  ||grad|| =  1.6857797228e+03 ; ||p|| =  9.5653660188e+03 ; alpha =  8.6736173799e-19; backtrack iters = 60; explored data points = 486120; precision = 0.851020l; CG iters = 15
+
+RUNNING STOCASTIC MODE
+Sample size: 24557 
+
+ ITER = 9; f(x) = 7.9286051348e+03;  ||grad|| =  2.1112028646e+03 ; ||p|| =  5.9703169341e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 510677; precision = 0.877490l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 53289 
+
+ ITER = 10; f(x) = 1.5542902585e+04;  ||grad|| =  2.7657833271e+03 ; ||p|| =  8.7295287512e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 563966; precision = 0.894820l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 11379 
+
+ ITER = 11; f(x) = 3.1094995645e+03;  ||grad|| =  5.8078443053e+02 ; ||p|| =  8.1377949700e+00 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 575345; precision = 0.900040l; CG iters = 2
+
+RUNNING STOCASTIC MODE
+Sample size: 36306 
+
+ ITER = 12; f(x) = 9.9504580876e+03;  ||grad|| =  1.5113605297e+03 ; ||p|| =  1.8443732671e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 611651; precision = 0.900490l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 95647 
+
+ ITER = 13; f(x) = 2.5493507243e+04;  ||grad|| =  3.5491913171e+03 ; ||p|| =  6.6840264273e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 707298; precision = 0.900480l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 72217 
+
+ ITER = 14; f(x) = 1.9081186270e+04;  ||grad|| =  2.0007287574e+03 ; ||p|| =  1.4428159612e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 779515; precision = 0.900780l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 30605 
+
+ ITER = 15; f(x) = 8.0600353566e+03;  ||grad|| =  6.0250523398e+02 ; ||p|| =  1.8140305056e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 810120; precision = 0.901260l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 30390 
+
+ ITER = 16; f(x) = 7.9148834989e+03;  ||grad|| =  4.6874061504e+02 ; ||p|| =  3.8068853326e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 840510; precision = 0.901310l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 79643 
+
+ ITER = 17; f(x) = 2.0826240270e+04;  ||grad|| =  8.7282361620e+02 ; ||p|| =  4.9605505342e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 920153; precision = 0.901510l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 8300 
+
+ ITER = 18; f(x) = 2.0942018153e+03;  ||grad|| =  1.5904439301e+02 ; ||p|| =  1.8484483494e+00 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 928453; precision = 0.901600l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 45022 
+
+ ITER = 19; f(x) = 1.1540638528e+04;  ||grad|| =  3.7268196928e+02 ; ||p|| =  3.9781823156e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 973475; precision = 0.901710l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 70249 
+
+ ITER = 20; f(x) = 1.8015281695e+04;  ||grad|| =  6.3848392859e+02 ; ||p|| =  8.5064420209e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 1043724; precision = 0.901850l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 97513 
+
+ ITER = 21; f(x) = 2.5084973027e+04;  ||grad|| =  6.9111154053e+02 ; ||p|| =  6.6994239458e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 1141237; precision = 0.901850l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 7456 
+
+ ITER = 22; f(x) = 1.9824133554e+03;  ||grad|| =  1.2581126964e+02 ; ||p|| =  1.0076344183e+00 ; alpha =  6.2500000000e-02; backtrack iters = 4; explored data points = 1148693; precision = 0.902040l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 52552 
+
+ ITER = 23; f(x) = 1.3494068666e+04;  ||grad|| =  3.3342151071e+02 ; ||p|| =  2.7567497962e-02 ; alpha =  1.4551915228e-11; backtrack iters = 36; explored data points = 1201245; precision = 0.902040l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 5009 
+
+ ITER = 24; f(x) = 1.3389360154e+03;  ||grad|| =  8.6303235595e+01 ; ||p|| =  1.1762057275e+00 ; alpha =  4.6566128731e-10; backtrack iters = 31; explored data points = 1206254; precision = 0.902040l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 54684 
+
+ ITER = 25; f(x) = 1.4466623918e+04;  ||grad|| =  4.2704882315e+02 ; ||p|| =  1.4088656730e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 1260938; precision = 0.902030l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 6292 
+
+ ITER = 26; f(x) = 1.6405514351e+03;  ||grad|| =  1.1533454648e+02 ; ||p|| =  5.5748560773e-01 ; alpha =  3.1250000000e-02; backtrack iters = 5; explored data points = 1267230; precision = 0.901990l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 37955 
+
+ ITER = 27; f(x) = 9.5188006268e+03;  ||grad|| =  3.4716118358e+02 ; ||p|| =  3.4157561228e-02 ; alpha =  9.0949470177e-13; backtrack iters = 40; explored data points = 1305185; precision = 0.901990l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 27418 
+
+ ITER = 28; f(x) = 7.0445588751e+03;  ||grad|| =  1.7314309533e+02 ; ||p|| =  1.2110255705e-01 ; alpha =  2.5000000000e-01; backtrack iters = 2; explored data points = 1332603; precision = 0.902030l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 22609 
+
+ ITER = 29; f(x) = 5.8525153461e+03;  ||grad|| =  2.0503514945e+02 ; ||p|| =  8.0223508162e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 1355212; precision = 0.901900l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 91138 
+
+ ITER = 30; f(x) = 2.3348655555e+04;  ||grad|| =  6.2653792395e+02 ; ||p|| =  2.4759584590e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 1446350; precision = 0.901860l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 5152 
+
+ ITER = 31; f(x) = 1.3035922355e+03;  ||grad|| =  9.1070856665e+01 ; ||p|| =  1.2549976239e+00 ; alpha =  1.5625000000e-02; backtrack iters = 6; explored data points = 1451502; precision = 0.902070l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 5020 
+
+ ITER = 32; f(x) = 1.2375201049e+03;  ||grad|| =  9.4077912286e+01 ; ||p|| =  2.1444162069e-01 ; alpha =  9.0949470177e-13; backtrack iters = 40; explored data points = 1456522; precision = 0.902070l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 9559 
+
+ ITER = 33; f(x) = 2.4120010918e+03;  ||grad|| =  1.0847578710e+02 ; ||p|| =  8.5431332391e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 1466081; precision = 0.901960l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 50104 
+
+ ITER = 34; f(x) = 1.2926766173e+04;  ||grad|| =  4.7643514147e+02 ; ||p|| =  2.2729951989e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 1516185; precision = 0.901890l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 43072 
+
+ ITER = 35; f(x) = 1.1092318458e+04;  ||grad|| =  3.1107322306e+02 ; ||p|| =  1.0387964279e-01 ; alpha =  2.5000000000e-01; backtrack iters = 2; explored data points = 1559257; precision = 0.902050l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 71835 
+
+ ITER = 36; f(x) = 1.8524282939e+04;  ||grad|| =  4.1933324619e+02 ; ||p|| =  3.7894289202e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 1631092; precision = 0.901760l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 50535 
+
+ ITER = 37; f(x) = 1.3060197468e+04;  ||grad|| =  3.3998643469e+02 ; ||p|| =  1.5736423347e-01 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 1681627; precision = 0.901820l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 12711 
+
+ ITER = 38; f(x) = 3.3729470047e+03;  ||grad|| =  1.6601996805e+02 ; ||p|| =  3.0091780576e-01 ; alpha =  2.5000000000e-01; backtrack iters = 2; explored data points = 1694338; precision = 0.901950l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 12062 
+
+ ITER = 39; f(x) = 3.0420638678e+03;  ||grad|| =  1.7315230686e+02 ; ||p|| =  1.6295726283e-01 ; alpha =  6.2500000000e-02; backtrack iters = 4; explored data points = 1706400; precision = 0.901900l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 99932 
+
+ ITER = 40; f(x) = 2.5630502415e+04;  ||grad|| =  7.0946356546e+02 ; ||p|| =  1.8307556891e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 1806332; precision = 0.901850l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 69627 
+
+ ITER = 41; f(x) = 1.7799914022e+04;  ||grad|| =  3.2909757381e+02 ; ||p|| =  1.3929536173e-01 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 1875959; precision = 0.901810l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 42438 
+
+ ITER = 42; f(x) = 1.1144265452e+04;  ||grad|| =  3.6872024137e+02 ; ||p|| =  1.4301445496e-01 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 1918397; precision = 0.901790l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 8286 
+
+ ITER = 43; f(x) = 2.1161241296e+03;  ||grad|| =  1.6305003508e+02 ; ||p|| =  4.3505917382e-01 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 1926683; precision = 0.901940l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 65290 
+
+ ITER = 44; f(x) = 1.6542627776e+04;  ||grad|| =  4.0314845869e+02 ; ||p|| =  2.4353611583e-02 ; alpha =  1.4901161194e-08; backtrack iters = 26; explored data points = 1991973; precision = 0.901940l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 77960 
+
+ ITER = 45; f(x) = 2.0157608758e+04;  ||grad|| =  4.9440942072e+02 ; ||p|| =  6.8639539070e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 2069933; precision = 0.901900l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 32115 
+
+ ITER = 46; f(x) = 8.3955725869e+03;  ||grad|| =  2.6791400445e+02 ; ||p|| =  1.5629447059e-01 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 2102048; precision = 0.901960l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 52461 
+
+ ITER = 47; f(x) = 1.3364358044e+04;  ||grad|| =  3.8038903962e+02 ; ||p|| =  6.5397266968e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 2154509; precision = 0.901910l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 89965 
+
+ ITER = 48; f(x) = 2.3204105648e+04;  ||grad|| =  4.6987412451e+02 ; ||p|| =  4.9684020334e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 2244474; precision = 0.901900l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 76725 
+
+ ITER = 49; f(x) = 1.9558720313e+04;  ||grad|| =  3.1660472160e+02 ; ||p|| =  7.1412981158e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 2321199; precision = 0.902080l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 30998 
+
+ ITER = 50; f(x) = 7.9222114931e+03;  ||grad|| =  2.6322912778e+02 ; ||p|| =  1.3064388323e-01 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 2352197; precision = 0.902030l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 21107 
+
+ ITER = 51; f(x) = 5.4971185712e+03;  ||grad|| =  1.9005453814e+02 ; ||p|| =  1.2912598793e-01 ; alpha =  1.8189894035e-12; backtrack iters = 39; explored data points = 2373304; precision = 0.902030l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 38466 
+
+ ITER = 52; f(x) = 9.7977667694e+03;  ||grad|| =  2.5949860559e+02 ; ||p|| =  7.7168247637e-02 ; alpha =  3.6379788071e-12; backtrack iters = 38; explored data points = 2411770; precision = 0.902030l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 1593 
+
+ ITER = 53; f(x) = 4.0633965788e+02;  ||grad|| =  6.0050305108e+01 ; ||p|| =  1.7079253241e+00 ; alpha =  1.4210854715e-14; backtrack iters = 46; explored data points = 2413363; precision = 0.902030l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 33261 
+
+ ITER = 54; f(x) = 8.6103620635e+03;  ||grad|| =  3.4548511642e+02 ; ||p|| =  1.7625020185e-02 ; alpha =  7.1054273576e-15; backtrack iters = 47; explored data points = 2446624; precision = 0.902030l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 77858 
+
+ ITER = 55; f(x) = 2.0097255276e+04;  ||grad|| =  3.2646917863e+02 ; ||p|| =  6.3463011117e-02 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 2524482; precision = 0.902060l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 37005 
+
+ ITER = 56; f(x) = 9.4586681345e+03;  ||grad|| =  2.6117962438e+02 ; ||p|| =  1.0316766873e-01 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 2561487; precision = 0.901780l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 47299 
+
+ ITER = 57; f(x) = 1.2096359043e+04;  ||grad|| =  2.8503582642e+02 ; ||p|| =  5.2630806009e-02 ; alpha =  1.4551915228e-11; backtrack iters = 36; explored data points = 2608786; precision = 0.901780l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 96758 
+
+ ITER = 58; f(x) = 2.5081265143e+04;  ||grad|| =  3.8090428194e+02 ; ||p|| =  3.5496503688e-02 ; alpha =  2.3283064365e-10; backtrack iters = 32; explored data points = 2705544; precision = 0.901780l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 35382 
+
+ ITER = 59; f(x) = 9.1524530908e+03;  ||grad|| =  2.2607545419e+02 ; ||p|| =  9.0311294760e-02 ; alpha =  2.5000000000e-01; backtrack iters = 2; explored data points = 2740926; precision = 0.901880l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 54584 
+
+ ITER = 60; f(x) = 1.4031568078e+04;  ||grad|| =  3.9069963277e+02 ; ||p|| =  4.7954374238e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 2795510; precision = 0.901700l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 74338 
+
+ ITER = 61; f(x) = 1.9459098105e+04;  ||grad|| =  5.3279900011e+02 ; ||p|| =  8.4329463710e-02 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 2869848; precision = 0.901710l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 98788 
+
+ ITER = 62; f(x) = 2.5685644769e+04;  ||grad|| =  5.0417943360e+02 ; ||p|| =  5.2013309881e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 2968636; precision = 0.901890l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 18103 
+
+ ITER = 63; f(x) = 4.6956806225e+03;  ||grad|| =  2.1255609138e+02 ; ||p|| =  2.7195128618e-01 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 2986739; precision = 0.901670l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 58751 
+
+ ITER = 64; f(x) = 1.5318134740e+04;  ||grad|| =  2.1766996938e+02 ; ||p|| =  4.2003166879e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 3045490; precision = 0.901820l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 30754 
+
+ ITER = 65; f(x) = 7.7655736077e+03;  ||grad|| =  2.6473555396e+02 ; ||p|| =  1.0434553258e-01 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 3076244; precision = 0.901800l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 9576 
+
+ ITER = 66; f(x) = 2.4786613685e+03;  ||grad|| =  1.0844605367e+02 ; ||p|| =  3.6720255793e-01 ; alpha =  6.2500000000e-02; backtrack iters = 4; explored data points = 3085820; precision = 0.901930l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 17607 
+
+ ITER = 67; f(x) = 4.6709560899e+03;  ||grad|| =  1.8589739083e+02 ; ||p|| =  1.1836358009e-01 ; alpha =  4.5474735089e-13; backtrack iters = 41; explored data points = 3103427; precision = 0.901930l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 58828 
+
+ ITER = 68; f(x) = 1.5182297326e+04;  ||grad|| =  3.1939593062e+02 ; ||p|| =  2.9208848509e-02 ; alpha =  5.8207660913e-11; backtrack iters = 34; explored data points = 3162255; precision = 0.901930l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 79191 
+
+ ITER = 69; f(x) = 2.0508974140e+04;  ||grad|| =  4.5729028301e+02 ; ||p|| =  6.5920888037e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 3241446; precision = 0.901750l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 18136 
+
+ ITER = 70; f(x) = 4.5751193312e+03;  ||grad|| =  2.2421606718e+02 ; ||p|| =  2.7984518229e-01 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 3259582; precision = 0.901600l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 17963 
+
+ ITER = 71; f(x) = 4.7991040619e+03;  ||grad|| =  2.8003207573e+02 ; ||p|| =  1.4763324461e-01 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 3277545; precision = 0.901440l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 85422 
+
+ ITER = 72; f(x) = 2.1927122031e+04;  ||grad|| =  8.5245461226e+02 ; ||p|| =  2.5658108835e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 3362967; precision = 0.901620l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 33521 
+
+ ITER = 73; f(x) = 8.6331041325e+03;  ||grad|| =  2.7852477445e+02 ; ||p|| =  3.0718395159e-01 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 3396488; precision = 0.901620l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 18918 
+
+ ITER = 74; f(x) = 5.0066996230e+03;  ||grad|| =  2.5847037336e+02 ; ||p|| =  1.5863549009e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 3415406; precision = 0.901480l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 72098 
+
+ ITER = 75; f(x) = 1.8850925486e+04;  ||grad|| =  8.2018192017e+02 ; ||p|| =  3.6503292864e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 3487504; precision = 0.901500l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 54963 
+
+ ITER = 76; f(x) = 1.4336508396e+04;  ||grad|| =  5.8943773454e+02 ; ||p|| =  1.5419242548e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 3542467; precision = 0.901690l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 48085 
+
+ ITER = 77; f(x) = 1.2221468361e+04;  ||grad|| =  3.7405936423e+02 ; ||p|| =  1.0790608074e-01 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 3590552; precision = 0.901690l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 69841 
+
+ ITER = 78; f(x) = 1.8322130033e+04;  ||grad|| =  4.9483305157e+02 ; ||p|| =  6.0833040277e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 3660393; precision = 0.901930l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 75257 
+
+ ITER = 79; f(x) = 1.9658914311e+04;  ||grad|| =  5.6134604836e+02 ; ||p|| =  6.4393012348e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 3735650; precision = 0.901850l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 1009 
+
+ ITER = 80; f(x) = 2.8918371771e+02;  ||grad|| =  3.1837969032e+01 ; ||p|| =  6.9476725880e+00 ; alpha =  7.8125000000e-03; backtrack iters = 7; explored data points = 3736659; precision = 0.901920l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 67760 
+
+ ITER = 81; f(x) = 1.7527686689e+04;  ||grad|| =  3.7111962904e+02 ; ||p|| =  5.1850240786e-03 ; alpha =  2.3283064365e-10; backtrack iters = 32; explored data points = 3804419; precision = 0.901920l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 60680 
+
+ ITER = 82; f(x) = 1.5732570343e+04;  ||grad|| =  4.6216763481e+02 ; ||p|| =  7.8359302254e-02 ; alpha =  2.5000000000e-01; backtrack iters = 2; explored data points = 3865099; precision = 0.901930l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 55824 
+
+ ITER = 83; f(x) = 1.4292571998e+04;  ||grad|| =  3.2001519616e+02 ; ||p|| =  7.7702521275e-02 ; alpha =  2.9103830457e-11; backtrack iters = 35; explored data points = 3920923; precision = 0.901930l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 46263 
+
+ ITER = 84; f(x) = 1.2004076768e+04;  ||grad|| =  2.8559754708e+02 ; ||p|| =  8.9895937923e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 3967186; precision = 0.901970l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 57805 
+
+ ITER = 85; f(x) = 1.4911003943e+04;  ||grad|| =  4.0018510975e+02 ; ||p|| =  3.9881939665e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 4024991; precision = 0.901900l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 77400 
+
+ ITER = 86; f(x) = 1.9891465443e+04;  ||grad|| =  4.3177332059e+02 ; ||p|| =  5.8032797041e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 4102391; precision = 0.901950l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 98862 
+
+ ITER = 87; f(x) = 2.5706469686e+04;  ||grad|| =  7.2096440996e+02 ; ||p|| =  6.7084977761e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 4201253; precision = 0.901970l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 71842 
+
+ ITER = 88; f(x) = 1.8422573532e+04;  ||grad|| =  4.3439247757e+02 ; ||p|| =  6.5835571800e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 4273095; precision = 0.901450l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 46430 
+
+ ITER = 89; f(x) = 1.1719153291e+04;  ||grad|| =  3.9637488863e+02 ; ||p|| =  9.3591585828e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 4319525; precision = 0.902010l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 85861 
+
+ ITER = 90; f(x) = 2.2393494535e+04;  ||grad|| =  7.4691120043e+02 ; ||p|| =  5.0745777590e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 4405386; precision = 0.902000l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 8193 
+
+ ITER = 91; f(x) = 2.0966521064e+03;  ||grad|| =  1.0455222433e+02 ; ||p|| =  4.5902821378e-01 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 4413579; precision = 0.901810l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 42822 
+
+ ITER = 92; f(x) = 1.0909845988e+04;  ||grad|| =  3.5678627998e+02 ; ||p|| =  3.0777911000e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 4456401; precision = 0.901880l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 64869 
+
+ ITER = 93; f(x) = 1.6826870537e+04;  ||grad|| =  2.9035160581e+02 ; ||p|| =  5.3494855136e-02 ; alpha =  2.5000000000e-01; backtrack iters = 2; explored data points = 4521270; precision = 0.902060l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 13658 
+
+ ITER = 94; f(x) = 3.4999546738e+03;  ||grad|| =  1.5060278105e+02 ; ||p|| =  3.4588828673e-01 ; alpha =  1.4210854715e-14; backtrack iters = 46; explored data points = 4534928; precision = 0.902060l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 56710 
+
+ ITER = 95; f(x) = 1.4772925741e+04;  ||grad|| =  3.8257115169e+02 ; ||p|| =  2.8099312079e-02 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 4591638; precision = 0.902100l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 61667 
+
+ ITER = 96; f(x) = 1.5531227556e+04;  ||grad|| =  3.9048424012e+02 ; ||p|| =  6.0882225692e-02 ; alpha =  2.9103830457e-11; backtrack iters = 35; explored data points = 4653305; precision = 0.902100l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 54084 
+
+ ITER = 97; f(x) = 1.3835184866e+04;  ||grad|| =  4.3118456087e+02 ; ||p|| =  1.2073541022e-01 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 4707389; precision = 0.901970l; CG iters = 1
+
+RUNNING STOCASTIC MODE
+Sample size: 65159 
+
+ ITER = 98; f(x) = 1.6824399758e+04;  ||grad|| =  3.5298656428e+02 ; ||p|| =  5.0910621707e-02 ; alpha =  1.2500000000e-01; backtrack iters = 3; explored data points = 4772548; precision = 0.902000l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 80536 
+
+ ITER = 99; f(x) = 2.0471992776e+04;  ||grad|| =  3.9635272830e+02 ; ||p|| =  6.2156350207e-02 ; alpha =  6.2500000000e-02; backtrack iters = 4; explored data points = 4853084; precision = 0.902070l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 69726 
+
+ ITER = 100; f(x) = 1.7833761517e+04;  ||grad|| =  4.2022004173e+02 ; ||p|| =  5.9218704679e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 4922810; precision = 0.902080l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 9666 
+
+ ITER = 101; f(x) = 2.5459199858e+03;  ||grad|| =  1.8153664624e+02 ; ||p|| =  4.5383744230e-01 ; alpha =  6.2500000000e-02; backtrack iters = 4; explored data points = 4932476; precision = 0.902040l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 65494 
+
+ ITER = 102; f(x) = 1.6801660595e+04;  ||grad|| =  2.5843306854e+02 ; ||p|| =  2.6781031434e-02 ; alpha =  1.0000000000e+00; backtrack iters = 0; explored data points = 4997970; precision = 0.901990l; CG iters = 0
+
+RUNNING STOCASTIC MODE
+Sample size: 43608 
+
+ ITER = 103; f(x) = 1.1362166984e+04;  ||grad|| =  3.5108438066e+02 ; ||p|| =  8.4102185166e-02 ; alpha =  5.0000000000e-01; backtrack iters = 1; explored data points = 5041578; precision = 0.901670l; CG iters = 0
+
+------------
+Logistic minimum (NCG):
+------------
+6.2852379672e-01
+-2.2498714157e-02
+8.9966371393e-03
+5.9059062230e-01
+4.4987845357e-03
+4.1225045712e-02
+1.9488879662e+00
+-2.9647176141e-02
+-1.9854340943e-02
+1.9551789698e-01
+5.2160351042e-01
+2.5461555378e-02
+-3.5865237918e-02
+1.8538307736e-01
+1.9708432200e-01
+1.0277663362e-02
+-1.1930020456e-03
+1.0830417927e-01
+1.3031212803e-01
+-2.3162162670e-02
+-1.6301627911e-03
+5.6840656609e-02
+2.3489303998e-02
+-1.7632627049e-01
+9.3438150408e-04
+8.0219197748e-02
+7.9252379540e-01
+
+
+
+------------
+Classification Precision:
+------------
+0.90167 
