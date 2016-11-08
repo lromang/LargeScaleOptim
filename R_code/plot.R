@@ -1,15 +1,23 @@
 #! /bin/Rscript
 
 
-
+## -----------------------
 ## Libraries
+## -----------------------
 library(ggplot2)
 library(plyr)
 library(stringr)
+library(tidyr)
 
-
+## -----------------------
 ## Read in width for plot
+## -----------------------
 args = commandArgs(trailingOnly=TRUE)
+if(length(args) == 0){
+    x_lim <- 5e6
+}else{
+    x_lim <- as.integer(args[1])
+}
 
 ## -----------------------
 ## Read in dataset
@@ -42,23 +50,22 @@ for(i in 1:length(files)){
     }
 }
 
-## Plot Everything
-plot <- ggplot(data = all_data,
+## -----------------------
+## Plot
+## -----------------------
+ggplot(data = all_data,
        aes(x = data_points,
            y = precision,
            col = as.factor(params))) +
     geom_point() +
     geom_line(data = all_data,
-       aes(x = data_points,
-           y = precision,
-           col = as.factor(params)))
-if(length(args) != 0){
-    plot <- plot +
-    xlim(0, args[1]) +
+              aes(x = data_points,
+                  y = precision,
+                  col = as.factor(params))) +
+    xlim(0, x_lim) +
     theme(panel.background = element_blank())
-}else{
-    plot <- plot +
-    xlim(0, 5e6) +
-    theme(panel.background = element_blank())
-}
+
+## -----------------------
+## Save plot
+## -----------------------
 ggsave("../graphs/all_plot.png", width = 10)
