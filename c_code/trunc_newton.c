@@ -155,9 +155,9 @@ double* NGC(double (*func)(double*, int), int nRow,
   imprimeTit("Truncated Newton Iterations");
   // Calculate the gradient.
   r    = gradCentralDiff(func, x, nRow);
-  stop = 2e5;
+  stop = 5e6;
   // Outer loop, this modifies x!
-  for(k = 0; (norm(r, nRow) >= TOL) && ((run_logistic*exploredDataPoints + (1 - run_logistic*k)) < stop); k++){
+  for(k = 0; (norm(r, nRow) >= TOL) && ((run_logistic*exploredDataPoints + ((1 - run_logistic)*k)) < stop); k++){
     // Stochastic mode.
     if(stocMode && k){
       printf("\nRUNNING STOCASTIC MODE\n");

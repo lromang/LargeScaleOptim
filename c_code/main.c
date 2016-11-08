@@ -72,7 +72,7 @@ int main(){
 
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic. // ADD THIS CONFIGURATIONS TO CODE
-    optim_point_N = NGC(logistic, length, 5, 6e-1, verbose, 50, 1e3, .0001);
+    optim_point_N = NGC(logistic, length, 2, 1e-2, verbose, 50, 1e3, .0001);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
