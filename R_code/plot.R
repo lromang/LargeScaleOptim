@@ -1,6 +1,15 @@
+#! /bin/Rscript
+
+
+
+## Libraries
 library(ggplot2)
 library(plyr)
 library(stringr)
+
+
+## Read in width for plot
+args = commandArgs(trailingOnly=TRUE)
 
 ## -----------------------
 ## Read in dataset
@@ -34,7 +43,7 @@ for(i in 1:length(files)){
 }
 
 ## Plot Everything
-ggplot(data = all_data,
+plot <- ggplot(data = all_data,
        aes(x = data_points,
            y = precision,
            col = as.factor(params))) +
@@ -42,6 +51,14 @@ ggplot(data = all_data,
     geom_line(data = all_data,
        aes(x = data_points,
            y = precision,
-           col = as.factor(params))) +
-    xlim(0, 1e6) +
+           col = as.factor(params)))
+if(length(args) != 0){
+    plot <- plot +
+    xlim(0, args[1]) +
     theme(panel.background = element_blank())
+}else{
+    plot <- plot +
+    xlim(0, 5e6) +
+    theme(panel.background = element_blank())
+}
+ggsave("../graphs/all_plot.png", width = 10)
