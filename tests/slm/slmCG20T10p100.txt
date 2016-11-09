@@ -1,0 +1,101 @@
+
+------------
+RUNNING SLM-LBFGS MODEL
+------------
+
+RUNNING STOCASTIC MODE
+
+ backtrack iters = 16
+
+ ITER = 0; f(x) = 3.5988164189e+05 ; ||x|| = 3.0115051578e+00 ; ||grad|| =  2.4581392261e+05 ; ||p|| =  2.4581392261e+05 ; sTy =  1.1308206214e+06 ; alpha = 1.5258789062e-05; explored data points = 1216719; precision = 0.749060l 
+RUNNING STOCASTIC MODE
+Sample size: 396191 
+
+ backtrack iters = 3
+
+ ITER = 1; f(x) = 1.7077009761e+05 ; ||x|| = 3.9473966835e+00 ; ||grad|| =  7.4867732142e+04 ; ||p|| =  2.2821667931e+01 ; sTy =  1.4942255020e+05 ; alpha = 1.2500000000e-01; explored data points = 1612910; precision = 0.869220l 
+RUNNING STOCASTIC MODE
+Sample size: 523317 
+
+ backtrack iters = 2
+
+ ITER = 2; f(x) = 2.0459985973e+05 ; ||x|| = 5.0687503053e+00 ; ||grad|| =  2.9346073757e+04 ; ||p|| =  8.5195674690e+00 ; sTy =  6.1537180734e+04 ; alpha = 2.5000000000e-01; explored data points = 2136227; precision = 0.890819l 
+RUNNING STOCASTIC MODE
+Sample size: 52362 
+
+ backtrack iters = 9
+
+ ITER = 3; f(x) = 2.0005880664e+04 ; ||x|| = 5.4304855246e+00 ; ||grad|| =  3.6266723117e+04 ; ||p|| =  2.3943436255e+02 ; sTy =  2.8701330200e+03 ; alpha = 1.9531250000e-03; explored data points = 2188589; precision = 0.891652l 
+RUNNING STOCASTIC MODE
+Sample size: 669638 
+
+ backtrack iters = 5
+
+ ITER = 4; f(x) = 2.5671566479e+05 ; ||x|| = 5.3457690790e+00 ; ||grad|| =  4.0918873129e+03 ; ||p|| =  1.7605454343e+01 ; sTy =  3.7513680349e+03 ; alpha = 3.1250000000e-02; explored data points = 2858227; precision = 0.886409l 
+RUNNING STOCASTIC MODE
+Sample size: 163898 
+
+ backtrack iters = 9
+
+ ITER = 5; f(x) = 6.1804682830e+04 ; ||x|| = 5.4488189629e+00 ; ||grad|| =  4.4346048176e+04 ; ||p|| =  8.5818582019e+01 ; sTy =  1.9341661522e+01 ; alpha = 1.9531250000e-03; explored data points = 3022125; precision = 0.894621l 
+RUNNING STOCASTIC MODE
+Sample size: 363068 
+
+ backtrack iters = 11
+
+ ITER = 6; f(x) = 1.3696332069e+05 ; ||x|| = 5.4226680017e+00 ; ||grad|| =  1.0915844270e+04 ; ||p|| =  4.8773050030e+02 ; sTy =  1.2308099459e+02 ; alpha = 4.8828125000e-04; explored data points = 3385193; precision = 0.894492l 
+RUNNING STOCASTIC MODE
+Sample size: 407492 
+
+ backtrack iters = 10
+
+ ITER = 7; f(x) = 1.5283710590e+05 ; ||x|| = 5.4584594913e+00 ; ||grad|| =  2.3593927366e+04 ; ||p|| =  1.1658945067e+02 ; sTy =  3.7053591104e-01 ; alpha = 9.7656250000e-04; explored data points = 3792685; precision = 0.894752l 
+RUNNING STOCASTIC MODE
+Sample size: 491447 
+
+ backtrack iters = 18
+
+ ITER = 8; f(x) = 1.8737123095e+05 ; ||x|| = 5.4468416337e+00 ; ||grad|| =  2.6719117282e+04 ; ||p|| =  3.3303500179e+04 ; sTy =  6.7646089332e+01 ; alpha = 3.8146972656e-06; explored data points = 4284132; precision = 0.894719l 
+RUNNING STOCASTIC MODE
+Sample size: 849502 
+
+ backtrack iters = 8
+
+ ITER = 9; f(x) = 3.2182429071e+05 ; ||x|| = 5.4598832273e+00 ; ||grad|| =  3.3005431424e+04 ; ||p|| =  4.0426619803e+01 ; sTy =  1.7822821393e+02 ; alpha = 3.9062500000e-03; explored data points = 5133634; precision = 0.894760l 
+------------
+Multinomial Logistic minimum (SLM-LBFGS):
+------------
+1.4178425941e+00
+-1.1409318665e-01
+-2.6297047777e-01
+1.2052466759e+00
+-3.6138498381e-01
+-5.7161280064e-02
+3.9919036716e+00
+-3.0257304374e-01
+-5.3150464714e-01
+1.1356797712e-01
+1.9600840757e+00
+-2.3176990768e-01
+-3.0326963850e-01
+4.6293098207e-02
+1.4865627719e-01
+-3.7621082105e-01
+-4.8804225216e-01
+2.9370301251e-01
+-2.5443384686e-01
+-9.9257069377e-02
+-1.9448193664e-01
+5.6603533862e-01
+-2.3413822003e-01
+-3.7116084064e-01
+-4.2549039321e-01
+9.3058983879e-03
+2.0872636538e+00
+
+
+
+------------
+Classification Precision (SLM_LBFGS):
+------------
+0.89472 

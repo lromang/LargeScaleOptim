@@ -69,10 +69,10 @@ int main(){
     // READ FILE
     readFile();
     // RUNNING NGC MODEL
-
+    /*
     imprimeTit("RUNNING NGC MODEL");
     // Test logistic. // ADD THIS CONFIGURATIONS TO CODE
-    optim_point_N = NGC(logistic, length, 20, 1e-2, verbose, 0, 1e3, .0001);
+    optim_point_N = NGC(logistic, length, 5, 1e-2, verbose, 100, 100, .0001);
     imprimeTit("Logistic minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
@@ -80,6 +80,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision:");
     printf("%.5lf \n", precision);
+    */
     /*
     // RUNNING LBFGS MODEL
     imprimeTit("RUNNING LBFGS MODEL");
@@ -94,10 +95,10 @@ int main(){
     printf("%.5lf \n", precision);
     */
     // RUNNING SLM-LBFGS MODEL
-    /*
+
     imprimeTit("RUNNING SLM-LBFGS MODEL");
     // Test multinomial logistic.
-    optim_point_N = SLM_LBFGS(logistic, length, 7, 1e-2, 100, verbose);
+    optim_point_N = SLM_LBFGS(logistic, length, 2, 1e-2, 20, verbose);
     imprimeTit("Multinomial Logistic minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
@@ -105,7 +106,7 @@ int main(){
     printf("\n");
     imprimeTit("Classification Precision (SLM_LBFGS):");
     printf("%.5lf \n", precision);
-    */
+
   }
   return 0;
 }

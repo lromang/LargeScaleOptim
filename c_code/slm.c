@@ -136,13 +136,13 @@ double * SLM_LBFGS(double (* func)(double*, int),
   }
 
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1e1;
+  MAX_ITER = 6e6;
   grad     = gradCentralDiff(func, x, nRow);
   // Update s, y.
   k = 0;
   // Initial norm of gradient.
   norm_grad0 = norm(grad, nRow);
-  while(norm(grad, nRow) > TOL*(1 + norm_grad0) && k < MAX_ITER){
+  while(norm(grad, nRow) > TOL*(1 + norm_grad0) && ((run_logistic*exploredDataPoints + ((1 - run_logistic)*k)) < MAX_ITER)){
     if(stocMode){
       printf("\nRUNNING STOCASTIC MODE\n");
       SAMPLE      = rand() % (int)(MAX_FILE_ROWS * sampProp);
