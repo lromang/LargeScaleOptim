@@ -98,7 +98,7 @@ int main(){
 
     imprimeTit("RUNNING SLM-LBFGS MODEL");
     // Test multinomial logistic.
-    optim_point_N = SLM_LBFGS(logistic, length, 5, 1e-2, 2, verbose);
+    optim_point_N = SLM_LBFGS(logistic, length, 2, 1e-2, 5, verbose);
     imprimeTit("Multinomial Logistic minimum (SLM-LBFGS):");
     imprimeMatriz(optim_point_N, 1, length);
     // Prediction error.
