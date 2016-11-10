@@ -15,6 +15,7 @@
 #include <string.h>
 #include <math.h>
 #define BIG_N 1000000
+
 // ACTUAL DATA VARIABLES
 
 int const MAX_FILE_ROWS = BIG_N;//7000000;
