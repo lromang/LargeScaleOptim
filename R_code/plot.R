@@ -14,9 +14,14 @@ library(tidyr)
 ## -----------------------
 args = commandArgs(trailingOnly=TRUE)
 if(length(args) == 0){
-    x_lim <- 5e6
+    x_lim   <- 5e6
+    toPrint <- "all"
+}else if(length(args) == 1){
+    x_lim   <- as.integer(args[1])
+    toPrint <- "all"
 }else{
-    x_lim <- as.integer(args[1])
+    x_lim   <- as.integer(args[1])
+    toPrint <- args[2]
 }
 
 ## -----------------------
@@ -26,6 +31,11 @@ if(length(args) == 0){
 ## List all Directories:
 files <- list.files("../tests")
 files <- files[!str_detect(files, ".sh")]
+
+## Select what to print
+if(toPrint != "all"){
+    files <- files[tolower(files) == tolower(toPrint)]
+}
 
 ## List all subfiels
 all_files <- llply(files,
@@ -68,4 +78,4 @@ ggplot(data = all_data,
 ## -----------------------
 ## Save plot
 ## -----------------------
-ggsave("../graphs/all_plot.png", width = 10)
+ggsave(paste0("../graphs/", toPrint, "_plot.png"), width = 10)

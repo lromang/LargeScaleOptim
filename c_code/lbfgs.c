@@ -129,7 +129,7 @@ double * LBFGS(double (* func)(double*, int),
   // imprimeTit("X");
   // imprimeMatriz(x, 1, nRow);
   // Until Convergence or MAX_ITER.
-  MAX_ITER = 1e6;
+  MAX_ITER = 6e6;
   grad     = gradCentralDiff(func, x, nRow);
   // PRINT
   // imprimeTit("GRAD");
@@ -139,7 +139,7 @@ double * LBFGS(double (* func)(double*, int),
   // Initial norm of gradient.
   norm_grad0 = norm(grad, nRow);
   exploredDataPoints = 0;
-  while(norm(grad, nRow) > TOL*(1 + norm_grad0) && k < MAX_ITER){
+  while(norm(grad, nRow) > TOL * (1 + norm_grad0) && ((run_logistic * exploredDataPoints + ((1 - run_logistic) * k)) < MAX_ITER)){
     // p = -Hgrad(f)
     p        = vProd(findH(grad, s, y, nRow, m, k), -1, nRow);
     // Alpha that statifies Wolfe conditions.
