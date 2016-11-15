@@ -1,0 +1,875 @@
+\documentclass{book}
+%Para que los números de la tabla de contenidos
+%sean ligas a las distintas secciones.
+\usepackage[linktocpage]{hyperref}
+%Apendices
+\usepackage{appendix}
+\usepackage{chngcntr}
+\usepackage{etoolbox}
+%Para rellenar algunas secciones.
+\usepackage{lipsum}
+%Poder insertar imágenes
+\usepackage{graphicx}
+%Notación matemática
+\usepackage{amsmath,amsthm,epsfig,epstopdf,amsfonts}
+\usepackage{bbm}
+%Ambiente para teoremas, lemmas, definiciones
+%Idioma y encoding
+\usepackage[spanish, mexico]{babel}
+\usepackage[utf8]{inputenc}
+%
+\theoremstyle{plain}
+\newtheorem{thm}{Teorema}[section]
+\newtheorem{lem}[thm]{Lema}
+\newtheorem{prop}[thm]{Proposición}
+\newtheorem{assump}{Supuesto}[thm]
+\newtheorem*{cor}{Corolario}
+\theoremstyle{definition}
+\newtheorem{defn}{Definición}[section]
+\newtheorem{conj}{Conjetura}[section]
+\newtheorem{exmp}{Ejemplo}[section]
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\newtheorem*{note}{Note}
+% Otros paquetes para notación matemática
+\usepackage{mathtools}
+\usepackage{amssymb}
+%Tablas de color
+\usepackage[table]{xcolor}
+%Secciones con otra estructura aparte de la
+%de la página
+\usepackage{float}
+\selectlanguage{spanish}
+%Pseudo código
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+%Citas
+\usepackage{cite}
+%Formato especial para ocupar toda la hoja
+\usepackage{fullpage}
+%Margenes de parrafos
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist
+%\usepackage[a4paper]{geometry}
+%Secciones con su propio ambiente
+%para código por ejemplo
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{chngcntr}
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{minitoc}
+\usepackage{subcaption}
+\usepackage{multirow}
+%Texto
+\renewcommand{\baselinestretch}{1.5}
+\addtolength{\skip\footins}{8mm}
+%\usepackage[textwidth=15cm]{geometry}
+%Colores
+\usepackage{xcolor}
+\usepackage{textcomp}
+%-----Epigrafos---------
+\usepackage{epigraph}
+%-----------------------
+%----Títulos de capítulo fancy
+\usepackage{titlesec, blindtext, color}
+\usepackage{titlesec, blindtext, color}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{\vline}\hsp}{0pt}{\Huge\bfseries}
+%Encabezado en cada página
+%-----------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\usepackage[margin=4.4cm,headheight=35pt,showframe]{geometry}
+\fancyhf{}
+\rhead{\rightmark}
+\lhead{Proyecto de Tesis}
+\rfoot{\thepage}
+\usepackage[margin=3.5cm,headsep=1cm,headheight=2cm]{geometry}
+%-------------------------
+\usepackage{fancyvrb}
+\definecolor{listinggray}{gray}{0.95}
+\definecolor{lbcolor}{rgb}{0.95,0.95,0.95}
+\lstset{
+        backgroundcolor=\color{lbcolor},
+        tabsize=4,
+        language=R,
+    basicstyle=\scriptsize,
+    upquote=true,
+    aboveskip={0.5\baselineskip},
+    columns=fixed,
+    showstringspaces=false,
+    extendedchars=true,
+    breaklines=true,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=none,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    identifierstyle=\ttfamily,
+    keywordstyle=\color[rgb]{0,0,1},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    numbers=left,
+    numberstyle=\footnotesize,
+    stepnumber=1,
+    numbersep=0.5cm,
+    xleftmargin=0.2cm,
+    xrightmargin=0.3cm,
+    frame=tlbr,
+    framesep=5pt,
+    framerule=0pt,
+}
+
+\newcommand{\eqdef}{\overset{\mathrm{def}}{=\joinrel=}}
+
+\addto\captionsspanish{% Replace "english" with the language you use
+  \renewcommand{\contentsname}%
+    {Contenido}%
+}
+%--------pseudocódigo
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+%------------------------Abstracts------------------------
+\makeatletter
+\if@titlepage
+  \newenvironment{abstract}{%
+      \titlepage
+      \null\vfil
+      \@beginparpenalty\@lowpenalty
+      \begin{center}%
+        \bfseries \abstractname
+        \@endparpenalty\@M
+      \end{center}}%
+     {\par\vfil\null\endtitlepage}
+\else
+  \newenvironment{abstract}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \small
+        \begin{center}%
+          {\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \quotation
+      \fi}
+      {\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother
+%-----------------------No cambio de página----------------
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+%----------------------------------------------------------
+
+
+\setlength{\parskip}{1cm}
+\title{Métodos estocásticos de segundo orden con aplicación a problemas de aprendizaje de máquina}
+\author{Luis Manuel Román García}
+\date{\today}
+
+% ambiente de apendice
+\AtBeginEnvironment{subappendices}{%
+\chapter*{Appendix}
+\addcontentsline{toc}{chapter}{Appendices}
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\VerbatimFootnotes
+
+
+\begin{absolutelynopagebreak}
+\begin{abstract}
+En este documento se estudia el desempeño de dos algorítmos de optimización \emph{LBFGS} y \emph{Newton Truncado} cuando se utiliza información incompleta de segundo orden, es decir, cuando la matriz hessiana es aproximada por medio de una muestra de los datos. La idea es aprovechar la naturaleza estocástica de las funciones objetivo que a menudo surgen en aplicaciones del campo de aprendizaje de máquina. De igual forma, se exploran sus propiedades teóricas de convergencia y se pone a prueba su precisión con una tarea de clasificación de mensajes de voz.
+\end{abstract}
+\end{absolutelynopagebreak}
+
+%--------------------
+% Tabla de contenidos
+%\begin{absolutelynopagebreak}
+\addtocontents{toc}{\protect\sloppy}
+\tableofcontents
+\addtocontents{toc}{~\hfill\textbf{Página}\par}
+%\end{absolutelynopagebreak}
+%--------------------
+\pagenumbering{roman}
+
+
+\chapter{Aprendizaje a gran escala}
+
+
+\epigraph{Large-scale learning problems are subject to a qualitatively different tradeoff involving the computational complexity of the underlying optimization algorithms in non-trivial ways.}{\textit{Bousquet \\ 2008}}
+
+\newpage
+
+\section{Estadística y aprendizaje}
+
+Tal y como Vapnik menciona en \cite{VAPNIK1}, el paradígma del aprendizaje estadístico nace en la década de los 60's gracias a que el incremento en la capacidad computacional permitió llevar a cabo análisis multidimensionales de fenómenos naturales, antes impracticables. Estos análisis demostraron que, en su mayoría, los modelos de baja dimensionalidad eran poco precisos e incluso complteamente erróneos. Se comenzaron a cuestionar los planteamientos clásicos de la estadística y se reconcoció que la mayor parte de los supuestos que la sustentan no se cumplen cuando la complejidad del fenómeno bajo estudio aumenta. Derivado de esto, surgieron dos maneras distintas de abordar el problema clásico de la inferencia estadística:
+
+\begin{enumerate}
+\item El particular \emph{paramétrico}: busca generara métodos de estadística inferencial  simples que puedan ser utilizados para resolver problemas de la vida diaria.
+\item El general \emph{no paramétrico}: busca encontrar un método inductivo para cualquier problema de inferencia estadística.
+\end{enumerate}
+
+Ambas filosofías difieren en el número de supuestos que se plantean y en la cantidad de conocimiento que se le atribuye al usuario. De esta manera, el primer paradigma parte del hecho de que:
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{El investigador conoce el problema que analiza y tiene conocimiento de las causas físicas detrás de la estocasticidad de las observaciones.}
+\end{changemargin}
+
+Los principales supuestos que sustentan este planteamiento son los siguientes:
+
+\begin{itemize}
+\item La mayor parte de las relaciones funcionales subyacentes en los datos pueden ser aproximadas satisfactoriamente por una función lineal en sus parámetros.
+\item La normalidad es la regla subyacente en la mayor parte de los fenómenos de la naturaleza.
+\item La máxima verosimilitud es una buena herramienta inductiva para la estimación de parámetros.
+\end{itemize}
+
+Pese a que estos supuestos son razonables, ciertas fallas fundamentales obligaron a los investigadores y teóricos a buscar alternativas. Es curioso que dichas fallas se descubrieron en un corto periodo de tiempo: 1955-1961; Mismo periodo en el que F. Rosenblatt descubrió el primer modelo de aprendizaje: \emph{El Perceptrón} (1958).
+
+La impractibilidad del primer supuesto quedó evidenciada conforme al progreso científico. Dado que las indagaciones teóricas sobre procesos naturales daban por resultado interacciones complejas entre distintos fenómenos, los modelos requeridos para explicarlos fueron exigiendo un mayor número  de variables y flexibilidad (interacciones no lineales). En consecuencia, volviéndose más complejos. Sin embargo, y como R. Bellman demostró en 1961, la cantidad de datos requerida para ajustar un modelo crece de manera exponencial conforme al número de parámetros. Esto hace que sea computacionalmente intratable ajustar modelos lineales (en los parámetros) arbitrariamente complejos.
+
+Por ejemplo, siguiendo las líneas de \cite{VAPNIK1}, de acuerdo con el teorema de aproximación de Weierstrass. \footnote{\begin{thm}Si $f$ es una función continua definida sobre un compacto $k$, entonces para todo $\epsilon > 0, \exists N_0\in\mathbb{N}$ tal que $\forall n\geq N_0$ se cumple que:
+\begin{equation*}
+  \begin{split}
+    \|f(x) - P_n(x)\|_1 &< \epsilon\quad\forall x\in K
+  \end{split}
+\end{equation*}
+Donde $P_n$ es un polinómio de grado n.
+\end{thm}} Toda función continua de $n$ variables definida sobre el cubo unitario puede ser aproximada con un error arbitrariamente pequeño por polinomios. Sin embargo, si la función tiene únicamente $s<n$ derivadas, entonces con polinomios de grado $N$ sólo se puede aproximar con una precisión de orden $\large{O}(N^{\frac{s}{n}})$. Esto nos dice que si $s$ es pequeña, se requerirá un incremento exponencial en $N$ (el número de observaciones) para compensar incrementos en $n$ (la complejidad del modelo).
+
+El segundo supuesto, comenzó a verse en problemas desde unos años antes, pero fue Tukey en 1960 con\cite{TUKEY} quien puso fin a la universalidad del supuesto de normalidad al analizar muestras bajo distribuciones contaminadas. La principal interrogante consistía en determinar si los métodos de estimación que exhibian propiedades óptimas, tales como eficiencia,  bajo ciertos supuestos, preservaban sus propiedades una vez que dichos supestos eran relajados. El experimento que Tukey llevó a cabo fue introducir cierto número de valores dentro de una muestra proveniente de una distribución normal. Los valores introducidos provenian de una distribución normal con el mismo parámetro de locación pero un parámetro de escala tres veces mayor. Los resultados demostraron que bajo mezclas cási imperceptibles (.008 de los datos provenientes de la muestra con mayor desviación estandar), las propiedades de eficiencia de los estimadores (en este caso el estimador de la varianza) se pierden por completo. En otras palabras, desviaciones nímias del supuesto de normalidad puede deteriorar en gran medida la confiabilidad de las estimaciones.
+
+En cuanto al tercer supuesto, en 1955, Stein mostró en \cite{STEIN1} que el estimador de máxima verosimilitud para una muestra unitaria proveniente de una normal multivariada con número de dimensiones $n\geq 3$ es un estimador inadmisible \footnote{\begin{defn}Decimos que un estimador $\hat{\theta}$ es \textbf{mejor que} un estimador $\theta^*$ si $\forall\mu,R(\mu,\hat{\theta})\leq R(\mu,\theta^*)$ y $\exists\mu'$ tal que $R(\mu,\hat{\theta})<R(\mu,\theta^*)$. Un estimador $\hat{\theta}$ es \textbf{admisible} si no existe un estimador $\theta^*$ \textbf{mejor que} $\hat{\theta}$, donde $R$ es la función de error definida en el capítulo 2. Un estimador es inadmisible si no es admisible.\end{defn}}. Este resultado fue de tal importancia que según palabras de Bradley Efron:
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{Socavó siglo y medio de teoría de estimación, yendo atrás hasta Karl Friederich Gauss y Adrein Marie Legendre.}
+\end{changemargin}
+
+Para una discusión muy intuitiva sobre este resultado y sobre el estimador propuesto por James y Stein en \cite{STEIN2}, ver \cite{EFRON}.
+
+Las fallas en los supuestos fundamentales del paradígma clásico de la inferencia estadística urgieron el desarrollo de técnicas más generales que descansaran en un menor número de supuestos. El paradígma \emph{general no paramétrico} resulto ser una alternativa prometedora. Este enfoque para el problema de la inferéncia estadística  es mucho más conservador en cuanto al grado de conocimiento del problema y a las hipótesis subyacentes. A saber, este paradigma sostiene que:
+
+\begin{changemargin}{1.5cm}{1.5cm}
+\emph{El investigador no tiene conocimiento confiable a priori de la regla estadística subyacente en el fenómeno bajo observación o de la función que uno quisiera aproximar.}
+\end{changemargin}
+
+Bajo estas líneas, es necesario preguntarse en que medida el investigador puede hacer uso de los datos a su disposición para hacer inferencia. Más aún, queda determinar que tan adecuado es este método y si es capaz de arrojar resultados adecuados para la tarea propuesta. En esta dirección surgen dos resultados clave, el primero dice que tiene sentido utilizar los datos que el investigador tiene a su disposición para aproximar la distribución subyacente del fenómeno bajo estudio y el segundo habla de la presición asintótica de dicha aproximación. El primer resultado es el teorema  Gilvenko-Cantelli:
+
+\bigskip
+
+\begin{thm}
+Sean $X_1,X_2,\dots,X_n$ variables aleatorias iid con una distribución $F$ con valores en $\mathbb{R}$. Entonces se cumple que
+\begin{equation*}
+\begin{split}
+\displaystyle\sup_{x\in\mathbb{R}}\bigg\|\frac{1}{n}\displaystyle\sum_{i=1}^n\mathbb{I}_{x_i\leq x}-F_{x}(x_i)\bigg\| &\xrightarrow[n\rightarrow\infty]{a.s} 0
+\end{split}
+\end{equation*}
+\end{thm}
+
+Es decir, la distribución empiríca obtenida de promediar los valores observados en la muestra, converge cási seguramente a la distribución de probabilidad real. Y el segundo se conoce como la desigualdad de Dvoretzky-Kiefer-Wolfowitz \cite{MASSART}.
+
+\bigskip
+
+\begin{thm}
+Sean $X_1,X_2,\dots,X_n$ variables aleatorias iid con una distribución $F$ con valores en $\mathbb{R}$ y $\lambda\in\mathbb{R}^+$. Entonces se cumple que
+\begin{equation*}
+\begin{split}
+P\bigg\{\sqrt{n}\displaystyle\sup_{x\in\mathbb{R}}\bigg\|\frac{1}{n}\displaystyle\sum_{i=1}^n\mathbb{I}_{x_i\leq x}-F_{x}(x_i)\bigg\| > \lambda \bigg\}& \leq 2e^{-2\lambda^2}
+\end{split}
+\end{equation*}
+\end{thm}
+
+Como puede observarse, la eficiencia del paradígma \emph{general de la estadística} depende de la abundancia de datos \footnote{La dependencia de ambos límites del tamaño de la muestra es evidente.}, no obstante, hay una serie de complicaciones empíricas de las cuales la exposición teórica hasta el momento no ha dado cuenta. En las siguientes secciones aterrizaremos más la problemática en cuestión, daremos una breve introducción al problema principal del aprendizaje de máquina, exploraremos las principales complicaciones que surgen a la hora de implementar dichos algoritmos y en particular nos enfocaremos en el área de optimización y en las diversas técnicas que han surgido para solventar dichas dificultades.
+
+\section{El problema del aprendizaje}
+
+El objetivo del aprendizaje estadístico es el diseño e implementación de algoritmos que sean capaces de \emph{aprender} las interacciones existentes entre un conjunto de datos y un conjunto de respuestas y generalizar dichas percepciones para observaciones futuras. En este sentido, se supondra que existe una \emph{regla} subyacente que rige la relación entre las variables observables y las respuestas \footnote{Sin perdida de generalidad, siguiendo las líneas de \cite{VAPNIK1}, nos centraremos en el contexto de clasificación binaria. Esto se debe a que es el escenario más simple de analizar, sin que esta simplicidad sacrifique generalidad.}. De manera concreta, supondremos un conjunto arbitrario de observaciones $X=\{x_1,x_2,\dots,x_n\}$ tal que $x_i \stackrel{iid}{\sim} D,\quad\forall x_i\in X$ y un conjunto de respuestas $Y=\{y_1, y_2, \dots,y_n\};y_i\in \{0,1\}$. Tal que existe una función $c:X\rightarrow Y$ que rige la manera en la que cada elemento $x_i$ está relacionado con una respuesta $y_i$. El problema principal del aprendizaje estadístico se reduce entonces a encontrar de manera \emph{eficiente} una función o hipótesis $h:S\subset X\rightarrow Y$ donde $S\sim D^n$ tal que \emph{probablemente} estime a $c$ de manera \emph{razonablemente correcta}.
+
+Del párrafo anterior se desprenden varias interrogantes: ¿Qué significa que un algoritmo aprenda con \emph{alta probabilidad} una representación \emph{razonablemente correcta}?, ¿Qué significa que lo haga eficientemente? y ¿Cuándo es esto posible?. Con estas interrogantes en mente, resulta conveniente entonces definir un criterio bajo el cual se puede evaluar el desempeño de un determinado \emph{algoritmo de aprendizaje} con tal de determinar si cumple las características de lo que puede llegar a ser \emph{aprendible}:
+
+\bigskip\bigskip
+
+
+\begin{defn}\label{eq:def_gen_err}
+\textbf{Error de generalización}\\
+  Dado un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una función $c:X\rightarrow Y$ y una hipótesis $h:X\rightarrow Y$. El error de generalización de $h$ está dado por:
+\begin{equation*}
+R(h)=P_{x\sim D}\{x\in X| h(x)\neq c(x)\}=E\bigg(\mathbbm{1}_{\{x\in X| h(x)\neq c(x)\}}\bigg)
+\end{equation*}
+\end{defn}
+
+Como puede observarse, el error de generalización no es otra cosa que la \emph{medida} del espacio en el cual la hipótesis aprendida $h$ diferirá de la relación intrínseca $c$. De esta forma podemos determinar una tolerancia $\epsilon > 0$ y llamar a todo algoritmo que genere hipótesis $h$ tal que $R(h)\leq\epsilon$ como razonablemente correcto o \emph{aproximadamente} correcto. Además de esto, también nos da una medida para comparar el desempeño de un algoritmo con respecto a otro. No obstante lo adecuado de esta definición, una dificultad evidente al querer evaluar el desempeño de un modelo de manera empírica es que ni la distribución $D$, ni la función $c$ son conocidas. Más aún, es probable, salvo casos triviales, que nisiquiera se cuente con $X$ si no con una muestra finita $S \subset X$. En consecuencia, se define el \emph{Error empírico} como un aproximador insesgado de $R(h)$ de la siguiente manera:
+\bigskip
+
+\begin{defn}\label{eq:def_emp_err}
+\textbf{Error empírico}\\  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$, una muestra $S\subset X$ con $S\sim D^n$ y una hipótesis $h:S\subset X\rightarrow Y$. El error de empírico de $h$ está dado por\footnote{El que este estimador sea insesgado es una consecuencia directa de la ley de los grandes números.\cite{BERNOULLI}}:
+\begin{equation*}
+\hat{R(h)}=\frac{1}{n}\displaystyle\sum_{i=1}^n\mathbbm{1}_{\{x\in S| h(x)\neq c(x)\}}
+\end{equation*}
+\end{defn}
+
+Para aligerar la notación, en lo siguiente se denotará la función de pérdida como $l(h,c)$. En este contexto, y con tal de esclarecer las nociones de estimación \emph{probablemente aproximadamente correcta} para una regla $c$, se buscará caracterizar el comportamiento de:
+\begin{defn}\label{eq:def_emp_err_g}
+\begin{equation*}
+\begin{split}
+\hat{R(h)}=\frac{1}{n}\displaystyle\sum_{i=i}^n l(h,c)
+\end{split}
+\end{equation*}
+\end{defn}
+
+Dada una familia de hipótesis $H$. Por lo tanto diremos que una regla $c$ es \emph{Probablemente aproximadamente correctamente aprendible} o \emph{PAC} aprendible por H si:
+
+\begin{defn}\label{eq:pac_aprendible}
+\textbf{PAC Aprendible}\\  Dados un par de conjuntos $X$, $Y$ donde $x_i \stackrel{iid}{\sim} D,\forall x_i\in X$ existe una hipótesis $h_{n^{*}}:S\subset X\rightarrow Y\in H$. Tal que $\forall \epsilon,\delta > 0$ $\exists n^{*} > 0 \in \mathbb{N}$ con $|S|\geq n^{*}$ que cumple que:
+\begin{equation*}
+P\{\hat{R(h_{n^{*}})}\geq R(h) + \epsilon\} < \delta
+\end{equation*}
+\end{defn}
+
+En \cite{VALIANT}, Valiant agregó la característica que para que una familia de \emph{reglas} o \emph{conceptos} sean aprendibles, estos deben poder serlo en tiempo polinomial con respecto al tamaño de los datos, de ahí la noción de eficiencia. En este sentido, en la siguiente sección, se explorará que es lo que ocurre cuando entra en contexto el tamaño de los en las aplicaciones de aprendizaje a gran escala.
+
+\section{El efecto de la escala}
+
+Partiendo de la definición  \ref{eq:pac_aprendible} y con tal de investigar cómo es que el tamaño de los datos afecta la capacidad de un algoritmo para aprender de manera empírica, nos concentraremos en explorar el valor esperado de la diferencia entre $\hat{R(h_n)}$ y $R(h)$. Suponiendo, cómo es de esperarse en la práctica, que el tamaño de nuestra muestra es $0< n < n^{*}$. De esta manera, siguiendo los pasos de  \cite{BOUSQUET}, podemos descomponer el valor esperado de la siguiente manera:
+
+\begin{equation*}
+  \begin{split}
+    \mathbf{E}[\hat{R(h_{n})} - R(h)] & = \mathbf{E}[\hat{R(h_{n^{*}})} - R(h)] + \mathbf{E}[\hat{R(h_{n^{*}})} - R(h_n)]\\
+                                     & = Err_{app} + Err_{est}
+  \end{split}
+\end{equation*}
+
+El primer error, $Err_{app}$ proviene del \emph{tamaño} de la familia de hipótesis $H$. Entre más \emph{grande} sea la familia de hipótesis $H$\footnote{Ver Appendice A para definición de dimensión VC}, la probabilidad de que $\hat{R(h_{n^{*}})}$ y $R(h)$ difieran será baja y por lo tanto el valor esperado de este error será pequeño. De hecho, el orden de decrecimiento del error  está dado por la siguiente desigualdad\cite{VAPNIK2} con una probabilidad de almenos $1-\eta;\eta >0$:
+
+\begin{equation*}
+  \begin{split}
+    \displaystyle_{h \in H} |R(h) - R_{n^{*}}(h)| & \leq O\bigg( \sqrt{\frac{1}{2n}log(\frac{2}{\eta}) + \frac{d_H}{n}log(\frac{n}{d_H})}\bigg)
+  \end{split}
+\end{equation*}
+
+
+Por otra parte, el error $Err_{est}$ proviene de la dificultad intrínseca de aproximar $h$ dado un tamaño de muestra $n<n^{*}$. El compromiso existente entre los dos tipos de errores es claro. Si bien por un lado una familia de hipótesis \emph{grande} permitirá disminuir el primer error, el simple aumento en el espacio de búsqueda hará que $h$ sea más dificil de aproximar y por ende el segundo error crecerá.
+
+Ahora bien, es claro que el problema de encontrar $h_n$ que minimice \ref{eq:def_emp_err} es una operación computacionalmente costosa. Tomemos por ejemplo\cite{JUDD} donde $H$ está constituida por redes neuronales \emph{feed-forward}. Ahí se muestra que el problema de \emph{carga de información} a las distintas capas de la red es un problema NP-completo. Por esta razón, con valores grandes del tamaño de muestra $n$, el sistema computacional que lleve la optimización a cabo muy probablemente se verá restringido por un tiempo máximo aceptable de cómputo $T_{max}$. De aquí que en el caso de aprendizaje a gran escala no se pueda aspirar a estimar $h_n$ si no a lo más $h_{opt}$. De aquí se desprende una nueva descomposición del error esperado:
+
+\begin{equation*}
+  \begin{split}
+    \mathbf{E}[\hat{R(h_{n})} - R(h)] & = \mathbf{E}[\hat{R(h_{n^{*}})} - R(h)] + \mathbf{E}[\hat{R(h_{n^{*}})} - R(h_n)] +  \mathbf{E}[\hat{R(h_{opt})} - R(h_n)]\\
+                                     & = Err_{app} + Err_{est} + Err_{opt}
+  \end{split}
+\end{equation*}
+
+Esta ecuación comprende ahora tres variables que se comprometen mutuamente: El tamaño de la familia de hipótesis, el número de observaciones disponibles en la muestra y el tiempo tolerable para el algoritmo de optimización. Surge entonces una disyuntiva antes inexistente, a saber, que tanto utilizar los datos en la muestra $n$ para que el balance entre tamaño de $Err_{opt}$ y el tiempo en el proceso de optimización $T_{max}$ sea satisfactorio. Esto da origen a los algoritmos de optimización que utilizan submuestras aleatorias de los datos disponibles. Estos algoritmos se denominan de optimización estocástica. En la siguiente sección exploraremos las diferentes formas de dichos algoritmos, veremos que difieren en cuanto al tipo de información que utilizan, primer orden o segundo orden. Veremos la cantidad de datos que utilizan en cada iteración, en línea, \emph{mini-batch} o \emph{full-batch}. Además de esto, estudiaremos sus tasas de convergencia y contextos bajo los cuales se puede esperar un buen o mal comportamiento de los mismos. De manera concreta y con tal de aterrizar las ideas, en la siguiente sección y por el resto de este documento, en lugar de enfocarnos en una familia de hipótesis abstracta, supondremos que la familia $H$ está parametrizada por un conjunto de parámetros $w$. De esta forma, el objetivo será analizar el comportamiento de diversos algoritmos que busquen resolver el siguiente problema de opitmización:
+
+\begin{defn}\label{eq:central_prob}
+\begin{equation*}
+\begin{split}
+\displaystyle\min_{w\in W}\hat{R}(h_{w,n})=\frac{1}{n}\displaystyle\sum_{i=i}^n l(h_{w_i,n},c) &; n\leq n^{*}
+\end{split}
+\end{equation*}
+
+\end{defn}
+
+\chapter{Optimización estocástica}
+
+\epigraph{It’s more important than ever to understand the fundamentals of
+algorithms as well as the demands of the application, so that good
+choices are made in matching algorithms to applications.}{\textit{Stephen Wright \\ University of Wisconsin-Madison}}
+\newpage
+
+\section{Descenso en gradiente estocástico}
+
+En esta sección nos enfocaremos en analizar métodos que utilizan información incompleta, de ahí la parte estocástica, referente al gradiente de la función que se desea minimizar. De manera general, estos métodos hacen uso de una aproximación local de primer orden para encontrar, de manera iterativa, una dirección de descenso que, bajo ciertos supuestos de regularidad \cite{NOCEDAL}, eventualmente llegará a un mínimo local\footnote{En este trabajo nos enfocaremos en optimización local. Para un recuento extensivo de métodos de optimización global, el lector puede referirse a \cite{TORN}}. Todos estos métodos tienen, en principio, la misma \emph{forma} que el algoritmo propuesto por \cite{ROBBINS}. Por esta razón, al igual que \cite{BOTTOU}, nos referiremos a todos los algorimos expuestos en esta sección y en lo que resta de la tesis como métodos de \emph{Descenso en Gradiente Estocástico (DGE)}.
+
+Siguiendo entonces las líneas de \cite{BOTTOU}, con tal de minimizar \ref{eq:central_prob}, el algoritmo de \emph{Descenso en Gradiente Estocástico (DGE)} se define de la siguiente manera:
+
+ \begin{algorithm}
+   \caption{Descenso en Gradiente Estocástico}
+    \begin{algorithmic}[1]
+      \Function{DGE}{$w_0$, $n_0$, $TOL$, $MAX_{dge}$}
+        \While{$k < MAX_{dge}$ \& $\| \nabla g(h_{w_k, n_k}) \| >TOL$}
+        \State Calcular $\alpha_k > 0$
+        \State $w_{k+1} = w_k - \alpha_kg(w_k, n_k)$
+        \State Generar muestra de tamaño $n_{k+1}$
+        \State Calcular $g(h_{w_{k+1}, n_{k+1}})$
+        \EndWhile
+       \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+En este análisis, $g(w_k, n_k)$ tiene la siguiente forma:
+\[
+g(w_k, n_k) = \\
+\begin{cases}
+      \nabla l(h_{w_k}) \\
+      \frac{1}{n_k}\displaystyle\sum_{i=1}^{n_k}\nabla l(h_{w_k}) \\
+      H_k \frac{1}{n_k}\displaystyle\sum_{i=1}^{n_k}\nabla l(h_{w_k})
+   \end{cases}
+\]
+
+Cómo puede apreciarse, esta definición nos da la flexibilidad de optar por un descenso de tipo \emph{batch} o uno  \emph{en línea} dependiendo del tamaño de $n_k$. Además de esto, nos permite hacer el análisis de métodos que tomen en cuenta exclusivamente información de primer orden, haciendo $H_k = I_{nxn}$ o que incluyan información de segundo orden. Ya sea de manera exacta, haciendo $H^{-1}_k = \nabla^2_{ww}l(h_{w_k})$ obteniendo así la dirección de descenso de Newton o con una aproximación a esta última, utilizando un pseudo Newton. Con tal de compreneder las propiedades generales de convergencia de esta familia de métodos y con el fin de hacer este texto lo más autocontenido posible, en lo siguiente se presentaran las pruebas de algunos resultados de \cite{BOTTOU}. A partir de este momento, con el objetivo de simplificar la notación, haremos $F(w_k) = l(h_{w_k})$.
+
+Previo a estas pruebas, es necesario establecer algunos supuestos sobre el comportamiento general de la función objetivo.
+
+\begin{assump}[Continuidad Lipschitz del gradiente de la función objetivo]\label{assump:lipschitz}
+La función objetivo $F(w):\mathbb{R}^n\rightarrow\mathbb{R}$ es continuamente diferenciable y $\exists L\in\mathbb{R^+}$ tal que el gradiente $\nabla F(w):\mathbb{R}^n\rightarrow\mathbb{R^n}$ cumple la siguiente desigualdad:
+\begin{equation}
+    \|\nabla F(w)- \nabla F(\hat{w})\|_2 \leq L\|w-\hat{w}\|_2^2; \forall w, \hat{w} \in \mathbb{R^d}
+\end{equation}
+De aquí, usando Taylor se desprende que:
+\begin{equation*}
+    \begin{split}
+    F_w & = F(\hat{w}) + \int_0^1\nabla F(\hat{w} + t(w- \hat{w}))^T(w-\hat{w})dt\\
+    &= F(\hat{w}) + \nabla F(\hat{w})^T(w- \hat{w}) + \int_0^1[\nabla F(\hat{w} + t(w- \hat{w})) - \nabla F(\hat{w})]^T(w-\hat{w})dt\\
+    &\leq F(\hat{w}) + \nabla F(\hat{w})^T(w- \hat{w}) + \int_0^1L|t|\|w - \hat{w}\|_2^2dt\\
+    &= F(\hat{w}) + \nabla F(\hat{w})^T(w- \hat{w}) + \frac{1}{2}L\|w - \hat{w}\|_2^2
+    \end{split}
+\end{equation*}
+\end{assump}
+
+Este supuesto nos garantiza que la variabilidad en el comportamiento del gradiente está acotada por un factor del tamaño de la vecindad en la cual el gradiente es evaluado. En otras palabras, si el gradiente resulta ser un buen estimador del comportamiento de una función en un punto en partiular, este seguirá siendo un buen estimador en una vecindad del mismo. Por tanto direcciones de descenso basadas en el gradiente pueden ser relativamente confiables.
+
+\begin{lem}\label{lem:markov}
+Bajo el supuesto \ref{assump:lipschitz}, toda iteración de DGE (Algoritmo 1) satisface la siguiente desigualdad:
+\begin{equation}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) \leq -\alpha_k\nabla F(w_{k})^T\mathbb{E}_{n_k}[g(w_{k}, n_{k})]+\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]
+\end{equation}
+\end{lem}
+
+\begin{proof}
+
+Por \ref{assump:lipschitz} sabemos que:
+\begin{equation*}
+    F(w_{k+1}) - F(w) \leq  \nabla F(w_{k})^T(w_{k+1}- w) + \frac{1}{2}L\|w_{k+1} - w\|_2^2
+\end{equation*}
+Por el paso 4 de DGE, esto se convierte en:
+\begin{equation*}
+    F(w_{k+1}) - F(w) \leq  -\alpha_k\nabla F(w_k)^Tg(w_k, n_k) + \frac{1}{2}\alpha_k^2L\|g(w_k, n_k)\|_2^2
+\end{equation*}
+Tomando el valor esperado sobre $n_k$:
+\begin{equation*}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w) \leq  - \alpha_k\nabla F(w)^T\mathbb{E}_{n_k}[g(w_k, n_k)] + \frac{1}{2}\alpha_k^2L\mathbb{E}_{n_k}[\|g(w_k, n_k)\|_2^2]
+\end{equation*}
+\end{proof}
+
+La relevancia de \ref{lem:markov} radica en el hecho de que nos da una noción de los factores de los cuales dependerá el decremento esperado en la función objetivo. A saber, como cambiará la función en dirección de $g(w_k, n_k)$ y un factor de la variabilidad del mismo vector. Por esto mismo, es necesario agregar supuestos adicionales sobre estas cantidades con tal de garantizar convergencia.
+
+\begin{assump}[Cotas de primer y segundo orden]\label{assump:primeSec}
+La función objetivo y DGE satisfacen las siguientes propiedades: Sea $U\subset\mathbb{R}^n$ un conjunto abierto:
+\begin{equation}\label{eq:cotInf}
+    F(w_k)\geq F_{inf} > -\infty; \forall w_k \in U;\forall k\in\mathbb{N}
+\end{equation}
+$\exists \mu_G \geq \mu>0; \forall k \in \mathbb{N}$
+\begin{equation}\label{eq:primCot}
+\begin{split}
+    -\nabla F(w_k)^T\mathbb{E}_{n_k}[g(w_k, n_k)] & \leq -\mu\|\nabla F(w_k)\|_2^2 \\
+    \|\mathbb{E}_{n_k}[g(w_k, n_k)]\|_2 & \leq \mu_G\|\nabla F(w_k)\|_2
+\end{split}
+\end{equation}
+$\exists M \geq 0;  M_V\geq0; \forall k \in \mathbb{N}$
+\begin{equation}\label{eq:secCot}
+    \mathbb{V}_{n_k}[g(w_k, n_k)] \leq M + M_V\|\nabla F(w_k)\|_2^2
+\end{equation}
+Juntando \ref{eq:primCot} y \ref{eq:secCot} con la definición de varianza obtenemos que:
+\begin{equation}\label{eq:secCot1}
+    \begin{split}
+    \mathbb{E}_{n_k}[\|g(w_k, n_k)\|_2^2] & \leq \|\mathbb{E}_{n_k}[g(w_k, n_k)]\|_2^2 + M + M_V\|\nabla F(w_k)\|_2^2\\
+    & \leq \mu_G^2\|\nabla F(w_k)\|_2^2 + M + M_V\|\nabla F(w_k)\|_2^2\\
+    & \leq M + M_G\|\nabla F(w_k)\|_2^2; M_G = M_V + \mu_G^2 \geq \mu >0
+    \end{split}
+\end{equation}
+\end{assump}
+
+Con estos supuestos, a saber podemos probar el siguiente lema.
+
+\begin{lem}\label{lem:desc}
+Suponiendo \ref{assump:primeSec} y \ref{assump:lipschitz}, entonces las iteraciones de DGE satisfacen lo siguiente:
+\begin{equation}
+    \begin{split}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) & \leq -\mu\alpha_k\|\nabla F(w_k)\|^2_2 + \frac{1}{2}\alpha_k^2L\mathbb{E}_{n_k}[\|g(w_k, n_k)\|_2^2]\\
+    & \leq -(\mu - \frac{1}{2}\alpha_kLM_G)\alpha_k\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\alpha_k^2LM
+    \end{split}
+\end{equation}
+\end{lem}
+
+\begin{proof}
+Por \ref{lem:markov} tenemos que
+\begin{equation*}
+      \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) \leq -\alpha_k\nabla F(w_{k})^T\mathbb{E}_{n_k}[g(w_{k}, n_{k})]+\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]
+\end{equation*}
+De la primera desigualdad de \ref{eq:primCot} se sigue que:
+\begin{equation*}
+      \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) \leq -\alpha_k\mu\|\nabla F(w_k)\|_2^2 +\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]
+\end{equation*}
+Que es la primera desigualdad. Luego usando \label{eq:secCot1}:
+\begin{equation*}
+    \begin{split}
+      \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) & \leq -\alpha_k\mu\|\nabla F(w_k)\|_2^2 +\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]\\
+      & \leq  -\alpha_k\mu\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\alpha^2_kLM + \frac{1}{2}\alpha^2_kLM_G\|\nabla F(w_k)\|_2^2\\
+      & = (\frac{1}{2}\alpha_kLM_G-\mu)\alpha_k\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\alpha^2_kLM
+     \end{split}
+\end{equation*}
+\end{proof}
+
+La relevancia de este lema es que que caracteriza el descenso esperado en una iteración de DGE cómo un proceso de tipo Markov de un paso, ya que el descenso en el tiempo $k+1$ depende exclusivamente del valor del gradiente de la función en el tiempo $k$. Cómo en esta tesis nos enfocaremos en entrenar los parámetros de una regresión logística con regularización, la cual, es una función estríctamente convexa, en lo siguiente nos dedicaremos a probar un teorema de convergencia para este tipo de funciones.
+
+\begin{assump}[Convexidad Estricta de la función objetivo]\label{assump:convex}
+Dada la función objetivo $F:\mathbb{R}^n\rightarrow\mathbb{R}$ es tal que $\exists c \in \mathbb{R}^+$ que cumple la siguiente desigualdad:
+\begin{equation}\label{eq:convex}
+    F(\hat{w}) \geq F(w) + \nabla F(w)^T(\hat{w}-w) + \frac{1}{2}c\|\hat{w}-w\|^2_2; \forall \hat{w}, w \in \mathbb{R}^n
+\end{equation}
+Notando que el lado derecho de \ref{eq:convex} puede ser visto como una función cuadrática de $\hat{w}$. Derivando con respecto a $\hat{w}$ e igualando a cero obtenemos que el único mínimo está dado por:
+\begin{equation*}
+\begin{split}
+    \nabla F(w) + c(w^* - w)  & = 0 \\
+    \rightarrow \quad w^* & = -\frac{1}{c} \nabla F(w) + w
+\end{split}
+\end{equation*}
+Por tanto, sustituyendo en \ref{eq:convex} obtenemos:
+\begin{equation}\label{eq:convex2}
+    \begin{split}
+        F(w^*) & \geq F(w) + \nabla F(w)^T(w^*-w) + \frac{1}{2}c\|w^*-w\|^2_2 \\
+        & = F(w) - \frac{1}{2c}\|\nabla F(w)\|_2^2 \\
+    \end{split}
+\end{equation}
+De aquí se sigue que:
+\begin{equation}
+        2c(F(w)-F(w^*))  \leq  \|\nabla F(w)\|_2^2
+\end{equation}
+\end{assump}
+
+Estamos ahora en posición de enunciar y probar el teorema que caracteriza la tasa de convergencia del algoritm DGE cuando el paso $\alpha_k$ es fijo en cada iteración.
+
+\begin{thm}[Tasa de convergencia de DGE con pasos fijos y función objetivo estríctamente convexa]
+Bajo los supuestos \ref{assump:lipschitz}, \ref{assump:primeSec}, \ref{assump:convex} y suponiendo que el algoritmo DGE toma un paso fijo $\alpha_k = \hat{\alpha}\forall k \in N$ de tal manera que el paso cumpla:
+\begin{equation}\label{eq:paso}
+        0 < \hat{\alpha}\leq\frac{\mu}{L M_G}
+\end{equation}
+Entonces la siguiente desigualdad se cumple $\forall k \in \mathbb{N}$:
+\begin{equation}\label{eq:convergence}
+    \mathbb{E}[F(w_k)- F(w^*)] \leq \frac{\hat{\alpha}LM}{2c\mu} + (1-\hat{\alpha})^{k-1}\Big(F(w_1)-F(w^*)-\frac{\hat{\alpha} LM}{2c\mu}\Big)
+\end{equation}
+\end{thm}
+\begin{proof}
+De la segunda desigualdad de \ref{lem:desc} tenemos que:
+\begin{equation}\label{theom:ineq1}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) \leq -(\mu - \frac{1}{2}\hat{\alpha}LM_G)\hat{\alpha}\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\hat{\alpha}^2LM
+\end{equation}
+Como $\hat{\alpha}\leq\frac{\mu}{L M_G}\Rightarrow \mu - \frac{1}{2}\hat{\alpha}LM_G \geq \mu - \frac{1}{2}\frac{\mu}{L M_G}LM_G = \frac{\mu}{2}$ sustituyendo en \ref{theom:ineq1}, tenemos que:
+\begin{equation}\label{theom:ineq2}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) \leq -\frac{\mu}{2}\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\hat{\alpha}^2LM
+\end{equation}
+y aplicando \ref{eq:convex2} se obtiene
+\begin{equation}\label{theom:ineq3}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) \leq -c\hat{\alpha}\mu[F(w_k)-F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM
+\end{equation}
+Restando $F(w^*)$ en ambos lados obtenemos:
+\begin{equation*}
+\begin{split}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w^*) & \leq [F(w_k)-F(w^*)]-c\hat{\alpha}\mu[ F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM \\
+    & = (1-c\hat{\alpha}\mu)[F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM
+    \end{split}
+\end{equation*}
+Tomando esperanza total:
+\begin{equation*}
+\begin{split}
+    \mathbb{E}[F(w_{k+1}) - F(w^*)] & \leq
+    (1-c\hat{\alpha}\mu)\mathbb{E}[F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM
+    \end{split}
+\end{equation*}
+Y restando $\frac{\hat{\alpha}LM}{2c\mu}$ de ambos lados
+\begin{equation}\label{theom:compress}
+\begin{split}
+    \Big(\mathbb{E}[F(w_{k+1}) - F(w^*)] - \frac{\hat{\alpha}LM}{2c\mu}\Big) & \leq
+    (1-c\hat{\alpha}\mu)\mathbb{E}[F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM - \frac{\hat{\alpha}LM}{2c\mu}\\
+    & = (1-c\hat{\alpha}\mu)\mathbb{E}[F(w_k) -F(w^*)] + (1-c\hat{\alpha}\mu)\frac{\hat{\alpha}LM}{2c\mu}\\
+    & = (1-c\hat{\alpha}\mu)\Big(\mathbb{E}[F(w_k) -F(w^*)]-\frac{\hat{\alpha}LM}{2c\mu}\Big)
+    \end{split}
+\end{equation}
+Como puede observarse \ref{theom:compress} es una relación recursiva que después de $k-1$ aplicaciones dará la desigualdad deseada. Ahora, como $\hat{\alpha}\leq\frac{\mu}{L M_G}\Rightarrow \hat{\alpha}c\mu\leq \frac{c\mu^2}{LM_G}\leq\frac{c\mu^2}{L\mu^2}=\frac{c}{L}\leq 1$ pues de \ref{assump:lipschitz} y \ref{assump:convex} sabemos que:
+\begin{equation*}
+    \begin{split}
+    F(w) - F(w^*) & \leq \nabla F(w^*)^T(w-w^*) + \frac{L}{2}\|w - w^*\|_2^2 \\
+    \& & \\
+    F(w) - F(w^*) & \geq \nabla F(w^*)^T(w-w^*) +  \frac{c}{2}\|w - w^*\|_2^2 \\
+    \Rightarrow & \\
+    \nabla F(w^*)^T(w-w^*) + \frac{c}{2}\|w - w^*\|_2^2 &\leq \nabla F(w^*)^T(w-w^*) + \frac{L}{2}\|w - w^*\|_2^2 \\
+    \Rightarrow & \\
+    c \leq L
+    \end{split}
+\end{equation*}
+Tenemos que \ref{theom:ineq3} es una contracción. Y por tanto: \begin{equation}
+    \displaystyle\lim_{k\rightarrow\infty}\mathbb{E}[F(w_k)- F(w^*)] \leq \frac{\hat{\alpha}LM}{2c\mu}
+\end{equation}
+\end{proof}
+
+\textcolor{red}{Hacer un análisis de lo que los diferentes parámetros que constituyen la cota representan. Finalizar con consideraciones de venajas y desventajas de batch size, cómo usar pasos pasados de gradiente para disminuir varianza, BOTTOU}
+
+
+\chapter{Métodos estocásticos de segundo orden}
+
+\newpage
+
+\textcolor{red}{Cómo intro planteamiento y lema Erdogdu}
+
+A lo largo de esta sección, siguiendo los pasos de \cite{BYRD}, \cite{ROOSTA} y particularmente \cite{BOLLAPRAGADA}, denotaremos $A\preceq B$ para significar que $B-A$ es simétrica positiva definida con $A,B \in \mathbb{R}{n\times n}$. Además, supondremos lo siguiente:
+
+\begin{assump}\label{assump:compHess} Supuestos de regularidad para garantizar convergencia $R-lineal$
+\begin{enumerate}
+\item \textbf{Acotamiento de los valores propios de la Hessiana} La función F es doblemente diferenciable y cumple que $\forall\beta\in\mathbb{R}^+$ y $\forall S\subset\mathbb{N}$ tal que $|S| = \beta$, $\exists \mu_\beta, \Upsilon_\beta$ tal que:
+\begin{equation}\label{eq:pos_def_subHess}
+    \mu_\beta\mathbb{I}\preceq\nabla^2 F_S(w)\preceq \Upsilon_\beta\mathbb{I};\quad \forall w\in \mathbb{R}^n
+\end{equation}
+Más aún, existen $\hat{\mu}, \hat{\L}$ tal que $0 < \hat{\mu} \leq \mu_\beta$ y $\Upsilon_\beta \leq \hat{L} < \infty$
+El valor própio más pequeño y más grande de $F$ se denominarán  $\mu$ y $\Upsilon$ respectivamente. Porsupuesto, se cumple que:
+\begin{equation}\label{eq:pos_def_hess}
+    \mu\mathbb{I}\preceq\nabla^2 F_S(w)\preceq \Upsilon\mathbb{I};\quad \forall w\in \mathbb{R}^n
+\end{equation}
+\item \textbf{Varianza acotada de los gradientes muestreados}
+$\exists v\in \mathbb{R}$ tal que:
+\begin{equation}\label{eq:var_acot_grad_subHess}
+tr(Cov(\nabla F_i(w))) \leq v^2; \quad \forall w\in \mathbb{R}^n
+\end{equation}
+Donde $tr()$ es el operador traza y $Cov()$ es la covarianza.
+\item \textbf{Continuidad Lipschitz de la Hessiana}
+$\exists M > 0$ tal que:
+\begin{equation}\label{eq:lip_hess_subHess}
+    \|\nabla^2 F(w) - \nabla^2 F(z)\|_2\footnote{Cuando hablemos de la norma de una matriz, a menos de que se indique lo contrario, nos estaremos refiriendo a la norma inducida por la norma 2, a saber, dada $A\in\mathbb{R}^{n\times n}$ tenemos que \begin{equation*}
+        \|A\| = \displaystyle\max_{x\in \mathbb{R}^n}\|Ax\|_2 = \sqrt{\lambda_{max}}
+    \end{equation*} donde $\lambda_{max}$ es el máximo real $\lambda$ tal que $A*A - \lambda \mathbb{I}$ es singular.}. \leq M\|w-z\|_2; \quad \forall w, z \in \mathbb{R}^n
+\end{equation}
+\item \textbf{Varianza acotada de los componentes de la Hessiana}
+$\exists \sigma$ tal que para todos los componentes de la Hessiana, se cumple que:
+\begin{equation}\label{eq:var_acot_subHess}
+\|\mathbb{E}[(\nabla^2 F_i(w) - \nabla^2 F_i(w))^2]\|_2\leq\sigma^2; \quad \forall w\in \mathbb{R}^d
+\end{equation}
+\end{enumerate}
+\end{assump}
+
+Con estos supuestos estamos listos para probar un teorema debido a \cite{ERDOGDU} que garantiza que los métodos con este tipo de corrección de segundo orden pueden obtener en probabilidada convergencia cuadrática para puntos suficientemente cercanos al óptimo.
+
+\begin{thm}\label{thm:quad_conv}
+Suponiendo en adición a \ref{eq:pos_def_subHess}, \ref{eq:lip_hess_subHess} que el espacio de parámetros $C$ es convexo, y $S_t\subset\mathbb{N}$ es tomada de manera uniforme sobre todas las observaciones y donde cada muestra $t_i$ es independiente de una muestra $t_j$ cuando $i\neq j$. Entonces para cualquier constante $c>0$ con probabilidad al menos $1-\frac{2}{p}$ las iteraciones de la forma \textcolor{red}{HACER REFERNCIA FORMA GENERAL DE ITERACIONES CUADRÁTICAS} cumplirán:
+\begin{equation}
+    \|w_{t+1} - w^*\|_2 \leq \xi_1^t\|w_{t} - w^*\|_2 + \xi_2^t\|w_t - w^*\|_2^2
+\end{equation}
+Donde
+\begin{equation*}
+\begin{split}
+    \xi_1^t = \|\mathbb{I} - \alpha_t H_{S_t}\nabla F(w_t) \| + \alpha_t c \Upsilon\|H_{S_t}\|_2\sqrt{\frac{log(p)}{|S_t|}} &;\quad \xi_2^t = \alpha_t \frac{L}{2}\|H_{S_t}\|_2
+\end{split}
+\end{equation*}
+\end{thm}
+
+\subsubsection{Hessiana submuestreada}
+
+\textcolor{red}{TEOREMA NOCEDAL ON THE USE OF...}
+
+\textcolor{red}{Después de dar argumentos, a favor de este tipo de metodologías, exponer los supuestos, pseudo código y dar teorema de convergencia de On the use of... (también falta lemma 3.1)}
+
+Una vez que hemos expuesto los supuestos básicos, analizado los pros y contras sobre este tipo de algoritmos y demostrado la convergencia global de los mismos, estamos listos para probar un teorema debido a \cite{ROOSTA} que nos da las condiciones necesarias para alcanzar convergencia $R-lineal$ bajo un esquema de submuestra constante de la hessiana.
+
+\begin{thm}\label{r-linear}
+Suponiendo \ref{eq:pos_def_subHess} y \ref{eq:var_acot_grad_subHess}. Sean $\{w_k\}$ las iteraciones generadas por \textcolor{red}{HACER REFERNCIA FORMA GENERAL DE ITERACIONES CUADRÁTICAS} con cualquier elección de $w_0$. Si $\|X_k\|  = \eta^k$ para alguna $\eta > 1$ y $|S_k| = \beta\geq 1$ es constante, entonces, si el tamaño del paso $\alpha_k = \alpha = \frac{\mu_\beta}{L}$ tenemos que:
+\begin{equation}\label{eq:r-linear}
+    \mathbb{E}[F(w_k) - F(w^*)] \leq C\hat{\rho}^k
+\end{equation}
+Donde
+\begin{equation}
+   \begin{split}
+       C = \max\bigg\{F(w_0) - F(w^*), \frac{v^2\Upsilon_\beta}{\mu\mu_\beta}\bigg\} & \quad \hat{\rho} = \max\bigg\{1- \frac{\mu\mu_\beta}{2\Upsilon\Upsilon_\beta}, \frac{1}{\eta}\bigg\}
+   \end{split}
+\end{equation}
+\end{thm}
+\begin{proof}
+Sea $\mathbb{E}_k$ la esperanza condicional en la iteración $k$ sobre todos los posibles conjuntos $X_k$. Entonces para cualquier $S_k$ por \ref{lem:markov} se cumple que:
+\begin{equation}\label{eq:r-linear1}
+        \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) \leq -\alpha_k\nabla F(w_{k})^T\mathbb{E}_{n_k}[g(w_{k}, n_{k})]+\frac{1}{2}\alpha^2_k\Upsilon\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]
+\end{equation}
+Como en este caso $|S_k|$ es constante y $g(w_k,n_k)=\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)$. \ref{eq:r-linear1} se convierte en:
+\begin{equation}
+    \begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})] & \leq F(w_{k}) -\alpha_k\nabla F(w_{k})^T\nabla^2F_{S_k}^{-1}(w_k)\mathbb{E}_{n_k}[\nabla F_{X_k}(w_k)]\\ & +\frac{1}{2}\alpha^2_k\Upsilon\mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)\|_2^2]
+    \end{split}
+\end{equation}
+Al ser las muestras tomadas de manera uniforme a largo de todas las observaciones, tenemos que $\nabla F_{X_k}(w_k)$ es un estimador insesgado de $\nabla F(w_k)$, por tanto:
+\begin{equation}\label{eq:r-linear2}
+\begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})] & \leq F(w_{k}) -\alpha_k\nabla F(w_{k})^T\nabla^2F_{S_k}^{-1}(w_k)\nabla F(w_k)\\ & +\frac{1}{2}\alpha^2_k\Upsilon\mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)\|_2^2]
+\end{split}
+\end{equation}
+Ahora bien, por definición de varianza, sabemos que:
+\begin{equation*}
+\begin{split}
+    \mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k) - \mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)]\|_2^2] & = \mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)\|_2^2] \\ & - \|\mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)]\|_2^2
+    \end{split}
+\end{equation*}
+Sustituyendo en el último término de \ref{eq:r-linear1} obtenemos:
+\begin{equation}\label{eq:r-linear3}
+\begin{split}
+     \mathbb{E}_{n_k}[F(w_{k+1})] & \leq F(w_{k}) -\alpha_k\nabla F(w_{k})^T\nabla^2F_{S_k}^{-1}(w_k)\nabla F(w_k)\\ & +\frac{1}{2}\alpha^2_k\Upsilon\|\mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)]\|_2^2 \\ & + \frac{1}{2}\alpha^2_k\Upsilon\mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k) - \mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)]\|_2^2]
+\end{split}
+\end{equation}
+Por los argumentos mencionados arriba, el tercer término de \ref{eq:r-linear3} se convierte en:
+\begin{equation*}
+\begin{split}
+ \frac{1}{2}\alpha^2_k\Upsilon\|\mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)]\|_2^2 & = \frac{1}{2}\alpha^2_k\Upsilon\|\nabla^2F_{S_k}^{-1}(w_k)\mathbb{E}_{n_k}[\nabla F_{X_k}(w_k)]\|_2^2 \\
+ & = \frac{1}{2}\alpha^2_k\Upsilon\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F(w_k)\|_2^2 \\
+ & = \frac{1}{2}\alpha^2_k\Upsilon(\nabla F(w_k)^T\nabla^2F_{S_k}^{-1}(w_k)^T)\nabla^2F_{S_k}^{-1}(w_k)\nabla F(w_k)
+\end{split}
+\end{equation*}
+Por tanto, sustituyendo en \ref{eq:r-linear3} y factorizando se sigue que:
+\begin{equation}\label{eq:r-linear4}
+\begin{split}
+    \mathbb{E}_{n_k}[F(w_{k+1})] &  \leq F(w_{k}) -\alpha_k\nabla F(w_{k})^T\nabla^2F_{S_k}^{-1}(w_k)\nabla F(w_k)\\ & +\frac{1}{2}\alpha^2_k\Upsilon\nabla F(w_k)^T\nabla^2F_{S_k}^{-2}(w_k)\nabla F(w_k) \\ & + \frac{1}{2}\alpha^2_k\Upsilon\mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k) - \mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)]\|_2^2] \\
+    & =F(w_{k}) -\alpha_k\nabla F(w_{k})^T(\nabla^2F_{S_k}^{-1}(w_k)-\frac{1}{2}\alpha^2_k\Upsilon\nabla^2F_{S_k}^{-1}(w_k))\nabla F(w_k)\\ & + \frac{1}{2}\alpha_k\Upsilon\mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k) - \mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-2}(w_k)\nabla F_{X_k}(w_k)]\|_2^2]\\
+     & =F(w_{k}) -\alpha_k\nabla F(w_{k})^T\nabla^2F_{S_k}^{-\frac{1}{2}}(w_k)(\mathbb{I}-\frac{1}{2}\alpha^2_k\Upsilon\nabla^2F_{S_k}^{-1}(w_k))\nabla^2F_{S_k}^{-\frac{1}{2}}(w_k)\nabla F(w_k)\\ & + \frac{1}{2}\alpha_k\Upsilon\mathbb{E}_{n_k}[\|\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k) - \mathbb{E}_{n_k}[\nabla^2F_{S_k}^{-1}(w_k)\nabla F_{X_k}(w_k)]\|_2^2]\\
+\end{split}
+\end{equation}
+Por \ref{eq:pos_def_subHess} podemos acotar los valores propios de la secuencia $\{\nabla^2F_{S_k}^{-1}(w_k)\}$ por:
+\begin{equation*}
+\begin{split}
+    -(\mathbb{I}-\frac{1}{2}\alpha^2_k\Upsilon\nabla^2F_{S_k}^{-1}(w_k)) & \leq -(\mathbb{I}-\frac{1}{2}\alpha^2_k\Upsilon\frac{1}{\mu_\beta}) \\
+    - \nabla^2F_{S_k}^{-1}(w_k) & \leq -\frac{1}{\Upsilon_\beta}\\
+      \nabla^2F_{S_k}^{-1}(w_k) & \leq \frac{1}{\mu_\beta}
+\end{split}
+\end{equation*}
+Sustituyendo en \ref{eq:r-linear4} obtenemos:
+\begin{equation}
+\begin{split}
+     \mathbb{E}_{n_k}[F(w_{k+1})] & =F(w_{k}) -\alpha_k(1-\frac{\Upsilon\alpha^2_k}{2\mu_\beta})\frac{1}{\Upsilon_\beta}\|\nabla F(w_{k})^T\|_2^2\\ & + \frac{\alpha_k\Upsilon}{2\mu_\beta^2}\mathbb{E}_{n_k}[\|\nabla F_{X_k}(w_k) - \nabla F(w_k)]\|_2^2]\\
+     & =F(w_{k}) -\frac{\mu_\beta}{2\Upsilon\Upsilon_\beta}\|\nabla F(w_{k})^T\|_2^2\\ & + \frac{1}{2\Upsilon}\mathbb{E}_{n_k}[\|\nabla F_{X_k}(w_k) - \nabla F(w_k)]\|_2^2]
+\end{split}
+\end{equation}
+Donde la última desigualdad se da tomando el valor de $\alpha_k = \frac{\mu_\beta}{\Upsilon}$. Además por  \ref{assump:convex} tenemos que  \ref{eq:r-linear4} se convierte en:
+\begin{equation*}
+    \begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})] \leq F(w_{k}) -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}(F(w_k) - F(w^*))+ \frac{1}{2\Upsilon}\mathbb{E}_{n_k}[\|\nabla F_{X_k}(w_k) - \nabla F(w_k)]\|_2^2]
+    \end{split}
+\end{equation*}
+Restando $F(x^*)$ a ambos lados obtenemos:
+\begin{equation}\label{eq:r-linear5}
+    \begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})- F(w^*)] \leq\bigg(1 -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}\bigg)(F(w_k) - F(w^*))+ \frac{1}{2\Upsilon}\mathbb{E}_{n_k}[\|\nabla F_{X_k}(w_k) - \nabla F(w_k)]\|_2^2]
+    \end{split}
+\end{equation}
+Pero el último término de \ref{eq:r-linear5} puede ser acotado superiormente haciendo uso de  \ref{eq:var_acot_grad_subHess}:
+\begin{equation}\label{eq:r-linear6}
+    \begin{split}
+        \mathbb{E}_{n_k}[\|\nabla F_{X_k}(w_k) - \nabla F(w_k)]\|_2^2] & = \mathbb{E}_{nk}\bigg[tr\bigg((\nabla F(w_k)-\nabla F_{X_k})(\nabla F(w_k)-\nabla F_{X_k})^T\bigg)\bigg] \\
+        & = tr(Cov(\nabla F_{X_k}(w_k))) \\
+        & = tr\bigg(Cov\bigg(\frac{1}{|X_k|}\displaystyle\sum_{i\in X_k}\nabla F_i(w_k)\bigg)\bigg)\\
+        & \leq \frac{1}{|X_k|}tr(Cov(\nabla F_i(w_k))) \\
+        & \leq \frac{v^2}{|X_k|}
+    \end{split}
+\end{equation}
+Donde la última desigualdad se da por \ref{eq:var_acot_grad_subHess}. Sustituyendo en \ref{eq:r-linear5} obtenemos:
+\begin{equation}\label{eq:r-linear7}
+    \begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})- F(w^*)] \leq\bigg(1 -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}\bigg)(F(w_k) - F(w^*))+ \frac{v^2}{2\Upsilon|X_k|}
+    \end{split}
+\end{equation}
+Para concluir la pruba, hacemos inferencia sobre $k$. Recordando la definición de $C = \max\bigg\{F(w_0) - F(w^*), \frac{v^2\Upsilon_\beta}{\mu\mu_\beta}\bigg\}$ tenemos que para el caso $k=0$ la desigualdad $\mathbb{E}[F(w_k) - F(w^*)] \leq C\hat{\rho}^k$ se cumple trivialmente. Ahora supongamos este resultados válido para cierta k. por \ref{eq:r-linear7} tenemos que:
+\begin{equation}\label{eq:r-linear8}
+    \begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})- F(w^*)] & \leq\bigg(1 -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}\bigg)(F(w_k) - F(w^*))+ \frac{v^2}{2\Upsilon|X_k|}\\
+        & \leq \bigg(1 -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}\bigg)C\hat{\rho}^k+ \frac{v^2}{2\Upsilon|X_k|}\\
+        & = C\hat{\rho}^k\bigg(1 -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}+ \frac{v^2}{2C\Upsilon(\hat{\rho}\eta)^k}\bigg)\\
+    \end{split}
+\end{equation}
+Donde la última igualdad surge de recordar que $|X_k|=\eta^k$. Cómo sabemos que $\hat{\rho}^k \geq \frac{1}{\eta^k}$ de \ref{eq:r-linear8} se sigue:
+\begin{equation}\label{eq:r-linear9}
+    \begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})- F(w^*)] & \leq C\hat{\rho}^k\bigg(1 -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}+ \frac{v^2}{2C\Upsilon}\bigg)\\
+    \end{split}
+\end{equation}
+Cómo $C \geq \frac{v^2\Upsilon_\beta}{\mu\mu_\beta}$ obtenemos:
+\begin{equation}\label{eq:r-linear8}
+    \begin{split}
+        \mathbb{E}_{n_k}[F(w_{k+1})- F(w^*)] & \leq C\hat{\rho}^k\bigg(1 -\frac{\mu\mu_\beta}{\Upsilon\Upsilon_\beta}+\frac{\mu\mu_\beta}{2\Upsilon\Upsilon_\beta}\bigg)\\
+         & = C\hat{\rho}^k\bigg(1 -\frac{\mu\mu_\beta}{2\Upsilon\Upsilon_\beta}\bigg)\\
+         & \leq C\hat{\rho}^{k+1}
+    \end{split}
+\end{equation}
+
+
+
+
+\end{proof}
+
+
+
+\subsubsection{Pseudo Newtons}
+
+\textcolor{red}{Después de dar argumentos, a favor de este tipo de metodologías, exponer los supuestos, pseudo código y dar teorema de convergencia de On the use of... (también falta lemma 3.1)}
+
+\textcolor{red}{TEOREMA NOCEDAL CONVERGENCIA GLOBAL ON THE USE OF...}
+
+\textcolor{red}{BYRDII TASA DE CONVERGENCIA}
+
+
+\chapter{Implementación de Dos algoritmos estocásticos de segundo orden}
+
+
+\epigraph{You're going to see speech recognition systems that have human or better-than-human accuracy become commercialized.}{\textit{Tim Tuttle \\ Massachusetts Institute of Technology}}
+
+\newpage
+
+\textcolor{red}{Hablar de implementación, modificaciones que se hicieron a los algoritmos originales y resultados}
+
+
+
+\subsubsection{Implementación y resultados}
+
+\textcolor{red}{IMPLEMENTAR MUESTRAS INCREMENTALES}
+
+\subsubsection{Conclusión}
+
+
+\begin{thebibliography}{9}
+\bibitem{BENNETT} Kristin P. Bennett, Emilio Parrado-Hernández, \emph{The Interplay of Optimization and Machine Learning Research}. Journal of Machine Learning Research, 2007.
+\bibitem{BERNOULLI}Bernoulli, Jakob. \emph{Ars Conjectandi, opus posthumum.} (1795).
+  \bibitem{BOTTOU}Bottou, Léon, Frank E. Curtis, and Jorge Nocedal. \emph{Optimization Methods for Large-Scale Machine Learning}. arXiv preprint arXiv:1606.04838 (2016).
+\bibitem{BOLLAPRAGADA}Bollapragada, Raghu, Richard Byrd, and Jorge Nocedal. \emph{Exact and Inexact Subsampled Newton Methods for Optimization.} arXiv preprint arXiv:1609.08502 (2016).
+\bibitem{BOUSQUET}Bousquet, Olivier, and Léon Bottou. \emph{The tradeoffs of large scale learning}. Advances in neural information processing systems. 2008.
+\bibitem{BYRD} Richard, H. Byrd, Gillian M. Chin, Will Neveitt \& Jorge Nocedal.
+  \emph{On the Use of Stochastic Hessian Information in Optimization Methdos for Machine Learning.} Society of Industrial and Applied Mathematics, 2011.
+\bibitem{BYRD2} Byrd, Richard H., et al. \emph{A stochastic quasi-Newton method for large-scale optimization}. SIAM Journal on Optimization 26.2 (2016): 1008-1031.
+\bibitem{EFRON} Bradly Efron and Carl Morris, \emph{Stein's Paradox in Statistics}. Scientific American, Volume 236, Issue 5.
+\bibitem{ERDOGDU}Erdogdu, Murat A., and Andrea Montanari. "Convergence rates of sub-sampled Newton methods." Advances in Neural Information Processing Systems. 2015.
+\bibitem{HASTIE} Hastie, T.; Tibshirani, R. \& Friedman, J. (2001), \emph{The Elements of Statistical Learning}, Springer New York Inc. , New York, NY, USA .
+\bibitem{MASSART} P. Massart, \emph{The tight constant in the dvoretzky kiefer wolfowitz inequality}. The Annals of Probability, 1990, Vol 18, No 3. pg 1269-1283.
+\bibitem{JUDD}Judd, Stephen. \emph{On the complexity of loading shallow neural networks.} Journal of Complexity 4.3 (1988): 177-192.
+\bibitem{MAYER} Mayer-Schönberger, Viktor, and Kenneth Cukier. \emph{Big data: A revolution that will transform how we live, work, and think}. Houghton Mifflin Harcourt, 2013.
+\bibitem{NOCEDAL} J. Nocedal and S. J. Wright. \emph{Numerical Optimization}, 2nd ed., Springer Ser. Oper. Res., Springer, New York, 2006.
+\bibitem{ROBBINS}H. Robbins and S. Monro,\emph{A  Stochastic  Approximation  Method}, The Annals of Mathe-matical Statistics, 22 (1951), pp. 400-407.
+\bibitem{ROOSTA}Roosta-Khorasani, Farbod, and Michael W. Mahoney. \emph{Sub-sampled Newton methods I: globally convergent algorithms.} arXiv preprint arXiv:1601.04737 (2016).
+\bibitem{SHAI} Shai Shalev-Shwartz, Shai Ben-David. \emph{Understanding Machine Learning, From Theory to Algorithms},Cambridge University Press, New York, 2014.
+\bibitem{STEIN1} Charles Stein. \emph{Inadmissibility of the usual estimator for the mean of a multivariate normal distribution}, Proceedings of the Third Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1956 Vol 1. pp 197-206
+\bibitem{STEIN2} W. James and Charles Stein. \emph{Estimation With Quadratic Loss},  Proceedings of the Fourth Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1961. pp 361-379.
+\bibitem{TORN} Törn, Aimo, Montaz M. Ali, and Sami Viitanen. \emph{Stochastic global optimization: Problem classes and solution techniques}. Journal of Global Optimization 14.4 (1999): 437-447.
+\bibitem{TUKEY} Tukey, J.W., \emph{A survey of sampling from contaminated distributions.} (1960a), Chapter 39 in: \emph{Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling} (ed. I. Olkin et al.), Stanford University Press, Stanford, California, 448-485.
+\bibitem{VALIANT} Valiant, Leslie G. \emph{A theory of the learnable}. Communications of the ACM 27.11 (1984): 1134-1142.
+\bibitem{VAPNIK1} Vladimir N. Vapnik  \emph{Statistical Learning Theory},JOHN WILEY \& SONS, INC., USA, 1998.
+\bibitem{VAPNIK2} Vladimir N. Vapnik  \emph{The Nature of Statistical Learning Theory},Springer, Second Edition, 1999.
+\bibitem{WALLER} Waller, Matthew A., and Stanley E. Fawcett. \emph{Data science, predictive analytics, and big data: a revolution that will transform supply chain design and management}." Journal of Business Logistics 34.2 (2013): 77-84.
+
+\end{thebibliography}
+
+\end{document}
