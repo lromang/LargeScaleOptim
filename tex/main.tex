@@ -22,7 +22,8 @@
 \newtheorem{thm}{Teorema}[section]
 \newtheorem{lem}[thm]{Lema}
 \newtheorem{prop}[thm]{Proposición}
-\newtheorem*{cor}{Corollary}
+\newtheorem{assump}{Supuesto}[thm]
+\newtheorem*{cor}{Corolario}
 \theoremstyle{definition}
 \newtheorem{defn}{Definición}[section]
 \newtheorem{conj}{Conjetura}[section]
@@ -40,8 +41,10 @@
 \usepackage{float}
 \selectlanguage{spanish}
 %Pseudo código
-\usepackage[Algoritmo]{algorithm}
-\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
 %Citas
 \usepackage{cite}
 %Formato especial para ocupar toda la hoja
@@ -65,7 +68,7 @@
 %Texto
 \renewcommand{\baselinestretch}{1.5} 
 \addtolength{\skip\footins}{8mm}
-
+%\usepackage[textwidth=15cm]{geometry}
 %Colores
 \usepackage{xcolor}
 \usepackage{textcomp}
@@ -87,7 +90,7 @@
 \rhead{\rightmark}
 \lhead{Proyecto de Tesis}
 \rfoot{\thepage}
-\usepackage[margin=3cm,headsep=1cm,headheight=2cm]{geometry}
+\usepackage[margin=3.5cm,headsep=1cm,headheight=2cm]{geometry}
 %-------------------------
 \usepackage{fancyvrb}
 \definecolor{listinggray}{gray}{0.95}
@@ -377,7 +380,7 @@ Esta ecuación comprende ahora tres variables que se comprometen mutuamente: El 
 \begin{defn}\label{eq:central_prob}
 \begin{equation*}
 \begin{split}
-\displaystyle\min_{w\in W}\hat{R(h_{w,n})}=\frac{1}{n}\displaystyle\sum_{i=i}^n l(h_{w_i,n},c) &; n\leq n^{*}
+\displaystyle\min_{w\in W}\hat{R}(h_{w,n})=\frac{1}{n}\displaystyle\sum_{i=i}^n l(h_{w_i,n},c) &; n\leq n^{*}
 \end{split}
 \end{equation*}
 
@@ -388,59 +391,276 @@ Esta ecuación comprende ahora tres variables que se comprometen mutuamente: El 
 \epigraph{It’s more important than ever to understand the fundamentals of
 algorithms as well as the demands of the application, so that good
 choices are made in matching algorithms to applications.}{\textit{Stephen Wright \\ University of Wisconsin-Madison}}
-\newpage
+\newpage        
 
 \section{Descenso en gradiente estocástico}
 
-En esta sección nos enfocaremos en analizar métodos que utilizan información incompleta, de ahí la parte estocástica, referente al gradiente de la función que se desea minimizar. De manera general, estos métodos hacen uso de una aproximación local de primer orden para encontrar, de manera iterativa, una dirección de descenso que, bajo ciertos supuestos de regularidad \cite{NOCEDAL}, eventualmente llegará a un mínimo local\footnote{En este trabajo nos enfocaremos en optimización local. Para un recuento extensivo de métodos de optimización global, el lector puede referirse a \cite{TORN}}. Todos estos métodos tienen, en principio, la misma \emph{forma} que el algoritmo propuesto por \cite{ROBBINS}. Por esta razón, al igual que \cite{BOTTOU}, nos referiremos a todos los algorimos expuestos en esta sección y en lo que queda de la tesis como métodos de \emph{Descenso en Gradiente Estocástico (DGE)}. 
+En esta sección nos enfocaremos en analizar métodos que utilizan información incompleta, de ahí la parte estocástica, referente al gradiente de la función que se desea minimizar. De manera general, estos métodos hacen uso de una aproximación local de primer orden para encontrar, de manera iterativa, una dirección de descenso que, bajo ciertos supuestos de regularidad \cite{NOCEDAL}, eventualmente llegará a un mínimo local\footnote{En este trabajo nos enfocaremos en optimización local. Para un recuento extensivo de métodos de optimización global, el lector puede referirse a \cite{TORN}}. Todos estos métodos tienen, en principio, la misma \emph{forma} que el algoritmo propuesto por \cite{ROBBINS}. Por esta razón, al igual que \cite{BOTTOU}, nos referiremos a todos los algorimos expuestos en esta sección y en lo que resta de la tesis como métodos de \emph{Descenso en Gradiente Estocástico (DGE)}. 
 
-Esta sección seguirá muy de cerca las líneas de \cite{BOTTOU} y , con tal de minimizar \ref{eq:central_prob}, el algoritmo de \emph{Descenso en Gradiente Estocástico (DGE)} se define de la siguiente manera:
+Siguiendo entonces las líneas de \cite{BOTTOU}, con tal de minimizar \ref{eq:central_prob}, el algoritmo de \emph{Descenso en Gradiente Estocástico (DGE)} se define de la siguiente manera:
 
-%\begin{algorithm}[H]
-%\caption{DGE}\label{dge}
-%\begin{algorithmic}[1]
-%\Procedure{DGE}{}
-%\State $\textit{w_0} \gets \text{punto inicial}$
-%\BState \emph{top}:
-%\State $j \gets \textit{patlen}$
-%\BState \emph{loop}:
-%\State $j \gets j-1$.
-%\State $i \gets i-1$.
-%\State \textbf{goto} \emph{loop}.
-%\State \textbf{close};
-%\EndProcedure
-%\end{algorithmic}
-%\end{algorithm}
+ \begin{algorithm}
+   \caption{Descenso en Gradiente Estocástico}
+    \begin{algorithmic}[1]
+      \Function{DGE}{$w_0$, $n_0$, $TOL$, $MAX_{dge}$}
+        \While{$k < MAX_{dge}$ \& $\| \nabla g(h_{w_k, n_k}) \| >TOL$}    
+        \State Calcular $\alpha_k > 0$
+        \State $w_{k+1} = w_k - \alpha_kg(w_k, n_k)$
+        \State Generar muestra de tamaño $n_{k+1}$
+        \State Calcular $g(h_{w_{k+1}, n_{k+1}})$
+        \EndWhile
+       \EndFunction
+\end{algorithmic}
+\end{algorithm}
 
-En este análisis, $g(w_k, \zeta_k)$ tiene la siguiente forma:
+En este análisis, $g(w_k, n_k)$ tiene la siguiente forma:
+\[ 
+g(w_k, n_k) = \\
+\begin{cases} 
+      \nabla l(h_{w_k}) \\
+      \frac{1}{n_k}\displaystyle\sum_{i=1}^{n_k}\nabla l(h_{w_k}) \\
+      H_k \frac{1}{n_k}\displaystyle\sum_{i=1}^{n_k}\nabla l(h_{w_k})
+   \end{cases}
+\]
 
-Cómo puede apreciarse fácilmente, esta definición nos da la flexibilidad de optar por un descenso de tipo \emph{batch} u \emph{online}. Nos permite además hacer el análisis de métodos que tomen en cuenta exclusivamente información de primer orden, haciendo $H_k = I_{nxn}$ o que incluyan información de segundo orden. Ya sea de manera exacta, haciendo $H^{-1}_k = \nabla^2_{ww}\hat{R(h_{w,n})}$ obteniendo así la dirección de descenso de Newton o con una aproximación a esta última, utilizando un pseudo Newton.
+Cómo puede apreciarse, esta definición nos da la flexibilidad de optar por un descenso de tipo \emph{batch} o uno  \emph{en línea} dependiendo del tamaño de $n_k$. Además de esto, nos permite hacer el análisis de métodos que tomen en cuenta exclusivamente información de primer orden, haciendo $H_k = I_{nxn}$ o que incluyan información de segundo orden. Ya sea de manera exacta, haciendo $H^{-1}_k = \nabla^2_{ww}l(h_{w_k})$ obteniendo así la dirección de descenso de Newton o con una aproximación a esta última, utilizando un pseudo Newton. Con tal de compreneder las propiedades generales de convergencia de esta familia de métodos y con el fin de hacer este texto lo más autocontenido posible, en lo siguiente se presentaran las pruebas de algunos resultados de \cite{BOTTOU}. A partir de este momento, con el objetivo de simplificar la notación, haremos $F(w_k) = l(h_{w_k})$.
 
-Ahora bien, para llevar a cabo el análisis de la velocidad de convergencia y determinar los compromisos que deben hacerse para seleccionar un método \emph{batch} sobre un \emph{en línea} es necesario hacer dos supuestos adicionales. 
+Previo a estas pruebas, es necesario establecer algunos supuestos sobre el comportamiento general de la función objetivo. 
 
-\subsection{Más allá del primer orden}
+\begin{assump}[Continuidad Lipschitz del gradiente de la función objetivo]\label{assump:lipschitz}
+La función objetivo $F(w):\mathbb{R}^n\rightarrow\mathbb{R}$ es continuamente diferenciable y $\exists L\in\mathbb{R^+}$ tal que el gradiente $\nabla F(w):\mathbb{R}^n\rightarrow\mathbb{R^n}$ cumple la siguiente desigualdad: 
+\begin{equation}
+    \|\nabla F(w)- \nabla F(\hat{w})\|_2 \leq L\|w-\hat{w}\|_2^2; \forall w, \hat{w} \in \mathbb{R^d}
+\end{equation}
+De aquí, usando Taylor se desprende que:
+\begin{equation*}
+    \begin{split}
+    F_w & = F(\hat{w}) + \int_0^1\nabla F(\hat{w} + t(w- \hat{w}))^T(w-\hat{w})dt\\
+    &= F(\hat{w}) + \nabla F(\hat{w})^T(w- \hat{w}) + \int_0^1[\nabla F(\hat{w} + t(w- \hat{w})) - \nabla F(\hat{w})]^T(w-\hat{w})dt\\
+    &\leq F(\hat{w}) + \nabla F(\hat{w})^T(w- \hat{w}) + \int_0^1L|t|\|w - \hat{w}\|_2^2dt\\
+    &= F(\hat{w}) + \nabla F(\hat{w})^T(w- \hat{w}) + \frac{1}{2}L\|w - \hat{w}\|_2^2
+    \end{split}
+\end{equation*}
+\end{assump}
+
+Este supuesto nos garantiza que la variabilidad en el comportamiento del gradiente está acotada por un factor del tamaño de la vecindad en la cual el gradiente es evaluado. En otras palabras, si el gradiente resulta ser un buen estimador del comportamiento de una función en un punto en partiular, este seguirá siendo un buen estimador en una vecindad del mismo. Por tanto direcciones de descenso basadas en el gradiente pueden ser relativamente confiables. 
+
+\begin{lem}\label{lem:markov}
+Bajo el supuesto \ref{assump:lipschitz}, toda iteración de DGE (Algoritmo 1) satisface la siguiente desigualdad:
+\begin{equation}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) \leq -\alpha_k\nabla F(w_{k})^T\mathbb{E}_{n_k}[g(w_{k}, n_{k})]+\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]
+\end{equation}
+\end{lem}
+
+\begin{proof}
+
+Por \ref{assump:lipschitz} sabemos que:
+\begin{equation*}
+    F(w_{k+1}) - F(w) \leq  \nabla F(w_{k})^T(w_{k+1}- w) + \frac{1}{2}L\|w_{k+1} - w\|_2^2
+\end{equation*}
+Por el paso 4 de DGE, esto se convierte en: 
+\begin{equation*}
+    F(w_{k+1}) - F(w) \leq  -\alpha_k\nabla F(w_k)^Tg(w_k, n_k) + \frac{1}{2}\alpha_k^2L\|g(w_k, n_k)\|_2^2
+\end{equation*}
+Tomando el valor esperado sobre $n_k$:
+\begin{equation*}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w) \leq  - \alpha_k\nabla F(w)^T\mathbb{E}_{n_k}[g(w_k, n_k)] + \frac{1}{2}\alpha_k^2L\mathbb{E}_{n_k}[\|g(w_k, n_k)\|_2^2]
+\end{equation*}
+\end{proof}
+
+La relevancia de \ref{lem:markov} radica en el hecho de que nos da una noción de los factores de los cuales dependerá el decremento esperado en la función objetivo. A saber, como cambiará la función en dirección de $g(w_k, n_k)$ y un factor de la variabilidad del mismo vector. Por esto mismo, es necesario agregar supuestos adicionales sobre estas cantidades con tal de garantizar convergencia. 
+
+\begin{assump}[Cotas de primer y segundo orden]\label{assump:primeSec}
+La función objetivo y DGE satisfacen las siguientes propiedades: Sea $U\subset\mathbb{R}^n$ un conjunto abierto:
+\begin{equation}\label{eq:cotInf}
+    F(w_k)\geq F_{inf} > -\infty; \forall w_k \in U;\forall k\in\mathbb{N}
+\end{equation}
+$\exists \mu_G \geq \mu>0; \forall k \in \mathbb{N}$
+\begin{equation}\label{eq:primCot}
+\begin{split}
+    -\nabla F(w_k)^T\mathbb{E}_{n_k}[g(w_k, n_k)] & \leq -\mu\|\nabla F(w_k)\|_2^2 \\
+    \|\mathbb{E}_{n_k}[g(w_k, n_k)]\|_2 & \leq \mu_G\|\nabla F(w_k)\|_2
+\end{split}
+\end{equation}
+$\exists M \geq 0;  M_V\geq0; \forall k \in \mathbb{N}$
+\begin{equation}\label{eq:secCot}
+    \mathbb{V}_{n_k}[g(w_k, n_k)] \leq M + M_V\|\nabla F(w_k)\|_2^2
+\end{equation}
+Juntando \ref{eq:primCot} y \ref{eq:secCot} con la definición de varianza obtenemos que: 
+\begin{equation}\label{eq:secCot1}
+    \begin{split}
+    \mathbb{E}_{n_k}[\|g(w_k, n_k)\|_2^2] & \leq \|\mathbb{E}_{n_k}[g(w_k, n_k)]\|_2^2 + M + M_V\|\nabla F(w_k)\|_2^2\\
+    & \leq \mu_G^2\|\nabla F(w_k)\|_2^2 + M + M_V\|\nabla F(w_k)\|_2^2\\
+    & \leq M + M_G\|\nabla F(w_k)\|_2^2; M_G = M_V + \mu_G^2 \geq \mu >0
+    \end{split}
+\end{equation}
+\end{assump}
+
+Con estos supuestos, a saber podemos probar el siguiente lema. 
+
+\begin{lem}\label{lem:desc}
+Suponiendo \ref{assump:primeSec} y \ref{assump:lipschitz}, entonces las iteraciones de DGE satisfacen lo siguiente: 
+\begin{equation}
+    \begin{split}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) & \leq -\mu\alpha_k\|\nabla F(w_k)\|^2_2 + \frac{1}{2}\alpha_k^2L\mathbb{E}_{n_k}[\|g(w_k, n_k)\|_2^2]\\
+    & \leq -(\mu - \frac{1}{2}\alpha_kLM_G)\alpha_k\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\alpha_k^2LM
+    \end{split}
+\end{equation}
+\end{lem}
+
+\begin{proof}
+Por \ref{lem:markov} tenemos que 
+\begin{equation*}
+      \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) \leq -\alpha_k\nabla F(w_{k})^T\mathbb{E}_{n_k}[g(w_{k}, n_{k})]+\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]
+\end{equation*}
+De la primera desigualdad de \ref{eq:primCot} se sigue que:
+\begin{equation*}
+      \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) \leq -\alpha_k\mu\|\nabla F(w_k)\|_2^2 +\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]
+\end{equation*}
+Que es la primera desigualdad. Luego usando \label{eq:secCot1}: 
+\begin{equation*}
+    \begin{split}
+      \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_{k}) & \leq -\alpha_k\mu\|\nabla F(w_k)\|_2^2 +\frac{1}{2}\alpha^2_kL\mathbb{E}_{n_k}[\|g(w_{k}, n_{k})\|_2^2]\\
+      & \leq  -\alpha_k\mu\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\alpha^2_kLM + \frac{1}{2}\alpha^2_kLM_G\|\nabla F(w_k)\|_2^2\\
+      & = (\frac{1}{2}\alpha_kLM_G-\mu)\alpha_k\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\alpha^2_kLM 
+     \end{split}
+\end{equation*}
+\end{proof}
+
+La relevancia de este lema es que que caracteriza el descenso esperado en una iteración de DGE cómo un proceso de tipo Markov de un paso, ya que el descenso en el tiempo $k+1$ depende exclusivamente del valor del gradiente de la función en el tiempo $k$. Cómo en esta tesis nos enfocaremos en entrenar los parámetros de una regresión logística con regularización, la cual, es una función estríctamente convexa, en lo siguiente nos dedicaremos a probar un teorema de convergencia para este tipo de funciones. 
+
+\begin{assump}[Convexidad Estricta de la función objetivo]\label{assump:convex}
+Dada la función objetivo $F:\mathbb{R}^n\rightarrow\mathbb{R}$ es tal que $\exists c \in \mathbb{R}^+$ que cumple la siguiente desigualdad: 
+\begin{equation}\label{eq:convex}
+    F(\hat{w}) \geq F(w) + \nabla F(w)^T(\hat{w}-w) + \frac{1}{2}c\|\hat{w}-w\|^2_2; \forall \hat{w}, w \in \mathbb{R}^n
+\end{equation}
+Notando que el lado derecho de \ref{eq:convex} puede ser visto como una función cuadrática de $\hat{w}$. Derivando con respecto a $\hat{w}$ e igualando a cero obtenemos que el único mínimo está dado por: 
+\begin{equation*}
+\begin{split}
+    \nabla F(w) + c(w^* - w)  & = 0 \\
+    \rightarrow \quad w^* & = -\frac{1}{c} \nabla F(w) + w
+\end{split}
+\end{equation*}
+Por tanto, sustituyendo en \ref{eq:convex} obtenemos:
+\begin{equation}\label{eq:convex2}
+    \begin{split}
+        F(w^*) & \geq F(w) + \nabla F(w)^T(w^*-w) + \frac{1}{2}c\|w^*-w\|^2_2 \\
+        & = F(w) - \frac{1}{2c}\|\nabla F(w)\|_2^2 \\
+    \end{split}
+\end{equation}
+De aquí se sigue que:
+\begin{equation}
+        2c(F(w)-F(w^*))  \leq  \|\nabla F(w)\|_2^2 
+\end{equation}
+\end{assump}
+
+Estamos ahora en posición de enunciar y probar el teorema que caracteriza la tasa de convergencia del algoritm DGE cuando el paso $\alpha_k$ es fijo en cada iteración. 
+
+\begin{thm}[Tasa de convergencia de DGE con pasos fijos y función objetivo estríctamente convexa]
+Bajo los supuestos \ref{assump:lipschitz}, \ref{assump:primeSec}, \ref{assump:convex} y suponiendo que el algoritmo DGE toma un paso fijo $\alpha_k = \hat{\alpha}\forall k \in N$ de tal manera que el paso cumpla: 
+\begin{equation}\label{eq:paso}
+        0 < \hat{\alpha}\leq\frac{\mu}{L M_G}
+\end{equation}
+Entonces la siguiente desigualdad se cumple $\forall k \in \mathbb{N}$:
+\begin{equation}\label{eq:convergence}
+    \mathbb{E}[F(w_k)- F(w^*)] \leq \frac{\hat{\alpha}LM}{2c\mu} + (1-\hat{\alpha})^{k-1}\Big(F(w_1)-F(w^*)-\frac{\hat{\alpha} LM}{2c\mu}\Big)
+\end{equation}
+\end{thm}
+\begin{proof}
+De la segunda desigualdad de \ref{lem:desc} tenemos que: 
+\begin{equation}\label{theom:ineq1}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) \leq -(\mu - \frac{1}{2}\hat{\alpha}LM_G)\hat{\alpha}\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\hat{\alpha}^2LM
+\end{equation}
+Como $\hat{\alpha}\leq\frac{\mu}{L M_G}\Rightarrow \mu - \frac{1}{2}\hat{\alpha}LM_G \geq \mu - \frac{1}{2}\frac{\mu}{L M_G}LM_G = \frac{\mu}{2}$ sustituyendo en \ref{theom:ineq1}, tenemos que: 
+\begin{equation}\label{theom:ineq2}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) \leq -\frac{\mu}{2}\|\nabla F(w_k)\|_2^2 + \frac{1}{2}\hat{\alpha}^2LM
+\end{equation}
+y aplicando \ref{eq:convex2} se obtiene
+\begin{equation}\label{theom:ineq3}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w_k) \leq -c\hat{\alpha}\mu[F(w_k)-F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM
+\end{equation}
+Restando $F(w^*)$ en ambos lados obtenemos: 
+\begin{equation*}
+\begin{split}
+    \mathbb{E}_{n_k}[F(w_{k+1})] - F(w^*) & \leq [F(w_k)-F(w^*)]-c\hat{\alpha}\mu[ F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM \\
+    & = (1-c\hat{\alpha}\mu)[F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM
+    \end{split}
+\end{equation*}
+Tomando esperanza total: 
+\begin{equation*}
+\begin{split}
+    \mathbb{E}[F(w_{k+1}) - F(w^*)] & \leq
+    (1-c\hat{\alpha}\mu)\mathbb{E}[F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM
+    \end{split}
+\end{equation*}
+Y restando $\frac{\hat{\alpha}LM}{2c\mu}$ de ambos lados
+\begin{equation}\label{theom:compress}
+\begin{split}
+    \Big(\mathbb{E}[F(w_{k+1}) - F(w^*)] - \frac{\hat{\alpha}LM}{2c\mu}\Big) & \leq
+    (1-c\hat{\alpha}\mu)\mathbb{E}[F(w_k) -F(w^*)] + \frac{1}{2}\hat{\alpha}^2LM - \frac{\hat{\alpha}LM}{2c\mu}\\
+    & = (1-c\hat{\alpha}\mu)\mathbb{E}[F(w_k) -F(w^*)] + (1-c\hat{\alpha}\mu)\frac{\hat{\alpha}LM}{2c\mu}\\
+    & = (1-c\hat{\alpha}\mu)\Big(\mathbb{E}[F(w_k) -F(w^*)]-\frac{\hat{\alpha}LM}{2c\mu}\Big)
+    \end{split}
+\end{equation}
+Como puede observarse \ref{theom:compress} es una relación recursiva que después de $k-1$ aplicaciones dará la desigualdad deseada. Ahora, como $\hat{\alpha}\leq\frac{\mu}{L M_G}\Rightarrow \hat{\alpha}c\mu\leq \frac{c\mu^2}{LM_G}\leq\frac{c\mu^2}{L\mu^2}=\frac{c}{L}\leq 1$ pues de \ref{assump:lipschitz} y \ref{assump:convex} sabemos que: 
+\begin{equation*}
+    \begin{split}
+    F(w) - F(w^*) & \leq \nabla F(w^*)^T(w-w^*) + \frac{L}{2}\|w - w^*\|_2^2 \\
+    \& & \\
+    F(w) - F(w^*) & \geq \nabla F(w^*)^T(w-w^*) +  \frac{c}{2}\|w - w^*\|_2^2 \\
+    \Rightarrow & \\
+    \nabla F(w^*)^T(w-w^*) + \frac{c}{2}\|w - w^*\|_2^2 &\leq \nabla F(w^*)^T(w-w^*) + \frac{L}{2}\|w - w^*\|_2^2 \\
+    \Rightarrow & \\
+    c \leq L
+    \end{split}
+\end{equation*}
+Tenemos que \ref{theom:ineq3} es una contracción. Y por tanto: \begin{equation}
+    \displaystyle\lim_{k\rightarrow\infty}\mathbb{E}[F(w_k)- F(w^*)] \leq \frac{\hat{\alpha}LM}{2c\mu} 
+\end{equation}
+\end{proof}
+
+\textcolor{red}{Finalizar con consideraciones de venajas y desventajas de batch size, cómo usar pasos pasados de gradiente para disminuir varianza, BOTTOU}
 
 
-\chapter{Dos algoritmos estocásticos de segundo orden}
+\chapter{Métodos estocásticos de segundo orden}
+
+\newpage
+
+\textcolor{red}{Cómo intro planteamiento y lema Erdogdu}
+
+\subsubsection{Hessiana submuestreada}
+
+\textcolor{red}{Después de dar argumentos, a favor de este tipo de metodologías, exponer los supuestos, pseudo código y dar teorema de convergencia de On the use of... (también falta lemma 3.1)}
+
+Una vez que hemos desarrollado la teoría básica sobre este tipo de algoritmos, hemos expuesto los supuestos básicos y demostrado la convergencia global de los mismos, estamos listos para probar un teorema que nos da las condiciones necesarias para alcanzar convergencia $R-lineal$
+
+%\begin{them}\label{r-linear}
+
+%\end{them}
+
+
+\subsubsection{Pseudo Newtons}
+
+\textcolor{red}{Después de dar argumentos, a favor de este tipo de metodologías, exponer los supuestos, pseudo código y dar teorema de convergencia de On the use of... (también falta lemma 3.1)}
+
+\chapter{Implementación de Dos algoritmos estocásticos de segundo orden}
+
 
 \epigraph{You're going to see speech recognition systems that have human or better-than-human accuracy become commercialized.}{\textit{Tim Tuttle \\ Massachusetts Institute of Technology}}
 
 \newpage
 
-\section{Newton truncado con gradiente conjugado}
+\textcolor{red}{Hablar de implementación, modificaciones que se hicieron a los algoritmos originales y resultados}
 
-\section{SLM-LBFGS}
+\subsubsection{Implementación y resultados}
 
-\chapter{Implementación y resultados}
-
-\chapter{Conclusión}
+\subsubsection{Conclusión}
 
 
 \begin{thebibliography}{9}
 \bibitem{BENNETT} Kristin P. Bennett, Emilio Parrado-Hernández, \emph{The Interplay of Optimization and Machine Learning Research}. Journal of Machine Learning Research, 2007.
 \bibitem{BERNOULLI}Bernoulli, Jakob. \emph{Ars Conjectandi, opus posthumum.} (1795).
-\bibitem{BOTTOU}Bottou, Léon, Frank E. Curtis, and Jorge Nocedal. \emph{Optimization Methods for Large-Scale Machine Learning}. arXiv preprint arXiv:1606.04838 (2016).
-  \bibitem{BOTTOU2}Bottou, Léon. \emph{Large-scale machine learning with stochastic gradient descent}. Proceedings of COMPSTAT'2010. Physica-Verlag HD, 2010. 177-186.
+  \bibitem{BOTTOU}Bottou, Léon, Frank E. Curtis, and Jorge Nocedal. \emph{Optimization Methods for Large-Scale Machine Learning}. arXiv preprint arXiv:1606.04838 (2016).
 \bibitem{BOUSQUET}Bousquet, Olivier, and Léon Bottou. \emph{The tradeoffs of large scale learning}. Advances in neural information processing systems. 2008.
 \bibitem{BYRD} Richard, H. Byrd, Gillian M. Chin, Will Neveitt \& Jorge Nocedal.
   \emph{On the Use of Stochastic Hessian Information in Optimization Methdos for Machine Learning.} Society of Industrial and Applied Mathematics, 2011.
@@ -450,6 +670,7 @@ Ahora bien, para llevar a cabo el análisis de la velocidad de convergencia y de
 \bibitem{JUDD}Judd, Stephen. \emph{On the complexity of loading shallow neural networks.} Journal of Complexity 4.3 (1988): 177-192.
 \bibitem{MAYER} Mayer-Schönberger, Viktor, and Kenneth Cukier. \emph{Big data: A revolution that will transform how we live, work, and think}. Houghton Mifflin Harcourt, 2013.
 \bibitem{NOCEDAL} J. Nocedal and S. J. Wright. \emph{Numerical Optimization}, 2nd ed., Springer Ser. Oper. Res., Springer, New York, 2006.
+\bibitem{ROBBINS}H. Robbins and S. Monro,\emph{A  Stochastic  Approximation  Method}, The Annals of Mathe-matical Statistics, 22 (1951), pp. 400-407.
 \bibitem{SHAI} Shai Shalev-Shwartz, Shai Ben-David. \emph{Understanding Machine Learning, From Theory to Algorithms},Cambridge University Press, New York, 2014.
 \bibitem{STEIN1} Charles Stein. \emph{Inadmissibility of the usual estimator for the mean of a multivariate normal distribution}, Proceedings of the Third Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1956 Vol 1. pp 197-206
 \bibitem{STEIN2} W. James and Charles Stein. \emph{Estimation With Quadratic Loss},  Proceedings of the Fourth Berkley Symposium on Mathematical Statistics and Probability, Berkley and Los Angeles, University of California Press 1961. pp 361-379.
