@@ -35,11 +35,11 @@ int main(){
     // Size of point.
     length  = 100;
     // Print results easy.
-    optim_point_N = NGC(test_func1, length, 10, 1e-2, verbose, 100, 1, .0001);
+    optim_point_N = NGC(test_func1, length, 10, 1e-1, verbose, 100, 1, .0001);
     imprimeTit("Problem 1 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Print results hard.
-    optim_point_N = NGC(test_func2, length, 10, 1e-2, verbose, 100, 1, .0001);
+    optim_point_N = NGC(test_func2, length, 10, 1e-1, verbose, 100, 1, .0001);
     imprimeTit("Problem 2 minimum (NCG):");
     imprimeMatriz(optim_point_N, 1, length);
     // Print result easy.
