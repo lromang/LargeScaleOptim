@@ -37,12 +37,25 @@ if(toPrint != "all"){
     files <- files[tolower(files) == tolower(toPrint)]
 }
 
+## -----------------------
 ## List all subfiels
+## -----------------------
 all_files <- llply(files,
                   function(t) t <- list.files(paste0("../tests/", t)))
 all_files <- llply(all_files, function(t) t <- t[!str_detect(t, ".txt")])
 
+## -----------------------
+## Adhoc tunning
+## -----------------------
+
+### SLM VARYING CG
+all_files[[2]] <- all_files[[2]][c(5,  6, 7, 8)]
+all_files[[1]] <- all_files[[1]][1]
+
+
+## -----------------------
 ## All data
+## -----------------------
 all_data <- c()
 for(i in 1:length(files)){
     for(j in 1:length(all_files[[i]])){
@@ -67,15 +80,41 @@ ggplot(data = all_data,
        aes(x = data_points,
            y = precision,
            col = as.factor(params))) +
-    geom_point() +
+    geom_point(size = 3, alpha = .5) +
     geom_line(data = all_data,
               aes(x = data_points,
                   y = precision,
-                  col = as.factor(params))) +
+                  col = as.factor(params)),
+              alpha = .3) +
     xlim(0, x_lim) +
-    theme(panel.background = element_blank())
+    theme(panel.background = element_blank(),
+          legend.title = element_text(colour = "#424242", face = "bold"),
+          axis.title = element_text(colour = "#424242", face = "bold", size = 10),
+          axis.text  = element_text(colour = "#424242", face = "bold", size = 7)) +
+#    scale_colour_discrete(name   = "L-BFGS",
+#                          labels = c("T = 2",
+#                                     "T = 5",
+#                                     "T = 15",
+#                                     "T = 20"))+
 
+#    scale_colour_discrete(name   = "Newton Truncado con Gradiente Conjugado y \nHessiana Submuestreada",
+#                          labels = c("LBFGS  | T = 2",
+#                                     "CG = 20 | SGI = 0 | SGM = 0 | Muestra = 10% ",
+#                                     "CG = 20 | SGI = 0 | SGM = 0 | Muestra = 100% ",
+#                                     "CG = 20 | SGI = 0 | SGM = 0 | Muestra = 20%  ",
+#                                     "CG = 20 | SGI = 0 | SGM = 0 | Muestra = 80% "))+
+   scale_colour_discrete(name   = "L-BFGS Estocásticamente inicializado y LBFGS",
+                          labels = c("LBFGS  | T = 2",
+                                     "SLM | CG = 2 | T = 2 | Muestra = 100% ",
+                                     "SLM | CG = 2 | T = 5 | Muestra = 10%  ",
+                                     "SLM | CG = 2 | T = 5 | Muestra = 50%  ",
+                                     "SLM | CG = 5 | T = 2 | Muestra = 100%  "))+
+    xlab("Puntos Explorados") + ylab("Precisión")
+
+toPrint <- "NewtonSGVaryingSampleLBFG"
+toPrint <- "LBFGSVaryingMemory"
+toPrint <- "SLMVaryingAllLBFG"
 ## -----------------------
 ## Save plot
 ## -----------------------
-ggsave(paste0("../graphs/", toPrint, "_plot.png"), width = 10)
+ggsave(paste0("../graphs/final_graphs/", toPrint, "_plot.png"), width = 10)
