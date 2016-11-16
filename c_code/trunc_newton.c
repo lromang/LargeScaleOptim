@@ -161,6 +161,9 @@ double* NGC(double (*func)(double*, int), int nRow,
     // Stochastic mode.
     if(stocMode && k){
       printf("\nRUNNING STOCASTIC MODE\n");
+      if(increaingSamp){
+        sampProp = sampProp*sizeIncrease;
+      }
       SAMPLE = rand() % (int)(MAX_FILE_ROWS * sampProp);
       create_sample(verbose);
       exploredDataPoints += SAMPLE;

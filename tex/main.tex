@@ -34,6 +34,8 @@
 % Otros paquetes para notación matemática
 \usepackage{mathtools}
 \usepackage{amssymb}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
 %Tablas de color
 \usepackage[table]{xcolor}
 %Secciones con otra estructura aparte de la
@@ -66,8 +68,8 @@
 \usepackage{subcaption}
 \usepackage{multirow}
 %Texto
-\renewcommand{\baselinestretch}{1.5}
-\addtolength{\skip\footins}{8mm}
+\renewcommand{\baselinestretch}{1.2}
+\addtolength{\skip\footins}{5mm}
 %\usepackage[textwidth=15cm]{geometry}
 %Colores
 \usepackage{xcolor}
@@ -127,7 +129,7 @@
     framesep=5pt,
     framerule=0pt,
 }
-
+\usepackage{enumitem}
 \newcommand{\eqdef}{\overset{\mathrm{def}}{=\joinrel=}}
 
 \addto\captionsspanish{% Replace "english" with the language you use
@@ -383,8 +385,9 @@ Esta ecuación comprende ahora tres variables que se comprometen mutuamente: El 
 \displaystyle\min_{w\in W}\hat{R}(h_{w,n})=\frac{1}{n}\displaystyle\sum_{i=i}^n l(h_{w_i,n},c) &; n\leq n^{*}
 \end{split}
 \end{equation*}
-
 \end{defn}
+
+\textcolor{red}{ULTIMAS NOTAS Y DESCRIBIR ESTRUCTURA DE LA TESIS}
 
 \chapter{Optimización estocástica}
 
@@ -414,6 +417,7 @@ Siguiendo entonces las líneas de \cite{BOTTOU}, con tal de minimizar \ref{eq:ce
 \end{algorithm}
 
 En este análisis, $g(w_k, n_k)$ tiene la siguiente forma:
+
 \[
 g(w_k, n_k) = \\
 \begin{cases}
@@ -624,48 +628,54 @@ Tenemos que \ref{theom:ineq3} es una contracción. Y por tanto: \begin{equation}
 
 \chapter{Métodos estocásticos de segundo orden}
 
+\epigraph{It is well known within the optimization community that gradient descent is unsuitable for optimizing objectives that exhibit pathological curvature}{\textit{James Martens} \\ University of Toronto}
+
+
 \newpage
 
-\textcolor{red}{Cómo intro planteamiento y lema Erdogdu}
+\textcolor{red}{Dar pequeña intro utilizando BYRD y comenzar a describir ambos métodos}
 
-A lo largo de esta sección, siguiendo los pasos de \cite{BYRD}, \cite{ROOSTA} y particularmente \cite{BOLLAPRAGADA}, denotaremos $A\preceq B$ para significar que $B-A$ es simétrica positiva definida con $A,B \in \mathbb{R}{n\times n}$. Además, supondremos lo siguiente:
+\subsection{Hessiana submuestreada}
 
-\begin{assump}\label{assump:compHess} Supuestos de regularidad para garantizar convergencia $R-lineal$
-\begin{enumerate}
-\item \textbf{Acotamiento de los valores propios de la Hessiana} La función F es doblemente diferenciable y cumple que $\forall\beta\in\mathbb{R}^+$ y $\forall S\subset\mathbb{N}$ tal que $|S| = \beta$, $\exists \mu_\beta, \Upsilon_\beta$ tal que:
+\textcolor{red}{INTRODUCIR ESTA SECCIÓN}
+
+En esta sección nos enfocaremos en algoritmos de la familia DGE en donde $g(w_k, n_k)=\nabla^2F_{S_k}(w_K)\nabla F_{X_k}(w_k)$ con $|S_k| < |X_k| < n$ son muestras tomadas uniformemente y de manera independiente de las observaciones. De esta manera, cada iteración tiene la siguiente forma:
+\begin{equation}\label{eq:gen_hess_alg}
+    w_{k+1} = w_k - \alpha_k\nabla^2F_{S_k}(w_K)\nabla F_{X_k}(w_k)
+\end{equation}
+Además, supondremos lo siguiente:
+\begin{assump}\label{assump:compHess} \textbf{Supuestos de regularidad para garantizar convergencia} $R-lineal$ A lo largo de esta sección, siguiendo los pasos de \cite{BYRD}, \cite{ROOSTA} y particularmente \cite{BOLLAPRAGADA}, denotaremos $A\preceq B$ para significar que $B-A$ es simétrica positiva definida con $A,B \in \mathbb{R}^{n\times n}$. \\
+\textbf{1. Acotamiento de los valores propios de la Hessiana} La función F es doblemente diferenciable y cumple que $\forall\beta\in\mathbb{R}^+$ y $\forall S\subset\mathbb{N}$ tal que $|S| = \beta$, $\exists \mu_\beta, \Upsilon_\beta$ tal que:
 \begin{equation}\label{eq:pos_def_subHess}
     \mu_\beta\mathbb{I}\preceq\nabla^2 F_S(w)\preceq \Upsilon_\beta\mathbb{I};\quad \forall w\in \mathbb{R}^n
 \end{equation}
-Más aún, existen $\hat{\mu}, \hat{\L}$ tal que $0 < \hat{\mu} \leq \mu_\beta$ y $\Upsilon_\beta \leq \hat{L} < \infty$
+Más aún, existen $\hat{\mu}, \hat{\Upsilon}$ tal que $0 < \hat{\mu} \leq \mu_\beta$ y $\Upsilon_\beta \leq \hat{\Upsilon} < \infty$
 El valor própio más pequeño y más grande de $F$ se denominarán  $\mu$ y $\Upsilon$ respectivamente. Porsupuesto, se cumple que:
 \begin{equation}\label{eq:pos_def_hess}
     \mu\mathbb{I}\preceq\nabla^2 F_S(w)\preceq \Upsilon\mathbb{I};\quad \forall w\in \mathbb{R}^n
 \end{equation}
-\item \textbf{Varianza acotada de los gradientes muestreados}
+\textbf{2. Varianza acotada de los gradientes muestreados}
 $\exists v\in \mathbb{R}$ tal que:
 \begin{equation}\label{eq:var_acot_grad_subHess}
 tr(Cov(\nabla F_i(w))) \leq v^2; \quad \forall w\in \mathbb{R}^n
 \end{equation}
 Donde $tr()$ es el operador traza y $Cov()$ es la covarianza.
-\item \textbf{Continuidad Lipschitz de la Hessiana}
+\\\textbf{3. Continuidad Lipschitz de la Hessiana}
 $\exists M > 0$ tal que:
 \begin{equation}\label{eq:lip_hess_subHess}
     \|\nabla^2 F(w) - \nabla^2 F(z)\|_2\footnote{Cuando hablemos de la norma de una matriz, a menos de que se indique lo contrario, nos estaremos refiriendo a la norma inducida por la norma 2, a saber, dada $A\in\mathbb{R}^{n\times n}$ tenemos que \begin{equation*}
         \|A\| = \displaystyle\max_{x\in \mathbb{R}^n}\|Ax\|_2 = \sqrt{\lambda_{max}}
     \end{equation*} donde $\lambda_{max}$ es el máximo real $\lambda$ tal que $A*A - \lambda \mathbb{I}$ es singular.}. \leq M\|w-z\|_2; \quad \forall w, z \in \mathbb{R}^n
 \end{equation}
-\item \textbf{Varianza acotada de los componentes de la Hessiana}
+\textbf{4. Varianza acotada de los componentes de la Hessiana}
 $\exists \sigma$ tal que para todos los componentes de la Hessiana, se cumple que:
 \begin{equation}\label{eq:var_acot_subHess}
 \|\mathbb{E}[(\nabla^2 F_i(w) - \nabla^2 F_i(w))^2]\|_2\leq\sigma^2; \quad \forall w\in \mathbb{R}^d
 \end{equation}
-\end{enumerate}
 \end{assump}
-
 Con estos supuestos estamos listos para probar un teorema debido a \cite{ERDOGDU} que garantiza que los métodos con este tipo de corrección de segundo orden pueden obtener en probabilidada convergencia cuadrática para puntos suficientemente cercanos al óptimo.
-
 \begin{thm}\label{thm:quad_conv}
-Suponiendo en adición a \ref{eq:pos_def_subHess}, \ref{eq:lip_hess_subHess} que el espacio de parámetros $C$ es convexo, y $S_t\subset\mathbb{N}$ es tomada de manera uniforme sobre todas las observaciones y donde cada muestra $t_i$ es independiente de una muestra $t_j$ cuando $i\neq j$. Entonces para cualquier constante $c>0$ con probabilidad al menos $1-\frac{2}{p}$ las iteraciones de la forma \textcolor{red}{HACER REFERNCIA FORMA GENERAL DE ITERACIONES CUADRÁTICAS} cumplirán:
+Suponiendo en adición a \ref{eq:pos_def_subHess}, \ref{eq:lip_hess_subHess} que el espacio de parámetros $C$ es convexo, y $S_t\subset\mathbb{N}$ es tomada de manera uniforme sobre todas las observaciones y donde cada muestra $t_i$ es independiente de una muestra $t_j$ cuando $i\neq j$. Entonces para cualquier constante $c>0$ con probabilidad al menos $1-\frac{2}{p}$ las iteraciones de la forma \ref{eq:gen_hess_alg} cumplirán:
 \begin{equation}
     \|w_{t+1} - w^*\|_2 \leq \xi_1^t\|w_{t} - w^*\|_2 + \xi_2^t\|w_t - w^*\|_2^2
 \end{equation}
@@ -676,17 +686,9 @@ Donde
 \end{split}
 \end{equation*}
 \end{thm}
-
-\subsubsection{Hessiana submuestreada}
-
-\textcolor{red}{TEOREMA NOCEDAL ON THE USE OF...}
-
-\textcolor{red}{Después de dar argumentos, a favor de este tipo de metodologías, exponer los supuestos, pseudo código y dar teorema de convergencia de On the use of... (también falta lemma 3.1)}
-
 Una vez que hemos expuesto los supuestos básicos, analizado los pros y contras sobre este tipo de algoritmos y demostrado la convergencia global de los mismos, estamos listos para probar un teorema debido a \cite{ROOSTA} que nos da las condiciones necesarias para alcanzar convergencia $R-lineal$ bajo un esquema de submuestra constante de la hessiana.
-
 \begin{thm}\label{r-linear}
-Suponiendo \ref{eq:pos_def_subHess} y \ref{eq:var_acot_grad_subHess}. Sean $\{w_k\}$ las iteraciones generadas por \textcolor{red}{HACER REFERNCIA FORMA GENERAL DE ITERACIONES CUADRÁTICAS} con cualquier elección de $w_0$. Si $\|X_k\|  = \eta^k$ para alguna $\eta > 1$ y $|S_k| = \beta\geq 1$ es constante, entonces, si el tamaño del paso $\alpha_k = \alpha = \frac{\mu_\beta}{L}$ tenemos que:
+Suponiendo \ref{eq:pos_def_subHess} y \ref{eq:var_acot_grad_subHess}. Sean $\{w_k\}$ las iteraciones generadas por \ref{eq:gen_hess_alg} con cualquier elección de $w_0$. Si $\|X_k\|  = \eta^k$ para alguna $\eta > 1$ y $|S_k| = \beta\geq 1$ es constante, entonces, si el tamaño del paso $\alpha_k = \alpha = \frac{\mu_\beta}{L}$ tenemos que:
 \begin{equation}\label{eq:r-linear}
     \mathbb{E}[F(w_k) - F(w^*)] \leq C\hat{\rho}^k
 \end{equation}
@@ -807,42 +809,266 @@ Cómo $C \geq \frac{v^2\Upsilon_\beta}{\mu\mu_\beta}$ obtenemos:
          & \leq C\hat{\rho}^{k+1}
     \end{split}
 \end{equation}
+\end{proof}
+Ahora bien, después de ver este teorema uno puede preguntarse is existen mejores tasas de convergencia si se hace una selección inteligente del tamaño del paso $\alpha$ y del tamaño de muestra con la que se estima la Hessiana. La respuesta es que si lo hay, \cite{ROOSTA} dio condiciones suficientes para garantizar convergencia superlineal. Sin embargo, es necesario hacer un supuesto adicional.
+\begin{assump}\label{assump:acot_moment}
+$\exists \gamma >0 $ tal que para cualquier iteración $w_k$ generada por \ref{eq:gen_hess_alg} se tiene que:
+\begin{equation*}
+    \mathbb{E}[\|w_k - w^*\|_2^2]\leq\gamma(\mathbb{E}[\|w_k - w^*\|_2])^2
+\end{equation*}
+\end{assump}
+Estamos ahora en posición de enunciar dos teoremas cuya prueba puede encontrarse en \cite{ROOSTA}. El primero, nos da condiciones suficientes bajo las cuales algoritmos de la forma \ref{eq:gen_hess_alg} alcanzan convergencia superlineal. El segundo, de fundamental importancia para este trabajo ya que es el algoritmo que se implementará, caracteríza la tasa de convergencia cuando se utilizan iteraciones de gradiente conjugado\cite{NOCEDAL} para aproximar la dirección de descenso, por su relevancia, este algoritmo se enunciará en la siguiente sección.
+\begin{thm}
+Sea $\{w_k\}$ una secuencia generada por \ref{eq:gen_hess_alg} con tamaño de paso $\alpha_k= \alpha = 1$. Suponiendo \ref{eq:var_acot_subHess}, \ref{eq:lip_hess_subHess}, \ref{eq:var_acot_grad_subHess}, \ref{eq:pos_def_subHess} y \ref{assump:acot_moment}. Y si $\forall k \in \mathbb{N}$ se cumple que:
+\begin{enumerate}[topsep=0pt,partopsep=0ex,parsep=0ex]
+\item $|X_k| \geq |X_0|\eta_k^k;\quad |X_0|\geq\bigg(\frac{6v\gamma M}{\hat{\mu}^2}\bigg), \eta_k > \eta_{k-1}, \eta_k \rightarrow\infty, \eta_1>1$
+\item $|S_k| > |S_{k-1}|;\quad \displaystyle\lim_{k\rightarrow\infty}|S_k|=\infty; \quad |S_0|\geq\bigg(\frac{4\sigma}{\hat{\mu}}\bigg)^2$
+\end{enumerate}
+Entonces si el punto incial $w_0$ satisface que:
+\begin{equation*}
+    \|w_0-w^*\|\leq\frac{\hat{\mu}}{3\gamma M}
+\end{equation*}
+Se tiene que $\exists \{\tau_k\};\tau_k\in\mathbb{R}^+$ tal que $\displaystyle\lim_{k\rightarrow\infty}\frac{\tau_{k+1}}{\tau_k}\rightarrow 0$ y
+\begin{equation}
+    \mathbb{E}[|w_k - w^*|]\leq\tau_k
+\end{equation}
+\end{thm}
+Como puede observarse, este teorema arroja mucha luz sobre los distintos retos y factores a tomar en cuenta cuando se implementan algoritmos del tipo \ref{eq:gen_hess_alg}. Por ejemplo, es inmediatamente claro que es más crítico tener una buena aproximación del gradiente que de la Hessiana, esto puede apreciarse desde el resultado pasado en donde incluso el tamaño de muestra para aproximar a la Hessiana podía permancer constante. Otro factor que pudiera resultar preocupante, es que, dependiendo del problema, por ejemplo en caso de que el factor de continuidad del gradiente sea demasiado grande o que exista demasidada variabilidad en las iteraciones, el punto inicial requiera estar demasiado cerca del óptimo. Esto puede solventarse, usando un par de iteraciones de descenso en gradiente estocástico de primer orden \cite{BOTTOU} para aproximarse al óptimo.
 
+A pesar de que estos algoritmos exhiben un buen comportamiento y se pueden alcanzar garantías de tasa de convergencia superlineales, cuando los tamaños de muestra son demasiado grandes, el costo de calcular la dirección de descenso de manera exacta se vuelve prohibitivo. Con tal de solventar este problema, han surgido varias metodoglogías que buscan aproximar la dirección de descenso a un menor costo, entre las más prometedoras se encuentran:
+\begin{itemize}[topsep=0pt,partopsep=0ex,parsep=0ex]
+\item\textbf{\emph{LiSSA}\cite{AGARWAL}} Que utiliza una aproximación de Taylor para la inversa de la Hessiana y garantiza que la k-ésima iteración está a en una $\epsilon$-vecindad del óptimo $F(w_k)\leq \displaystyle\min_{w^*} F(w^*) + \epsilon$  en  un tiempo $O\bigg((|S|+(\frac{\hat{\Upsilon}}{\hat{\mu}})^2\frac{\hat{\Upsilon}}{\mu})d\log(\frac{1}{\epsilon})\bigg)$ con $|S|$ el tamaño de la muestra, d la dimensión de cada observación y $\Upsilon,\mu,\sigma^2$ como en \ref{eq:var_acot_subHess}, \ref{eq:lip_hess_subHess}, \ref{eq:var_acot_grad_subHess}, \ref{eq:pos_def_subHess}.
 
+\item\textbf{\emph{Newton Sketch}\cite{PILANCI}}  Utiliza aproximaciones a la Hessiana por medio de proyecciones aleatorias basadas en la transofmada de Hadamard. El tiempo que les toma llegar a una $\epsilon$-vecindad del óptimo está dado por $O\bigg((|S|+((\frac{\Upsilon}{\mu})^4d^2)d\log(\frac{1}{\epsilon})\bigg)$
 
+\item \textbf{\emph{Newton-CG}\cite{BYRD}} En este esquema, la solución a la ecuación $\nabla^2_F{S_k}p_k=\nabla F_{X_k}$ se aproxima por medio iteraciones de gradiente conjugado\cite{NOCEDAL}. \cite{BOLLAPRAGADA} demostró que el tiempo que le toma a este algoritmo llegar a una $\epsilon$-vecindad del óptimo es de orden $O\bigg((|S|+(\frac{\hat{\Upsilon}}{\hat{\mu}})^2\sqrt{\frac{\hat{\Upsilon}}{\hat{\mu}}})d\log(\frac{1}{\epsilon})\bigg)$
+\end{itemize}
+Puesto que \cite{BOLLAPRAGADA} mostró que \emph{Newton-CG} poseía ventajas empíricas interesantes, este algoritmo será el foco principal de la siguiente sección.
+\subsubsection{Newton Truncado con Gradiente Conjugado}
+Como se explicó en la sección pasada, en esta subsección profundizaremos en algoritmos que tienen la misma forma que \ref{eq:gen_hess_alg} pero cuya dirección de descenso $p_k = -\nabla^2F_{S_k}^{-1}\nabla F_{X_k}$ no se calcula de manera exacta, si no, a través de iteraciones de Gradiente Conjugado (GC)\cite{NOCEDAL}. Para facilitar el análisis y para que este texto sea lo más autocontenido posible, a continuación se detalla el pseudocódigo de este algoritmo\cite{BYRD}:
 
+ \begin{algorithm}[H]
+   \caption{Newton truncado con Gradiente Conjugado y Hessiana submuestreada}
+    \begin{algorithmic}[2]
+      \Function{SNewton}{$w_0, \eta, \sigma\in(0,1), max_{cg}, TOL$ y $X_0, S_0$ tal que $|X_0|>|S_0|>0$}
+        \While{$\| \nabla F_{X_k}(w_k) \|_2 >TOL$}
+        \State Calcular $\nabla F_{X_k}(w_k), F_{X_k}(w_k)$
+        \While{$\|\nabla^2_F{S_k}p_k+\nabla F{X_k}\|_2 \leq \sigma\|\nabla F_{X_k}\|$}
+        \State Por medio de GC calcular $\nabla^2_F{S_k}p_k=-\nabla F_{X_k}$
+        \EndWhile
+        \State Actualizar $w_{k+1}=w_k + \alpha_kp_k$
+        \State Donde  $\alpha_k = \displaystyle\argmax_{\alpha\in\{1,\frac{1}{2},\frac{1}{4}\dots\}}\{F_{X_k}(w_{k+1})\leq F_{X_k}(w_k)\nabla F_{X_k}(w_k)^Tp_k\}$
+        \State Obtener $X_{k+1}, S_{k+1}$ tal que $|X_{k+1}|>|S_{k+1}|>0$
+        \EndWhile
+       \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Como se vio más arriba, este algoritmo es lo suficientemente general como para permitirnos hacer varias modificaciones. Por ejemplo, con tal de garantizar convergencia superlineal, es necesario hacer que el tamaño de las muestras vaya aumentando iteración con iteración. Del mismo modo, \cite{BOTTOU} recomienda utilizar decenso en gradiente estocástico de primer orden para encontrar un mejor punto $w_0$. Otra importante ventaja, de este planteamiento es que se puede escoger el tamaño de muestra y el número de iteraciones de gradiente conjugado de tal manera que la complejidad que se requiere para hacer una evaluación del gradiente $\nabla F_{X_k}$, $g_{costo}$, de un producto entre un vector y la Hessiana $factor\times g_{costo}$ y el número de iteraciones de GC $max_{cg}$ se contrarresten mutuamente y tengamos una complejidad de la forma:
+\begin{equation*}
+    max_{cg}\times factor \times g_{costo} \approx g_{costo}
+\end{equation*}
+Con respecto a este algoritmo, el primero en probar convergencia global bajo los supuestos \ref{eq:var_acot_subHess}, \ref{eq:lip_hess_subHess}, \ref{eq:var_acot_grad_subHess}, \ref{eq:pos_def_subHess}, \ref{assump:convex} fue \cite{BYRD}.
+\begin{thm}\label{thm:globalConvNewton}
+Dada $F:\mathbb{R}^n\rightarrow\mathbb{R}$ doblemente continuamente diferenciable, uniformemente convexa y $\nabla^2F_{S_k}$ positiva definida para toda $S_k$. Entonces la secuencia de iteraciones generada por SNewton con $|X_k|=D$ cumple que:
+\begin{equation}
+    \displaystyle\lim_{k\rightarrow\infty}\nabla F_{D}(w_k) = 0
+\end{equation}
+\end{thm}
+Finalmente bajo las mismas hipótesis, con la adición de \ref{assump:acot_moment}  \cite{BOLLAPRAGADA} dio condiciones suficientes para garantizar convergencia lineal de SNewton:
+\begin{thm}
+Suponiendo \ref{eq:var_acot_subHess}, \ref{eq:lip_hess_subHess}, \ref{eq:var_acot_grad_subHess}, \ref{eq:pos_def_subHess} y \ref{assump:acot_moment}. Sea $\{w_k\}$ una sucesión generada por el algoritmo SNewton con:
+\begin{equation}
+    \|S_k\| = \beta \geq \frac{64\sigma^2}{\hat{\mu}^2}
+\end{equation}
+y suponiendo que que el número de iteraciones de GC satisfacen que:
+\begin{equation*}
+    r \geq \frac{\log\bigg(\frac{16\Upsilon}{\mu_\beta}\sqrt{\frac{\Upsilon_\beta}{\mu_\beta}}\bigg)}{\log\Bigg(\frac{\sqrt{\frac{\Upsilon_\beta}{\mu_\beta} + 1}}{\sqrt{\frac{\Upsilon_\beta}{\mu_\beta} - 1}}\Bigg)}
+\end{equation*}
+Entonces si $\|w_0 - w^*\|\leq\displaystyle\min\Bigg\{\frac{1}{4\frac{M}{2\mu_\beta}},\frac{1}{4\gamma\frac{M}{2\mu_\beta}}\Bigg\}$ tenemos que:
+\begin{equation}
+    \mathbb{E}[\|w_{k+1} - w^*\|_2] \leq \frac{1}{2}\mathbb{E}[\|w_{k} - w^*\|]
+\end{equation}
+
+\end{thm}
+
+Con este teorema finalizamos el estudio teórico de esta familia de algoritmos estocásticos de segundo orden. En lo subsecuente, analizaremos otra familia de métodos que estiman las influencias de segundo orden por medio de soluciones iterativas de sistemas de ecuaciones que contienen información de curvatura.
+
+\subsection{Pseudo Newtons}
+
+En esta sección, nos enfocamos en el estudio de algoritmos de la familia DGE en los cuales $g(w_k, n_k)=H_K\nabla F(w_k)$ de tal manera que cada $w_k$ en la iteración tiene la forma:
+\begin{equation}\label{eq:gen_pseudo_newt}
+    w_{k+1} = w_k - \alpha_k H_{S_k} \nabla F_{|X_k|}
+\end{equation}
+
+A diferencia de los métodos anteriores, este tipo de algoritmos no busca estimar a la hessiana directamente, si no por medio de aproximaciones de bajo rango busca capturar suficiente información sobre la curvatura de la función a cada iteración.
+
+\textcolor{red}{Dar resultados importantes sobre este tipo de algoritmos | Describir LBFGS}
+
+\subsubsection{SLM}
+
+Una variante de los métodos anteriores, se puede construir al calcular la dirección $q$ al resolver el sistema $H_k^0q = r$ por medio de GC. El pseudocódigo para este algoritmo es el siguiente\cite{BYRD}:
+
+ \begin{algorithm}[H]
+   \caption{Recursión de dos pasos}
+    \begin{algorithmic}[3]
+      \Function{2Rec}{$k$}
+      \State $q\gets \nabla F_{X_k}(w_k)$
+        \For{$i = k-1, k-2.\dots, k-t$}
+        \State $\alpha_i\gets\rho_is_i^Tq$
+        \State $q\gets q- \alpha_iy_i$
+        \EndFor
+        \State Resolver por GC $H_kr=q$
+        \For{$i = k -t, k-t +1, \dots, k-1$}
+        \State $\beta\gets\rho_i y_i^Tr$
+        \State $r\gets r + s_i(\alpha_i - \beta)$
+        \EndFor
+               \State \Return $r=H_k\nabla F_{X_k}(w_k)$
+       \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+   \caption{SLM: Memoria limitada BFGS estocástico}
+    \begin{algorithmic}[4]
+      \Function{SLM}{$w_0,0<c_1<c_2<1, max_{cg}, TOL$ y $X_0, S_0$ tal que $|X_0|>|S_0|>0$}
+      \State Evaluar $F_{X_0}(w_0), \nabla F_{X_0}(w_0)$
+      \State $p_0\gets -\nabla F_{X_0}(w_0)$
+        \While{$\| \nabla F_{X_k}(w_k) \|_2 >TOL$}
+            \State guardar $w_k$ y $ \nabla F_{X_k}(w_k)$
+            \State obtener $\alpha_k$ que satisfaga:
+            \State $F_{X_k}(w_k + \alpha_kp_k)\leq F_{X_k}(w_k) + c_1\alpha_k\nabla F_{X_k}(w_k)^Tp_k$
+            \State $\nabla F_{X_k}(w_k + \alpha_kp_k)^Tp_k\geq c_2\nabla F_{X_k}(w_k)^Tp_k$
+            \State obtener nueva iteración $w_{k+1} = w_k + \alpha_k p_k$
+            \State almacenar $s_k\gets w_{k+1} - w_k$ y $y_k\gets\nabla F_{X_k}(w_{k+1})-\nabla F_{X_k}(w_k) $
+            \State $k \gets k+1$
+            \State Remuestrear $S_k, X_k$ con $|X_k|>|S_k|>0$
+            \State Evaluar $F_{X_k}(w_k),\nabla F_{X_k}(w_k)$
+        \EndWhile
+       \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Como puede observarse, este método también ofrece un compromiso natural entre la calidad de la información sobre curvatura que se quiere presentar en cada iteración y el costo computacional que se quiere correr. Otra ventaja de esta metodología es que evita una selección arbitraría de la matríz $H_k^0=\frac{s_{k-1}^Ty_{k-1}}{y^T_{k-1}y_{k-1}}\mathbb{I}$\cite{NOCEDAL}. Ahora bien, la pregunta natural es si esta metodología menoscaba las propiedades de convergencia del algoritmo $L-BFGs$ convencional. En este sentido, \cite{BYRD} prueba que este método converge globalmente.
+
+\begin{thm}
+Bajo \ref{eq:var_acot_subHess}, \ref{eq:lip_hess_subHess}, \ref{eq:var_acot_grad_subHess}, \ref{eq:pos_def_subHess}, la secuencia generada por \textbf{SLM} satisface:
+\begin{equation}
+    \displaystyle\lim_{k\rightarrow\infty}\nabla F_{X_k}(w_k) = 0
+\end{equation}
+\end{thm}
+
+ Si bien tenemos condiciones suficientes para convergencia, hace falta un análisis formal sobre la tasa de convergencia. En esta dirección \cite{BYRD2} provee un teorema con condiciones suficientes para garantizar convergencia $r-lineal$. No obstante, para probar este resultado es necesario hacer un supuesto adicional con respecto al primer momento de cada iteración:
+
+ \begin{assump}\label{assump:moment_cota}
+ $\exists\gamma\in\mathbb{R}$ tal que $\forall w_k\in \mathbb{R}^n, k\in\mathbb{N}$ y $\forall n_k\in \mathbb{N}$ se cumple que:
+ \begin{equation}
+     \mathbb{E}_{n_k}[\|\nabla F_{X_k}(w_k)\|]^2 \leq \gamma^2
+ \end{equation}
+ \end{assump}
+Ahora estamos en posición de probar el siguiente teorema:
+\begin{thm}
+Suponiendo \ref{eq:var_acot_subHess}, \ref{eq:lip_hess_subHess}, \ref{eq:var_acot_grad_subHess}, \ref{eq:pos_def_subHess} y \ref{assump:moment_cota} sea $\{w_k\}$ una secuencia generada por \ref{eq:gen_pseudo_newt}\footnote{Siendo \textbf{SLM} un caso particular}. Si tenemos que
+\begin{equation*}
+\begin{split}
+    \mu_1\mathbb{I} \preceq H_k \preceq \mu_2\mathbb{I}; &\quad 0<\mu_1\leq\mu_2\\
+    \alpha_k = \frac{\beta}{k}; &\quad \beta>\frac{1}{2\mu_1\mu}
+\end{split}
+\end{equation*}
+Entonces $\forall k\geq 1$
+\begin{equation}\label{eq:to_proof_pseudo}
+    \mathbb{E}[F(w_k) - F(w^*)] \leq \frac{Q(\beta)}{k}
+\end{equation}
+Donde
+\begin{equation}
+    Q(\beta) = \displaystyle\max\Bigg\{\frac{\Upsilon\mu_2^2\beta^2\gamma^2}{2(2\mu_1\mu\beta-1)}, F(w_1)- F(w_*)\Bigg\}
+\end{equation}
+\end{thm}
+\begin{proof}
+Por \ref{lem:markov} tenemos que:
+\begin{equation}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1})] & \leq F(w_{k}) -\alpha_k\nabla F(w_{k})^TH_k\mathbb{E}_{n_k}[\nabla F_{X_k}(w_k)]\\ & +\frac{1}{2}\alpha^2_k\Upsilon\mathbb{E}_{n_k}[\|H_k\nabla F_{X_k}(w_k)\|_2^2]
+\end{split}
+\end{equation}
+Recordando que $\mu_{1}\leq\|H_k\|_2 \leq \mu_{2}$ y que $\nabla F_{X_k}(w_k)$ es un estimador insesgado de $\nabla F(w_k)$ se sigue:
+\begin{equation}\label{eq:conv_pseudo1}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1})] & \leq F(w_{k}) -\alpha_k\mu_1\|\nabla F(w_{k})\|_2^2 +\frac{\mu_2^2\alpha^2_k\Upsilon}{2}\mathbb{E}_{n_k}[\|\nabla F_{X_k}(w_k)\|_2^2] \\
+       & \leq F(w_{k}) -\alpha_k\mu_1\|\nabla F(w_{k})\|_2^2 +\frac{\Upsilon(\gamma\mu_2\alpha_k)^2}{2}\\
+\end{split}
+\end{equation}
+Donde la última desigualdad se sigue de \ref{assump:moment_cota}. Ahora bien, de \ref{assump:convex} se sigue que $\forall w$ se cumple que $2\mu(F(w)-F(w^*))  \leq  \|\nabla F(w)\|_2^2$. Sustituyendo en \ref{eq:conv_pseudo1} nos da:
+\begin{equation}\label{eq:conv_pseudo2}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1})]
+       & \leq F(w_{k}) -2\alpha_k\mu_1\mu\bigg(F(w_{k})- F(w^*)\bigg) +\frac{\Upsilon(\gamma\mu_2\alpha_k)^2}{2}\\
+\end{split}
+\end{equation}
+Restando $F(w^*)$ en ambos lados de \ref{eq:conv_pseudo2} y tomando el valor esperado obtenemos:
+\begin{equation}\label{eq:conv_pseudo3}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1}) - F(w^*)]
+       & \leq (1-2\alpha_k\mu_1\mu)\mathbb{E}[F(w_{k})- F(w^*)] +\frac{\Upsilon(\gamma\mu_2\alpha_k)^2}{2}\\
+\end{split}
+\end{equation}
+Ahora bien, haciendo inducción sobre $k$ por definición de Q vemos que el caso $k=1$ hace que la desigualdad \ref{eq:to_proof_pseudo} se cumple trivialmente. Suponiendo que la desigualdad es válida para algún $k>1$ y recordando que $\alpha_k = \frac{\beta}{k}$ tenemos:
+\begin{equation}\label{eq:conv_pseudo4}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1}) - F(w^*)]
+       & \leq (1-2\alpha_k\mu_1\mu)\mathbb{E}[F(w_{k})- F(w^*)] +\frac{\Upsilon(\gamma\mu_2\alpha_k)^2}{2}\\
+       & \leq \bigg(1-\frac{2\beta\mu_1\mu}{k}\bigg)\frac{Q(\beta)}{k}+\frac{\Upsilon(\gamma\mu_2\beta)^2}{2k^2}\\
+       & = \bigg(\frac{(k - 2\beta\mu_1\mu)Q(\beta)}{k^2}\bigg)+\frac{\Upsilon(\gamma\mu_2\beta)^2}{2k^2}\\
+\end{split}
+\end{equation}
+Factorizando el primer termino del lado derecho obtenemos:
+\begin{equation}\label{eq:conv_pseudo4}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1}) - F(w^*)]
+       & = \frac{(k-1)Q(\beta)}{k^2} - \frac{(2\beta\mu_1\mu- 1)Q(\beta)}{k^2}+\frac{\Upsilon(\gamma\mu_2\beta)^2}{2k^2}\\
+\end{split}
+\end{equation}
+Por definición de $Q(\beta)$, sabemos que $2(2\mu_1\mu\beta-1)Q(\beta)\geq\Upsilon\mu_2^2\beta^2\gamma^2$, sustituyendo en \ref{eq:conv_pseudo4} tenemos:
+\begin{equation}\label{eq:conv_pseudo5}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1}) - F(w^*)]
+       & \leq \frac{(k-1)Q(\beta)}{k^2} - \frac{(2\beta\mu_1\mu- 1)Q(\beta)}{k^2}+\frac{2(2\mu_1\mu\beta-1)Q(\beta)}{2k^2}\\
+       & = \frac{(k-1)Q(\beta)}{k^2} \\
+\end{split}
+\end{equation}
+Cómo $\forall k \in \mathbb{N}$ se tiene que $k^2 - 1 = (k+1)(k-1)< k^2 \Rightarrow \frac{k-1}{k^2} < \frac{1}{k+1}$ sustituyendo en \ref{eq:conv_pseudo5} obtenemos:
+\begin{equation}\label{eq:conv_pseudo5}
+\begin{split}
+       \mathbb{E}_{n_k}[F(w_{k+1}) - F(w^*)]
+       & \leq  \frac{Q(\beta)}{k+1} \\
+\end{split}
+\end{equation}
+Que es el resultado deseado.
 \end{proof}
 
 
 
-\subsubsection{Pseudo Newtons}
 
-\textcolor{red}{Después de dar argumentos, a favor de este tipo de metodologías, exponer los supuestos, pseudo código y dar teorema de convergencia de On the use of... (también falta lemma 3.1)}
-
-\textcolor{red}{TEOREMA NOCEDAL CONVERGENCIA GLOBAL ON THE USE OF...}
-
-\textcolor{red}{BYRDII TASA DE CONVERGENCIA}
+\chapter{Implementación y resultados}
 
 
-\chapter{Implementación de Dos algoritmos estocásticos de segundo orden}
-
-
-\epigraph{You're going to see speech recognition systems that have human or better-than-human accuracy become commercialized.}{\textit{Tim Tuttle \\ Massachusetts Institute of Technology}}
+\epigraph{I never expected this to happen in my lifetime and shall be asking my family to put some champagne in the fridge}{\textit{Peter Higgs}}
 
 \newpage
 
-\textcolor{red}{Hablar de implementación, modificaciones que se hicieron a los algoritmos originales y resultados}
+\section{Contexto determinístico}
 
+\section{Optimización estocástica}
 
+\textcolor{red}{DISCUTIR MODIFICACIONES HECHAS A LOS ALGORITMOS}
 
-\subsubsection{Implementación y resultados}
-
-\textcolor{red}{IMPLEMENTAR MUESTRAS INCREMENTALES}
+\section{Conclusión}
 
 \subsubsection{Conclusión}
 
 
 \begin{thebibliography}{9}
+\bibitem{AGARWAL}Agarwal, Naman, Brian Bullins, and Elad Hazan. \emph{Second Order Stochastic Optimization in Linear Time.} arXiv preprint arXiv:1602.03943 (2016).
 \bibitem{BENNETT} Kristin P. Bennett, Emilio Parrado-Hernández, \emph{The Interplay of Optimization and Machine Learning Research}. Journal of Machine Learning Research, 2007.
 \bibitem{BERNOULLI}Bernoulli, Jakob. \emph{Ars Conjectandi, opus posthumum.} (1795).
   \bibitem{BOTTOU}Bottou, Léon, Frank E. Curtis, and Jorge Nocedal. \emph{Optimization Methods for Large-Scale Machine Learning}. arXiv preprint arXiv:1606.04838 (2016).
@@ -858,6 +1084,7 @@ Cómo $C \geq \frac{v^2\Upsilon_\beta}{\mu\mu_\beta}$ obtenemos:
 \bibitem{JUDD}Judd, Stephen. \emph{On the complexity of loading shallow neural networks.} Journal of Complexity 4.3 (1988): 177-192.
 \bibitem{MAYER} Mayer-Schönberger, Viktor, and Kenneth Cukier. \emph{Big data: A revolution that will transform how we live, work, and think}. Houghton Mifflin Harcourt, 2013.
 \bibitem{NOCEDAL} J. Nocedal and S. J. Wright. \emph{Numerical Optimization}, 2nd ed., Springer Ser. Oper. Res., Springer, New York, 2006.
+\bibitem{PILANCI}Pilanci, Mert, and Martin J. Wainwright. \emph{Newton sketch: A linear-time optimization algorithm with linear-quadratic convergence.} arXiv preprint arXiv:1505.02250 (2015).
 \bibitem{ROBBINS}H. Robbins and S. Monro,\emph{A  Stochastic  Approximation  Method}, The Annals of Mathe-matical Statistics, 22 (1951), pp. 400-407.
 \bibitem{ROOSTA}Roosta-Khorasani, Farbod, and Michael W. Mahoney. \emph{Sub-sampled Newton methods I: globally convergent algorithms.} arXiv preprint arXiv:1601.04737 (2016).
 \bibitem{SHAI} Shai Shalev-Shwartz, Shai Ben-David. \emph{Understanding Machine Learning, From Theory to Algorithms},Cambridge University Press, New York, 2014.

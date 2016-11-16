@@ -28,10 +28,12 @@ int    sample_logistic_labels[BIG_N];
 
 // DEFAULT CONFIGURATION
 int SAMPLE = 0;
-double sampProp       = .1; //.5
+double sampProp       = .8; //.5
 double regularization = .0001; //.0001
 int run_logistic      = 1;
 int stocMode          = 1;
+int increaingSamp     = 1;
+double sizeIncrease   = 1.9;
 int seed              = 123454321;
 int verbose           = 1;
 int run_functions     = 0;
